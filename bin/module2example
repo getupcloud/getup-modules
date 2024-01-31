@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+import hcl2
+import sys
+
+module_name, tag = sys.argv[1:3]
+hcl = hcl2.api.load(sys.stdin)
+
+print(f'''
+# File auto-generated from {sys.argv[0]}
+
+module "{module_name}" {{
+  source = "github.com/getupcloud/terraform-modules//modules/{module_name}?ref={tag}"
+'''.strip())
+print()
+
+for i, variable in enumerate(hcl.get('variable')):
+    for name, content in variable.items():
+        print(f'  {name} = var.{name}')
+
+print('}')

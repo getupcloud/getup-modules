@@ -1,0 +1,5 @@
+.terraform
+terraform.log
+*.sw?
+terraform.tfplan
+terraform-migrate.tfstate

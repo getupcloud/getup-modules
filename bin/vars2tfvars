@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+
+import hcl2
+import sys
+
+hcl = hcl2.api.load(sys.stdin)
+
+print(f'# File auto-generated from {sys.argv[0]}')
+print()
+
+for i, variable in enumerate(hcl.get('variable')):
+    for name, content in variable.items():
+        description = content.get('description')
+        data_type = content.get('type')
+        has_default, default = 'default' in content, content.get('default')
+
+        if default is None:
+            default = 'null'
+        elif data_type == '${string}':
+            default = f'"{default}"'
+        elif data_type == '${bool}':
+            default = 'true' if default else 'false'
+
+        if i:
+            print()
+
+        if description is not None:
+            print(f'# {name} - {description}'.replace('\n', '\n #'))
+
+        if data_type is not None:
+            print(f'# Type: {data_type}'.replace('\n', '\n #'))
+
+
+        if has_default:
+            print(f'# Default: {default}')
+        else:
+            print(f'# Required')
+
+        if has_default:
+            print(f'#{name} = {default}')
+        else:
+            print(f'#{name} = <REQUIRED-VALUE>')
+
