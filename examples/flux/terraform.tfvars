@@ -35,7 +35,7 @@
 # Default: ""
 #flux_github_repository = ""
 
-# flux_path - Path relative to the repository root, when specified the cluster sync will be scoped to this path. Defaults to \"clusters/$${var.aws_region}/$${var.cluster_name}\".
+# flux_path - Path relative to the repository root, when specified the cluster sync will be scoped to this path.
 # Type: ${string}
 # Default: ""
 #flux_path = ""

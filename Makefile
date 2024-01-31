@@ -22,18 +22,18 @@ $(TEST_TARGETS):
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
-tfvars:
+examples:
 	@for dir in $(MODULES); do
 		name=$${dir##*/}
-		echo Generating examples/$$name/terraform.tfvars
-		cat $$dir/variables*.tf | ./bin/vars2tfvars > examples/$$name/terraform.tfvars || exit 1
-	done
-
-examples: tfvars
-	@for dir in $(MODULES); do
-		name=$${dir##*/}
-		echo Generating examples/$$name/main.tf
-		cat $$dir/variables*.tf | ./bin/module2example $$name $(RELEASE) > examples/$$name/main.tf || exit 1
+		echo Generating files: examples/$$name
+		if [ -e $$dir/variables.tf ]; then
+			cat $$dir/variables.tf | ./bin/module2example $$name $(RELEASE) > examples/$$name/main.tf || exit 1
+			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform.tfvars || exit 1
+			cp -f $$dir/variables.tf examples/$$name/
+		fi
+		if [ -e $$dir/versions.tf  ]; then
+			cp -f $$dir/versions.tf examples/$$name/
+		fi
 	done
 	$(MAKE) fmt
 

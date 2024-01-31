@@ -135,6 +135,16 @@
 # Default: "karpenter"
 #karpenter_namespace = "karpenter"
 
+# karpenter_version - Karpenter chart version.
+# Type: ${string}
+# Default: "v0.33.1"
+#karpenter_version = "v0.33.1"
+
+# karpenter_module_version - Version of the AWS module to create karpenter resources.
+# Type: ${string}
+# Default: "~> 19.21.0"
+#karpenter_module_version = "~> 19.21.0"
+
 # karpenter_replicas - Number of pods for Karpenter controller.
 # Type: ${number}
 # Default: 2
@@ -244,6 +254,11 @@
 # Type: ${string}
 # Default: "keda"
 #keda_namespace = "keda"
+
+# keda_version - Keda chart version.
+# Type: ${string}
+# Default: "2.12.1"
+#keda_version = "2.12.1"
 
 # keda_replicas - Number of pods for Keda workloads.
 # Type: ${number}

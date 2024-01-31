@@ -1,7 +1,7 @@
 # File auto-generated from ./bin/module2example
 
 module "eks" {
-  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.0.11"
+  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.0.7"
 
   cluster_name                            = var.cluster_name
   kubernetes_version                      = var.kubernetes_version
@@ -30,6 +30,8 @@ module "eks" {
   fallback_node_group_disk_size           = var.fallback_node_group_disk_size
   fallback_node_group_disk_type           = var.fallback_node_group_disk_type
   karpenter_namespace                     = var.karpenter_namespace
+  karpenter_version                       = var.karpenter_version
+  karpenter_module_version                = var.karpenter_module_version
   karpenter_replicas                      = var.karpenter_replicas
   karpenter_node_class_ami_family         = var.karpenter_node_class_ami_family
   karpenter_node_pool_instance_arch       = var.karpenter_node_pool_instance_arch
@@ -52,6 +54,7 @@ module "eks" {
   aws_auth_accounts                       = var.aws_auth_accounts
   aws_auth_node_iam_role_arns_non_windows = var.aws_auth_node_iam_role_arns_non_windows
   keda_namespace                          = var.keda_namespace
+  keda_version                            = var.keda_version
   keda_replicas                           = var.keda_replicas
   keda_cron_schedule                      = var.keda_cron_schedule
   baloon_chart_version                    = var.baloon_chart_version

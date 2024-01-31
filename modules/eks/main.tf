@@ -1,3 +1,8 @@
+provider "aws" {
+  region = "us-east-1"
+  alias  = "us-east-1"
+}
+
 data "aws_caller_identity" "current" {}
 
 data "aws_ecrpublic_authorization_token" "token" {
@@ -170,7 +175,7 @@ module "eks" {
 
 module "karpenter" {
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "~> 19.21.0"
+  version = var.karpenter_module_version
 
   cluster_name                    = module.eks.cluster_name
   irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
@@ -189,13 +194,12 @@ module "karpenter" {
 }
 
 resource "helm_release" "karpenter" {
-  namespace        = var.karpenter_namespace
-  create_namespace = true
-
   name                = "karpenter"
   repository          = "oci://public.ecr.aws/karpenter"
   chart               = "karpenter"
-  version             = "v0.33.1"
+  version             = var.karpenter_version
+  namespace           = var.karpenter_namespace
+  create_namespace    = true
   repository_username = data.aws_ecrpublic_authorization_token.token.user_name
   repository_password = data.aws_ecrpublic_authorization_token.token.password
 
@@ -381,13 +385,12 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
 ################################################################################
 
 resource "helm_release" "keda" {
+  name             = "keda"
+  repository       = "https://kedacore.github.io/charts"
+  chart            = "keda"
+  version          = var.keda_version
   namespace        = var.keda_namespace
   create_namespace = true
-
-  name       = "keda"
-  repository = "https://kedacore.github.io/charts"
-  chart      = "keda"
-  version    = "2.12.1"
 
   values = [
     <<-EOT
