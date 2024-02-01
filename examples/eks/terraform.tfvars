@@ -140,11 +140,6 @@
 # Default: "v0.33.1"
 #karpenter_version = "v0.33.1"
 
-# karpenter_module_version - Version of the AWS module to create karpenter resources.
-# Type: ${string}
-# Default: "~> 19.21.0"
-#karpenter_module_version = "~> 19.21.0"
-
 # karpenter_replicas - Number of pods for Karpenter controller.
 # Type: ${number}
 # Default: 2
