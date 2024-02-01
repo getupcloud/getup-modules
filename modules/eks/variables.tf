@@ -204,12 +204,6 @@ variable "karpenter_version" {
   default     = "v0.33.1"
 }
 
-variable "karpenter_module_version" {
-  description = "Version of the AWS module to create karpenter resources."
-  type        = string
-  default     = "~> 19.21.0"
-}
-
 variable "karpenter_replicas" {
   description = "Number of pods for Karpenter controller."
   type        = number
