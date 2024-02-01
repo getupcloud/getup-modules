@@ -1,7 +1,7 @@
 # File auto-generated from ./bin/module2example
 
 module "eks" {
-  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.0.7"
+  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.1.0"
 
   cluster_name                            = var.cluster_name
   kubernetes_version                      = var.kubernetes_version
