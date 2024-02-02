@@ -2,8 +2,8 @@
 
 # istio_version - Istio version.
 # Type: ${string}
-# Default: "1.18.2"
-#istio_version = "1.18.2"
+# Default: "1.20.2"
+#istio_version = "1.20.2"
 
 # istio_namespace - Istio namespace.
 # Type: ${string}
