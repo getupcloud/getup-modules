@@ -11,11 +11,6 @@ variable "flux_cluster_name" {
   type        = string
 }
 
-variable "flux_cluster_certificate_authority_data" {
-  description = "Base64 encoded certificate data required to communicate with the cluster."
-  type        = string
-}
-
 variable "flux_github_token" {
   description = "GitHub OAuth / Personal Access Token. Can also by provided via the GITHUB_TOKEN environment variable."
   type        = string
@@ -40,5 +35,4 @@ variable "flux_path" {
   type        = string
   default     = ""
 }
-
 
