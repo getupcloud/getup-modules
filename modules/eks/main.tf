@@ -538,7 +538,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
 
-  name = var.vpc_name ? var.vpc_name : local.cluster_name
+  name = var.vpc_name != "" ? var.vpc_name : local.cluster_name
   cidr = local.vpc_cidr
 
   azs             = local.azs
