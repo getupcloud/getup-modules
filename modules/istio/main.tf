@@ -78,6 +78,10 @@ resource "helm_release" "istiod" {
       value = set.value["value"]
     }
   }
+
+  depends_on = [
+    helm_release.istio-base
+  ]
 }
 resource "helm_release" "ingress-gateway" {
   name             = "istio-ingressgateway"
@@ -107,6 +111,10 @@ resource "helm_release" "ingress-gateway" {
       value = set.value["value"]
     }
   }
+
+  depends_on = [
+    helm_release.istio-base
+  ]
 }
 resource "helm_release" "egress-gateway" {
   name             = "istio-egressgateway"
@@ -136,4 +144,8 @@ resource "helm_release" "egress-gateway" {
       value = set.value["value"]
     }
   }
+
+  depends_on = [
+    helm_release.istio-base
+  ]
 }
