@@ -10,11 +10,6 @@
 # Required
 #flux_cluster_name = <REQUIRED-VALUE>
 
-# flux_cluster_certificate_authority_data - Base64 encoded certificate data required to communicate with the cluster.
-# Type: ${string}
-# Required
-#flux_cluster_certificate_authority_data = <REQUIRED-VALUE>
-
 # flux_github_token - GitHub OAuth / Personal Access Token. Can also by provided via the GITHUB_TOKEN environment variable.
 # Type: ${string}
 # Default: ""
