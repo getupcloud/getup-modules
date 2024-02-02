@@ -1,24 +1,19 @@
 # File auto-generated from ./bin/vars2tfvars
 
-# aws_region - AWS Region.
+# flux_aws_region - AWS Region.
 # Type: ${string}
 # Required
-#aws_region = <REQUIRED-VALUE>
+#flux_aws_region = <REQUIRED-VALUE>
 
-# cluster_name - EKS cluster name.
+# flux_cluster_name - EKS cluster name.
 # Type: ${string}
 # Required
-#cluster_name = <REQUIRED-VALUE>
+#flux_cluster_name = <REQUIRED-VALUE>
 
-# cluster_endpoint - Endpoint for your Kubernetes API server.
+# flux_cluster_certificate_authority_data - Base64 encoded certificate data required to communicate with the cluster.
 # Type: ${string}
 # Required
-#cluster_endpoint = <REQUIRED-VALUE>
-
-# cluster_certificate_authority_data - Base64 encoded certificate data required to communicate with the cluster.
-# Type: ${string}
-# Required
-#cluster_certificate_authority_data = <REQUIRED-VALUE>
+#flux_cluster_certificate_authority_data = <REQUIRED-VALUE>
 
 # flux_github_token - GitHub OAuth / Personal Access Token. Can also by provided via the GITHUB_TOKEN environment variable.
 # Type: ${string}
