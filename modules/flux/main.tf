@@ -6,7 +6,7 @@ resource "tls_private_key" "flux" {
 }
 
 resource "github_repository_deploy_key" "flux" {
-  title      = "EKS Flux - ${var.cluster_name} (Account ID: ${data.aws_caller_identity.current.account_id}, Region: ${var.aws_region})"
+  title      = "EKS Flux - ${var.flux_cluster_name} (Account ID: ${data.aws_caller_identity.current.account_id}, Region: ${var.flux_aws_region})"
   repository = var.flux_github_repository
   key        = tls_private_key.flux.public_key_openssh
   read_only  = false

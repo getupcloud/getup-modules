@@ -1,22 +1,17 @@
 #### Flux #####
 ###############
 
-variable "aws_region" {
+variable "flux_aws_region" {
   description = "AWS Region."
   type        = string
 }
 
-variable "cluster_name" {
+variable "flux_cluster_name" {
   description = "EKS cluster name."
   type        = string
 }
 
-variable "cluster_endpoint" {
-  description = "Endpoint for your Kubernetes API server."
-  type        = string
-}
-
-variable "cluster_certificate_authority_data" {
+variable "flux_cluster_certificate_authority_data" {
   description = "Base64 encoded certificate data required to communicate with the cluster."
   type        = string
 }
