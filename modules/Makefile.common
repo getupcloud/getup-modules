@@ -21,5 +21,4 @@ validate:
 	$(TERRAFORM) validate
 
 clean:
-	rm -rf .terraform
-
+	rm -rf .terraform .terraform.lock.hcl terraform.log

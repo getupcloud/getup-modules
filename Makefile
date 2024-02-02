@@ -5,8 +5,8 @@ RELEASE        := v$(VERSION)
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
 MODULES        := modules/eks modules/flux modules/istio
 EXAMPLES       := examples/eks examples/flux examples/istio
-COMMON_TARGETS := fmt lint init validate
-TEST_TARGETS   := test clean
+COMMON_TARGETS := fmt lint init validate clean
+TEST_TARGETS   := test
 
 .ONESHELL:
 

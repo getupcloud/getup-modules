@@ -19,7 +19,7 @@ all:
 	@echo 'Usage: make [init|validate|fmt|plan|apply|output|kubeconfig]'
 
 clean:
-	rm -rf .terraform terraform.log
+	rm -rf .terraform .terraform.lock.hcl terraform.log
 
 init: validate-vars
 	$(TERRAFORM) init $(TERRAFORM_ARGS) $(TERRAFORM_INIT_ARGS)
