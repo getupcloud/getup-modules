@@ -4,7 +4,7 @@
 variable "istio_version" {
   description = "Istio version."
   type        = string
-  default     = "1.18.2"
+  default     = "1.20.2"
 }
 
 variable "istio_namespace" {
