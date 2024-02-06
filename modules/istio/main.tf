@@ -27,6 +27,7 @@ resource "helm_release" "istio-base" {
   version          = var.istio_version
   namespace        = var.istio_namespace
   create_namespace = true
+  timeout          = 60 * 20
 
   values = [for f in local.istio_base_values : file(f)]
 
@@ -57,6 +58,7 @@ resource "helm_release" "istiod" {
   version          = var.istio_version
   namespace        = var.istio_namespace
   create_namespace = true
+  timeout          = 60 * 20
 
   values = [for f in local.istiod_values : file(f)]
 
@@ -90,6 +92,7 @@ resource "helm_release" "ingress-gateway" {
   version          = var.istio_version
   namespace        = var.istio_namespace
   create_namespace = true
+  timeout          = 60 * 20
 
   values = [for f in local.ingress_gateway_values : file(f)]
 
@@ -113,7 +116,7 @@ resource "helm_release" "ingress-gateway" {
   }
 
   depends_on = [
-    helm_release.istio-base
+    helm_release.istiod
   ]
 }
 resource "helm_release" "egress-gateway" {
@@ -123,6 +126,7 @@ resource "helm_release" "egress-gateway" {
   version          = var.istio_version
   namespace        = var.istio_namespace
   create_namespace = true
+  timeout          = 60 * 20
 
   values = [for f in local.egress_gateway_values : file(f)]
 
@@ -146,6 +150,6 @@ resource "helm_release" "egress-gateway" {
   }
 
   depends_on = [
-    helm_release.istio-base
+    helm_release.istiod
   ]
 }
