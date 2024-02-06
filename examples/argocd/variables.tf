@@ -29,13 +29,13 @@ variable "argocd_set" {
   description = "Value block with custom values to be merged with the values yaml."
   type        = list(object({ name = string, value = string }))
   default = [
-    { "name" : "redis-ha.enabled", "value" : "true" },
+    { "name" : "redis-ha.enabled", "value" : "false" },
     { "name" : "controller.replicas", "value" : "1" },
     { "name" : "server.autoscaling.enabled", "value" : "true" },
-    { "name" : "server.autoscaling.minReplicas", "value" : "2" },
+    { "name" : "server.autoscaling.minReplicas", "value" : "1" },
     { "name" : "repoServer.autoscaling.enabled", "value" : "true" },
-    { "name" : "repoServer.autoscaling.minReplicas", "value" : "2" },
-    { "name" : "applicationSet.replicas", "value" : "2" },
+    { "name" : "repoServer.autoscaling.minReplicas", "value" : "1" },
+    { "name" : "applicationSet.replicas", "value" : "1" },
   ]
 }
 
