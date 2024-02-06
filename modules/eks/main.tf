@@ -207,13 +207,13 @@ resource "helm_release" "karpenter" {
   values = [
     <<-EOT
     replicas: ${var.karpenter_replicas}
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: karpenter.sh/nodepool
-              operator: DoesNotExist
+    #affinity:
+    #  nodeAffinity:
+    #    requiredDuringSchedulingIgnoredDuringExecution:
+    #      nodeSelectorTerms:
+    #      - matchExpressions:
+    #        - key: karpenter.sh/nodepool
+    #          operator: DoesNotExist
     #        - key: eks.amazonaws.com/compute-type
     #          operator: In
     #          values:
@@ -397,15 +397,15 @@ resource "helm_release" "keda" {
     <<-EOT
     clusterName: ${module.eks.cluster_name}
 
-    # priorityClassName: system-cluster-critical
+    #priorityClassName: system-cluster-critical
 
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: karpenter.sh/nodepool
-              operator: DoesNotExist
+    #affinity:
+    #  nodeAffinity:
+    #    requiredDuringSchedulingIgnoredDuringExecution:
+    #      nodeSelectorTerms:
+    #      - matchExpressions:
+    #        - key: karpenter.sh/nodepool
+    #          operator: DoesNotExist
     #        - key: eks.amazonaws.com/compute-type
     #          operator: In
     #          values:
