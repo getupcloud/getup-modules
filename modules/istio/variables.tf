@@ -55,8 +55,8 @@ variable "istiod_set_list" {
   default     = []
 }
 
-## Ingresss Gateway
-###################
+## Ingress Gateway
+##################
 
 variable "ingress_gateway_values" {
   description = "Path to istio ingress-gateway values file. Start with / for absolute path or ./ to relative to root module. Set it to empty string to ignore."
@@ -79,8 +79,8 @@ variable "ingress_gateway_set_list" {
   default     = []
 }
 
-## Egresss Gateway
-##################
+## Egress Gateway
+#################
 
 variable "egress_gateway_values" {
   description = "Path to istio egress-gateway values file. Start with / for absolute path or ./ to relative to root module. Set it to empty string to ignore."
