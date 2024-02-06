@@ -17,13 +17,13 @@
 
 # tags - Tags to apply to all resources.
 # Type: ${any}
-# Default: {'managed-by': 'terraform'}
-#tags = {'managed-by': 'terraform'}
+# Default: {"managed-by": "terraform"}
+#tags = {"managed-by": "terraform"}
 
 # cluster_encryption_config - Configuration block with encryption configuration for the cluster. To disable secret encryption, set this value to `{}`
 # Type: ${any}
-# Default: {'resources': ['secrets']}
-#cluster_encryption_config = {'resources': ['secrets']}
+# Default: {"resources": ["secrets"]}
+#cluster_encryption_config = {"resources": ["secrets"]}
 
 # vpc_id - VPC ID of an existing VPC. Set to disable VPC creation.
 # Type: ${string}
@@ -47,8 +47,8 @@
 
 # azs - AZs to create subnets into.
 # Type: ${list(string)}
-# Default: ['use1-az1', 'use1-az2']
-#azs = ['use1-az1', 'use1-az2']
+# Default: ["use1-az1", "use1-az2"]
+#azs = ["use1-az1", "use1-az2"]
 
 # vpc_name - VPC name to create new VPC. Defaults to cluster name.
 # Type: ${string}
@@ -62,8 +62,8 @@
 
 # create_cluster_security_group - Determines if a security group is created for the cluster. Note: the EKS service creates a primary security group for the cluster by default
 # Type: ${bool}
-# Default: true
-#create_cluster_security_group = true
+# Default: "true"
+#create_cluster_security_group = "true"
 
 # cluster_security_group_id - Existing security group ID to be attached to the cluster.
 # Type: ${string}
@@ -72,28 +72,28 @@
 
 # cluster_security_group_name - Name to use on cluster security group created.
 # Type: ${string}
-# Default: null
-#cluster_security_group_name = null
+# Default: "null"
+#cluster_security_group_name = "null"
 
 # cluster_endpoint_public_access_cidrs - List of CIDR blocks. Indicates which CIDR blocks can access the Amazon EKS public API server endpoint when enabled.
 # Type: ${list(string)}
-# Default: ['0.0.0.0/0']
-#cluster_endpoint_public_access_cidrs = ['0.0.0.0/0']
+# Default: ["0.0.0.0/0"]
+#cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
 
 # cluster_endpoint_public_access - Indicates whether or not the Amazon EKS public API server endpoint is enabled.
 # Type: ${bool}
-# Default: false
-#cluster_endpoint_public_access = false
+# Default: "false"
+#cluster_endpoint_public_access = "false"
 
 # vpc_cni_enable_prefix_delegation - Increases Pod density by assigning EC2 ENIs with IP addresses prefixes instead a single IP. Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html.
 # Type: ${bool}
-# Default: true
-#vpc_cni_enable_prefix_delegation = true
+# Default: "true"
+#vpc_cni_enable_prefix_delegation = "true"
 
 # fargate_profiles - List of fargate profiles to create. To disable fargate, set this value to `[]`.
 # Type: ${any}
-# Default: [{'namespace': 'kube-system', 'labels': {}}]
-#fargate_profiles = [{'namespace': 'kube-system', 'labels': {}}]
+# Default: [{"namespace": "kube-system", "labels": {}}]
+#fargate_profiles = [{"namespace": "kube-system", "labels": {}}]
 
 # fallback_node_group_desired_size - Desired number of instances/nodes.
 # Type: ${number}
@@ -107,8 +107,8 @@
 
 # fallback_node_group_instance_types - Set of instance types associated with the EKS Node Group.
 # Type: ${list(string)}
-# Default: ['c5.large', 'c5.xlarge', 'm5.large', 'm5.xlarge', 'r5.large', 'r5.xlarge']
-#fallback_node_group_instance_types = ['c5.large', 'c5.xlarge', 'm5.large', 'm5.xlarge', 'r5.large', 'r5.xlarge']
+# Default: ["c5.large", "c5.xlarge", "m5.large", "m5.xlarge", "r5.large", "r5.xlarge"]
+#fallback_node_group_instance_types = ["c5.large", "c5.xlarge", "m5.large", "m5.xlarge", "r5.large", "r5.xlarge"]
 
 # fallback_node_group_ami_type - Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values are `AL2_x86_64`, `AL2_x86_64_GPU`, `AL2_ARM_64`, `CUSTOM`, `BOTTLEROCKET_ARM_64`, `BOTTLEROCKET_x86_64`.
 # Type: ${string}
@@ -152,13 +152,13 @@
 
 # karpenter_node_pool_instance_arch - CPU Architecture for node pool instances. Valid values are `amd64` and `arm64`.
 # Type: ${list(string)}
-# Default: ['amd64']
-#karpenter_node_pool_instance_arch = ['amd64']
+# Default: ["amd64"]
+#karpenter_node_pool_instance_arch = ["amd64"]
 
 # karpenter_node_pool_instance_category - EC2 Instance categories for both OnDemand and Spot Karpenter node pools.
 # Type: ${list(string)}
-# Default: ['c', 'm', 'r']
-#karpenter_node_pool_instance_category = ['c', 'm', 'r']
+# Default: ["c", "m", "r"]
+#karpenter_node_pool_instance_category = ["c", "m", "r"]
 
 # karpenter_node_group_spot_ratio - Ratio of On-Demand/Spot nodes created managed Karpenter.
 # Type: ${number}
@@ -167,8 +167,8 @@
 
 # karpenter_node_pool_instance_cpu - EC2 Instance vCPUs for both OnDemand and Spot Karpenter node pools.
 # Type: ${list(string)}
-# Default: ['2', '4', '8']
-#karpenter_node_pool_instance_cpu = ['2', '4', '8']
+# Default: ["2", "4", "8"]
+#karpenter_node_pool_instance_cpu = ["2", "4", "8"]
 
 # karpenter_node_pool_instance_memory_gb - EC2 Instance memory size in GBi for both OnDemand and Spot Karpenter node pools.
 # Type: ${list(number)}
@@ -192,13 +192,13 @@
 
 # iam_role_use_name_prefix - Determines whether the IAM role name (`iam_role_name`) is used as a prefix
 # Type: ${bool}
-# Default: true
-#iam_role_use_name_prefix = true
+# Default: "true"
+#iam_role_use_name_prefix = "true"
 
 # iam_role_arn - Existing IAM role ARN for the cluster.
 # Type: ${string}
-# Default: null
-#iam_role_arn = null
+# Default: "null"
+#iam_role_arn = "null"
 
 # kms_key_administrators - A list of IAM ARNs for [key administrators](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-default-allow-administrators). If no value is provided, the current caller identity is used to ensure at least one key admin is available
 # Type: ${list(string)}
@@ -217,8 +217,8 @@
 
 # aws_auth_user_groups - K8s group names to assign for all ARN users to add to the aws-auth configmap
 # Type: ${list(string)}
-# Default: ['system:masters']
-#aws_auth_user_groups = ['system:masters']
+# Default: ["system:masters"]
+#aws_auth_user_groups = ["system:masters"]
 
 # aws_auth_role_arns - List of roles ARNs to add to the aws-auth configmap. K8s username will be the last component of the ARN.
 # Type: ${list(string)}
@@ -232,8 +232,8 @@
 
 # aws_auth_role_groups - K8s group names to assign for all ARN users to add to the aws-auth configmap
 # Type: ${list(string)}
-# Default: ['system:masters']
-#aws_auth_role_groups = ['system:masters']
+# Default: ["system:masters"]
+#aws_auth_role_groups = ["system:masters"]
 
 # aws_auth_accounts - List of account maps to add to the aws-auth configmap
 # Type: ${list(any)}
@@ -261,7 +261,7 @@
 #keda_replicas = 2
 
 # keda_cron_schedule - Timebased autoscale configurations.
-# Type: ${list(object({'apiVersion': '${string}', 'kind': '${string}', 'name': '${string}', 'namespace': '${string}', 'minReplicaCount': '${number}', 'maxReplicaCount': '${number}', 'schedules': "${list(object({'timezone': '${string}', 'start': '${string}', 'end': '${string}', 'desiredReplicas': '${string}'}))}"}))}
+# Type: ${list(object({"apiVersion": "${string}", "kind": "${string}", "name": "${string}", "namespace": "${string}", "minReplicaCount": "${number}", "maxReplicaCount": "${number}", "schedules": "${list(object({"timezone": "${string}", "start": "${string}", "end": "${string}", "desiredReplicas": "${string}"}))}"}))}
 # Default: []
 #keda_cron_schedule = []
 

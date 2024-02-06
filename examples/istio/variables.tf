@@ -55,8 +55,8 @@ variable "istiod_set_list" {
   default     = []
 }
 
-## Ingresss Gateway
-###################
+## Ingress Gateway
+##################
 
 variable "ingress_gateway_values" {
   description = "Path to istio ingress-gateway values file. Start with / for absolute path or ./ to relative to root module. Set it to empty string to ignore."
@@ -67,7 +67,10 @@ variable "ingress_gateway_values" {
 variable "ingress_gateway_set" {
   description = "Value block with custom values to be merged with the values yaml."
   type        = list(object({ name = string, value = any }))
-  default     = []
+  default = [{
+    "name" : "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type",
+    "value" : "nlb",
+  }]
 }
 
 variable "ingress_gateway_set_list" {
@@ -76,8 +79,8 @@ variable "ingress_gateway_set_list" {
   default     = []
 }
 
-## Egresss Gateway
-##################
+## Egress Gateway
+#################
 
 variable "egress_gateway_values" {
   description = "Path to istio egress-gateway values file. Start with / for absolute path or ./ to relative to root module. Set it to empty string to ignore."
