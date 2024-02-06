@@ -3,8 +3,8 @@ FILE_VERSION   := $(shell cat $(VERSION_TXT))
 VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := modules/eks modules/flux modules/istio
-EXAMPLES       := examples/eks examples/flux examples/istio
+MODULES        := modules/eks modules/flux modules/istio modules/argocd
+EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd
 COMMON_TARGETS := fmt lint init validate clean
 TEST_TARGETS   := test
 
@@ -26,6 +26,7 @@ examples:
 	@for dir in $(MODULES); do
 		name=$${dir##*/}
 		echo Generating files: examples/$$name
+		mkdir -p examples/$$name
 		if [ -e $$dir/variables.tf ]; then
 			cat $$dir/variables.tf | ./bin/module2example $$name $(RELEASE) > examples/$$name/main.tf || exit 1
 			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform.tfvars || exit 1
@@ -34,10 +35,11 @@ examples:
 		if [ -e $$dir/versions.tf  ]; then
 			cp -f $$dir/versions.tf examples/$$name/
 		fi
+		ln -fs ../Makefile.example examples/$$name/Makefile
 	done
 	$(MAKE) fmt
 
-release: update-version
+release: fmt update-version
 	$(MAKE) build-release
 
 update-version:
