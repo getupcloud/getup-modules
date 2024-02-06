@@ -30,6 +30,13 @@ validate: validate-vars
 fmt:
 	$(TERRAFORM) fmt $(TERRAFORM_ARGS) $(TERRAFORM_FMT_ARGS)
 
+lint:
+	@if type tflint &>/dev/null; then
+		tflint
+	else
+		echo "Ignoring not found: tflint"
+	fi
+
 plan: validate-vars
 	$(TERRAFORM) plan -out terraform.tfplan \
 		-var cluster_name=$(CLUSTER_NAME) \
