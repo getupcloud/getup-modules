@@ -51,7 +51,7 @@ variable "istiod_set" {
 
 variable "istiod_set_list" {
   description = "Value block with list of custom values to be merged with the values yaml."
-  type        = list(object({ name = string, value = list(any) }))
+  type        = list(object({ name = string, value = list(string) }))
   default     = []
 }
 
@@ -66,7 +66,7 @@ variable "ingress_gateway_values" {
 
 variable "ingress_gateway_set" {
   description = "Value block with custom values to be merged with the values yaml."
-  type        = list(object({ name = string, value = any }))
+  type        = list(object({ name = string, value = string }))
   default = [{
     "name" : "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type",
     "value" : "nlb",
@@ -75,7 +75,7 @@ variable "ingress_gateway_set" {
 
 variable "ingress_gateway_set_list" {
   description = "Value block with list of custom values to be merged with the values yaml."
-  type        = list(object({ name = string, value = list(any) }))
+  type        = list(object({ name = string, value = list(string) }))
   default     = []
 }
 
@@ -91,12 +91,12 @@ variable "egress_gateway_values" {
 # Egress is just a plain gateway without a load balancer.
 variable "egress_gateway_set" {
   description = "Value block with custom values to be merged with the values yaml."
-  type        = list(object({ name = string, value = any }))
+  type        = list(object({ name = string, value = string }))
   default     = [{ "name" : "service.type", "value" : "ClusterIP" }]
 }
 
 variable "egress_gateway_set_list" {
   description = "Value block with list of custom values to be merged with the values yaml."
-  type        = list(object({ name = string, value = list(any) }))
+  type        = list(object({ name = string, value = list(string) }))
   default     = []
 }
