@@ -2,11 +2,15 @@
 
 import hcl2
 import sys
+import json
 
 hcl = hcl2.api.load(sys.stdin)
 
 print(f'# File auto-generated from {sys.argv[0]}')
 print()
+
+def fix_string(s):
+    return s.replace('\'', '"').replace('\n', '\n #')
 
 for i, variable in enumerate(hcl.get('variable')):
     for name, content in variable.items():
@@ -17,7 +21,7 @@ for i, variable in enumerate(hcl.get('variable')):
         if default is None:
             default = 'null'
         elif data_type == '${string}':
-            default = f'"{default}"'
+            default = default # f'"{default}"'
         elif data_type == '${bool}':
             default = 'true' if default else 'false'
 
@@ -25,19 +29,19 @@ for i, variable in enumerate(hcl.get('variable')):
             print()
 
         if description is not None:
-            print(f'# {name} - {description}'.replace('\n', '\n #'))
+            print(fix_string(f'# {name} - {description}'))
 
         if data_type is not None:
-            print(f'# Type: {data_type}'.replace('\n', '\n #'))
+            print(fix_string(f'# Type: {data_type}'))
 
 
         if has_default:
-            print(f'# Default: {default}')
+            print(fix_string(f'# Default: {json.dumps(default)}'))
         else:
             print(f'# Required')
 
         if has_default:
-            print(f'#{name} = {default}')
+            print(fix_string(f'#{name} = {json.dumps(default)}'))
         else:
             print(f'#{name} = <REQUIRED-VALUE>')
 
