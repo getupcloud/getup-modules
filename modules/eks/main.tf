@@ -85,7 +85,8 @@ module "eks" {
   create_cluster_security_group           = var.create_cluster_security_group
   cluster_security_group_id               = var.cluster_security_group_id
   cluster_security_group_name             = var.cluster_security_group_name
-  create_node_security_group              = true
+  # https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/docs/faq.md#i-received-an-error-expect-exactly-one-securitygroup-tagged-with-kubernetesioclustername-
+  create_node_security_group              = false
   cluster_security_group_additional_rules = local.cluster_security_group_additional_rules
 
   cluster_encryption_config = var.cluster_encryption_config
