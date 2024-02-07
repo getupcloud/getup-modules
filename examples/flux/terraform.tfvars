@@ -29,3 +29,8 @@
 # Type: ${string}
 # Default: ""
 #flux_path = ""
+
+# flux_version - Flux version.
+# Type: ${string}
+# Default: "v2.2.3"
+#flux_version = "v2.2.3"

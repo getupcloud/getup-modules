@@ -20,6 +20,7 @@ resource "flux_bootstrap_git" "flux" {
   #kustomization_override = "" ## see https://registry.terraform.io/providers/fluxcd/flux/latest/docs/resources/bootstrap_git#kustomization_override
   recurse_submodules = true
   toleration_keys    = ["NoSchedule"]
+  version            = var.flux_version
 
   components       = ["source-controller", "kustomize-controller", "helm-controller", "notification-controller"]
   components_extra = ["image-reflector-controller", "image-automation-controller"]
