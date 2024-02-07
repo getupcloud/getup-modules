@@ -1,7 +1,7 @@
 # File auto-generated from ./bin/module2example
 
 module "argocd" {
-  source = "github.com/getupcloud/terraform-modules//modules/argocd?ref=v0.4.0"
+  source = "github.com/getupcloud/terraform-modules//modules/argocd?ref=v0.4.1"
 
   argocd_repository = var.argocd_repository
   argocd_version    = var.argocd_version
