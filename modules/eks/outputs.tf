@@ -47,6 +47,11 @@ output "cluster_primary_security_group_id" {
   value       = module.eks.cluster_primary_security_group_id
 }
 
+output "cluster_vpc_id" {
+  description = "ID of the cluster VPC"
+  value       = local.vpc_id
+}
+
 ################################################################################
 # Security Group
 ################################################################################
