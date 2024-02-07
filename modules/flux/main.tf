@@ -13,7 +13,7 @@ resource "github_repository_deploy_key" "flux" {
 }
 
 resource "flux_bootstrap_git" "flux" {
-  interval       = "5m"
+  interval       = "10m"
   path           = var.flux_path
   namespace      = "flux-system"
   network_policy = true
@@ -29,3 +29,25 @@ resource "flux_bootstrap_git" "flux" {
   ]
 }
 
+resource "kubectl_manifest" "flux-apps" {
+  yaml_body = <<-EOF
+    apiVersion: kustomize.toolkit.fluxcd.io/v1
+    kind: Kustomization
+    metadata:
+      name: apps
+      namespace: flux-system
+    spec:
+      interval: 10m
+      path: ./apps
+      prune: true
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+      decryption:
+        provider: sops
+  EOF
+
+  depends_on = [
+    flux_bootstrap_git.flux
+  ]
+}
