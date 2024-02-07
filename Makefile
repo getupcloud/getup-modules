@@ -29,12 +29,12 @@ examples:
 		echo Generating files: examples/$$name
 		mkdir -p examples/$$name
 		if [ -e $$dir/variables.tf ]; then
-			cat $$dir/variables.tf | ./bin/vars2tf $$name $(RELEASE) > examples/$$name/main.tf || exit 1
-			cat $$dir/variables.tf | ./bin/filter-vars > examples/$$name/variables.tf || exit 1
-			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform.tfvars || exit 1
+			cat $$dir/variables.tf | ./bin/vars2tf $$name $(RELEASE) > examples/$$name/main-$$name.tf || exit 1
+			cat $$dir/variables.tf | ./bin/filter-vars > examples/$$name/variables-$$name.tf || exit 1
+			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform-$$name.tfvars || exit 1
 		fi
 		if [ -e $$dir/versions.tf  ]; then
-			cp -f $$dir/versions.tf examples/$$name/
+			cp -f $$dir/versions.tf examples/$$name/versions-$$name.tf
 		fi
 		ln -fs ../Makefile.example examples/$$name/Makefile
 	done
