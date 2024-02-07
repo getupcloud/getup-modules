@@ -1,3 +1,5 @@
+# File auto-generated from ./bin/filter-vars
+
 #### Cluster ####
 #################
 

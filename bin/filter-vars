@@ -1,0 +1,17 @@
+#!/bin/bash
+
+exprs=""
+ignores=( ${!IGNORE_*} )
+echo "-> Ignoring variables: ${ignores[*]/IGNORE_/}" >&2
+
+for i in ${ignores[*]}; do
+    name=${i#IGNORE_}
+    if [ -n "$exprs" ]; then
+        exprs="$exprs;"
+    fi
+
+    exprs+="/^\\s*variable\\s\\+\"\\?$name\"\\?/,/^\\s*}\\s*\$/s/^/#/"
+done
+echo "# File auto-generated from $0"
+echo
+sed -e "$exprs"

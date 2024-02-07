@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 
-import hcl2
+import os
 import sys
 import json
+import hcl2
 
 hcl = hcl2.api.load(sys.stdin)
 
 print(f'# File auto-generated from {sys.argv[0]}')
 print()
 
-def fix_string(s):
+def sanitize_string(s):
     return s.replace('\'', '"').replace('\n', '\n #')
 
 for i, variable in enumerate(hcl.get('variable')):
     for name, content in variable.items():
+        if os.environ.get('IGNORE_{name}'):
+            continue
+
         description = content.get('description')
         data_type = content.get('type')
         has_default, default = 'default' in content, content.get('default')
@@ -29,19 +33,19 @@ for i, variable in enumerate(hcl.get('variable')):
             print()
 
         if description is not None:
-            print(fix_string(f'# {name} - {description}'))
+            print(sanitize_string(f'# {name} - {description}'))
 
         if data_type is not None:
-            print(fix_string(f'# Type: {data_type}'))
+            print(sanitize_string(f'# Type: {data_type}'))
 
 
         if has_default:
-            print(fix_string(f'# Default: {json.dumps(default)}'))
+            print(sanitize_string(f'# Default: {json.dumps(default)}'))
         else:
             print(f'# Required')
 
         if has_default:
-            print(fix_string(f'#{name} = {json.dumps(default)}'))
+            print(sanitize_string(f'#{name} = {json.dumps(default)}'))
         else:
             print(f'#{name} = <REQUIRED-VALUE>')
 

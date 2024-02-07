@@ -1,0 +1,10 @@
+# Used by bin/var2tf and bin/filter-vars
+#
+# var2tf:       MAP_${tf-var-name}=value  -> assigns `value` to ${tf-var-name} instead var.${tf-var-name}
+# filter-gvars: IGNORE_{tf-var-name}=true -> removes/comments ${tf-var-name} from results
+#
+
+export MAP_flux_aws_region=var.aws_region
+export MAP_flux_cluster_name=module.eks.cluster_name
+export IGNORE_flux_aws_region=true
+export IGNORE_flux_cluster_name=true

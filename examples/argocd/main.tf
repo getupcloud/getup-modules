@@ -1,4 +1,4 @@
-# File auto-generated from ./bin/module2example
+# File auto-generated from ./bin/vars2tf
 
 module "argocd" {
   source = "github.com/getupcloud/terraform-modules//modules/argocd?ref=v0.5.0"

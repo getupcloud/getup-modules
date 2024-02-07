@@ -1,4 +1,4 @@
-# File auto-generated from ./bin/module2example
+# File auto-generated from ./bin/vars2tf
 
 module "istio" {
   source = "github.com/getupcloud/terraform-modules//modules/istio?ref=v0.5.0"
