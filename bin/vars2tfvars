@@ -23,7 +23,7 @@ for i, variable in enumerate(hcl.get('variable')):
         has_default, default = 'default' in content, content.get('default')
 
         if default is None:
-            default = 'null'
+            pass
         elif data_type == '${string}':
             default = default # f'"{default}"'
         elif data_type == '${bool}':

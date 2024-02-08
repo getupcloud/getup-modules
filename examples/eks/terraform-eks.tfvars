@@ -72,8 +72,8 @@
 
 # cluster_security_group_name - Name to use on cluster security group created.
 # Type: ${string}
-# Default: "null"
-#cluster_security_group_name = "null"
+# Default: null
+#cluster_security_group_name = null
 
 # cluster_endpoint_public_access_cidrs - List of CIDR blocks. Indicates which CIDR blocks can access the Amazon EKS public API server endpoint when enabled.
 # Type: ${list(string)}
@@ -197,8 +197,8 @@
 
 # iam_role_arn - Existing IAM role ARN for the cluster.
 # Type: ${string}
-# Default: "null"
-#iam_role_arn = "null"
+# Default: null
+#iam_role_arn = null
 
 # kms_key_administrators - A list of IAM ARNs for [key administrators](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-default.html#key-policy-default-allow-administrators). If no value is provided, the current caller identity is used to ensure at least one key admin is available
 # Type: ${list(string)}
