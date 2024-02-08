@@ -27,7 +27,7 @@ for i, variable in enumerate(hcl.get('variable')):
         elif data_type == '${string}':
             default = default # f'"{default}"'
         elif data_type == '${bool}':
-            default = 'true' if default else 'false'
+            default = bool(default)
 
         if i:
             print()

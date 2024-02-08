@@ -62,8 +62,8 @@
 
 # create_cluster_security_group - Determines if a security group is created for the cluster. Note: the EKS service creates a primary security group for the cluster by default
 # Type: ${bool}
-# Default: "true"
-#create_cluster_security_group = "true"
+# Default: true
+#create_cluster_security_group = true
 
 # cluster_security_group_id - Existing security group ID to be attached to the cluster.
 # Type: ${string}
@@ -82,13 +82,13 @@
 
 # cluster_endpoint_public_access - Indicates whether or not the Amazon EKS public API server endpoint is enabled.
 # Type: ${bool}
-# Default: "false"
-#cluster_endpoint_public_access = "false"
+# Default: false
+#cluster_endpoint_public_access = false
 
 # vpc_cni_enable_prefix_delegation - Increases Pod density by assigning EC2 ENIs with IP addresses prefixes instead a single IP. Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html.
 # Type: ${bool}
-# Default: "true"
-#vpc_cni_enable_prefix_delegation = "true"
+# Default: true
+#vpc_cni_enable_prefix_delegation = true
 
 # fargate_profiles - List of fargate profiles to create. To disable fargate, set this value to `[]`.
 # Type: ${any}
@@ -192,8 +192,8 @@
 
 # iam_role_use_name_prefix - Determines whether the IAM role name (`iam_role_name`) is used as a prefix
 # Type: ${bool}
-# Default: "true"
-#iam_role_use_name_prefix = "true"
+# Default: true
+#iam_role_use_name_prefix = true
 
 # iam_role_arn - Existing IAM role ARN for the cluster.
 # Type: ${string}
