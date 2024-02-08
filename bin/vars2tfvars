@@ -11,7 +11,7 @@ print(f'# File auto-generated from {sys.argv[0]}')
 print()
 
 def sanitize_string(s):
-    return s.replace('\'', '"').replace('\n', '\n #')
+    return s.replace('\'', '"').replace('\n', '\n#')
 
 for i, variable in enumerate(hcl.get('variable')):
     for name, content in variable.items():
@@ -40,12 +40,12 @@ for i, variable in enumerate(hcl.get('variable')):
 
 
         if has_default:
-            print(sanitize_string(f'# Default: {json.dumps(default)}'))
+            print(sanitize_string(f'# Default: {json.dumps(default, indent=2, sort_keys=True)}'))
         else:
             print(f'# Required')
 
         if has_default:
-            print(sanitize_string(f'#{name} = {json.dumps(default)}'))
+            print(sanitize_string(f'#{name} = {json.dumps(default, indent=2, sort_keys=True)}'))
         else:
             print(f'#{name} = <REQUIRED-VALUE>')
 

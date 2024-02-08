@@ -22,8 +22,66 @@
 
 # argocd_set - Value block with custom values to be merged with the values yaml.
 # Type: ${list(object({"name": "${string}", "value": "${string}"}))}
-# Default: [{"name": "redis-ha.enabled", "value": "false"}, {"name": "controller.replicas", "value": "1"}, {"name": "server.autoscaling.enabled", "value": "true"}, {"name": "server.autoscaling.minReplicas", "value": "1"}, {"name": "repoServer.autoscaling.enabled", "value": "true"}, {"name": "repoServer.autoscaling.minReplicas", "value": "1"}, {"name": "applicationSet.replicas", "value": "1"}]
-#argocd_set = [{"name": "redis-ha.enabled", "value": "false"}, {"name": "controller.replicas", "value": "1"}, {"name": "server.autoscaling.enabled", "value": "true"}, {"name": "server.autoscaling.minReplicas", "value": "1"}, {"name": "repoServer.autoscaling.enabled", "value": "true"}, {"name": "repoServer.autoscaling.minReplicas", "value": "1"}, {"name": "applicationSet.replicas", "value": "1"}]
+# Default: [
+#  {
+#    "name": "redis-ha.enabled",
+#    "value": "false"
+#  },
+#  {
+#    "name": "controller.replicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "server.autoscaling.enabled",
+#    "value": "true"
+#  },
+#  {
+#    "name": "server.autoscaling.minReplicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "repoServer.autoscaling.enabled",
+#    "value": "true"
+#  },
+#  {
+#    "name": "repoServer.autoscaling.minReplicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "applicationSet.replicas",
+#    "value": "1"
+#  }
+#]
+#argocd_set = [
+#  {
+#    "name": "redis-ha.enabled",
+#    "value": "false"
+#  },
+#  {
+#    "name": "controller.replicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "server.autoscaling.enabled",
+#    "value": "true"
+#  },
+#  {
+#    "name": "server.autoscaling.minReplicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "repoServer.autoscaling.enabled",
+#    "value": "true"
+#  },
+#  {
+#    "name": "repoServer.autoscaling.minReplicas",
+#    "value": "1"
+#  },
+#  {
+#    "name": "applicationSet.replicas",
+#    "value": "1"
+#  }
+#]
 
 # argocd_set_list - Value block with list of custom values to be merged with the values yaml.
 # Type: ${list(object({"name": "${string}", "value": "${list(string)}"}))}
