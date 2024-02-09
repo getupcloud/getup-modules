@@ -127,6 +127,11 @@ output "cluster_addons" {
   value       = module.eks.cluster_addons
 }
 
+output "aws_load_balancer_controller_iam_role_arn" {
+  description = "AWS Load Balancer Controller Role ARN."
+  value       = module.aws_load_balancer_controller_irsa.iam_role_arn
+}
+
 ################################################################################
 # EKS Identity Provider
 ################################################################################
@@ -188,7 +193,7 @@ output "self_managed_node_groups_autoscaling_group_names" {
 }
 
 ################################################################################
-# Additional
+# AWS Auth
 ################################################################################
 
 output "aws_auth_configmap_yaml" {
