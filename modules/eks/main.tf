@@ -316,7 +316,7 @@ resource "helm_release" "karpenter" {
 }
 
 resource "kubectl_manifest" "karpenter_node_class" {
-  for_each = (var.karpenter_enabled ? ["default"] : [])
+  for_each = toset(var.karpenter_enabled ? ["default"] : [])
 
   yaml_body = <<-YAML
     apiVersion: karpenter.k8s.aws/v1beta1
@@ -342,7 +342,7 @@ resource "kubectl_manifest" "karpenter_node_class" {
 }
 
 resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
-  for_each = (var.karpenter_enabled ? ["on-demand"] : [])
+  for_each = toset(var.karpenter_enabled ? ["on-demand"] : [])
 
   yaml_body = <<-YAML
     apiVersion: karpenter.sh/v1beta1
@@ -395,7 +395,7 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
 }
 
 resource "kubectl_manifest" "karpenter_node_pool_spot" {
-  for_each = (var.karpenter_enabled ? ["spot"] : [])
+  for_each = toset(var.karpenter_enabled ? ["spot"] : [])
 
   yaml_body = <<-YAML
     apiVersion: karpenter.sh/v1beta1
