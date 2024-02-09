@@ -29,6 +29,7 @@ module "eks" {
   fallback_node_group_platform            = var.fallback_node_group_platform
   fallback_node_group_disk_size           = var.fallback_node_group_disk_size
   fallback_node_group_disk_type           = var.fallback_node_group_disk_type
+  karpenter_enabled                       = var.karpenter_enabled
   karpenter_namespace                     = var.karpenter_namespace
   karpenter_version                       = var.karpenter_version
   karpenter_replicas                      = var.karpenter_replicas
