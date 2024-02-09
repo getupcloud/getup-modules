@@ -38,7 +38,7 @@ module "eks" {
   cluster_addons = {
     aws-ebs-csi-driver = {
       service_account_role_arn = module.ebs_csi_driver_irsa.iam_role_arn
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts        = "OVERWRITE"
     }
     kube-proxy = {
       resolve_conflicts = "OVERWRITE"
