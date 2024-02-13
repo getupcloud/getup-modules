@@ -20,5 +20,5 @@ variable "loki_retention_days" {
 variable "loki_retention_prefixes" {
   description = "Prefixes to retain files in S3."
   type        = list(string)
-  default     = [ "fake/" ]
+  default     = ["fake/"]
 }
