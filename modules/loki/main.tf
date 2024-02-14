@@ -10,7 +10,7 @@ module "loki_s3_bucket" {
 
   lifecycle_rule = [for idx, prefix in var.loki_retention_prefixes :
     {
-      id      = "expiration-${idx}"
+      id      = "expiration-${idx}-${var.loki_retention_days}-days"
       enabled = true
       filter = {
         prefix = prefix
