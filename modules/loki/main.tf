@@ -17,7 +17,6 @@ module "loki_s3_bucket" {
       }
       expiration = {
         days                         = var.loki_retention_days
-        expired_object_delete_marker = true
       }
     }
   ]
