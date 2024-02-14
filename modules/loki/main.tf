@@ -2,27 +2,23 @@ locals {
   name_prefix = "loki-"
 }
 
-resource "aws_s3_bucket" "s3_loki" {
-  bucket_prefix = local.name_prefix
-
-}
-
-module "s3_bucket" {
+module "loki_s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
   bucket_prefix = local.name_prefix
   force_destroy = true
 
-  lifecycle_rule = [for idx, prefix in var.loki_retention_prefixes : {
-    id      = "expiration-${idx}"
-    enabled = true
-    filter = {
-      prefix = prefix
-    }
-    expiration = {
-      days                         = var.loki_retention_days
-      expired_object_delete_marker = true
-    }
+  lifecycle_rule = [for idx, prefix in var.loki_retention_prefixes :
+    {
+      id      = "expiration-${idx}"
+      enabled = true
+      filter = {
+        prefix = prefix
+      }
+      expiration = {
+        days                         = var.loki_retention_days
+        expired_object_delete_marker = true
+      }
     }
   ]
 
@@ -31,7 +27,7 @@ module "s3_bucket" {
   })
 }
 
-data "aws_iam_policy_document" "s3_loki" {
+data "aws_iam_policy_document" "loki_s3" {
   statement {
     actions = [
       "s3:ListBucket",
@@ -41,27 +37,35 @@ data "aws_iam_policy_document" "s3_loki" {
     ]
 
     resources = [
-      aws_s3_bucket.s3_loki.arn,
-      "${aws_s3_bucket.s3_loki.arn}/*"
+      module.loki_s3_bucket.s3_bucket_arn,
+      "${module.loki_s3_bucket.s3_bucket_arn}/*"
     ]
   }
 }
 
-resource "aws_iam_policy" "s3_loki" {
+resource "aws_iam_policy" "loki_s3" {
   name_prefix = local.name_prefix
   description = "AWSS3Loki policy"
-  policy      = data.aws_iam_policy_document.s3_loki.json
+  policy      = data.aws_iam_policy_document.loki_s3.json
+
+  tags = merge(var.loki_tags, {
+    "managed-by" : "terraform"
+  })
 }
 
 
-module "loki_irsa" {
+module "loki_s3_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version = "~> 5.34.0"
 
   create_role                   = true
   role_name_prefix              = local.name_prefix
   provider_url                  = var.loki_cluster_oidc_issuer_url
-  role_policy_arns              = [aws_iam_policy.s3_loki.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:logging:loki"]
+  role_policy_arns              = [aws_iam_policy.loki_s3.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:logging:loki"] #TODO: parametrize
+
+  tags = merge(var.loki_tags, {
+    "managed-by" : "terraform"
+  })
 }
 
