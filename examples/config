@@ -1,7 +1,7 @@
 # Used by bin/var2tf and bin/filter-vars
 #
-# var2tf:       MAP_${tf-var-name}=value  -> assigns `value` to ${tf-var-name} instead var.${tf-var-name}
-# filter-gvars: IGNORE_{tf-var-name}=true -> removes/comments ${tf-var-name} from results
+# var2tf:      MAP_${tf-var-name}=value  -> assigns `value` to ${tf-var-name} instead var.${tf-var-name}
+# filter-vars: IGNORE_{tf-var-name}=true -> removes/comments ${tf-var-name} from results
 #
 
 export MAP_flux_aws_region=var.aws_region
@@ -11,3 +11,6 @@ export IGNORE_flux_cluster_name=true
 
 export MAP_loki_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
 export IGNORE_loki_cluster_oidc_issuer_url=true
+
+export MAP_cert_manager_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
+export IGNORE_cert_manager_cluster_oidc_issuer_url=true

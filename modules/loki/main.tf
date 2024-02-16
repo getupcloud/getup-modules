@@ -16,7 +16,7 @@ module "loki_s3_bucket" {
         prefix = prefix
       }
       expiration = {
-        days                         = var.loki_retention_days
+        days = var.loki_retention_days
       }
     }
   ]
