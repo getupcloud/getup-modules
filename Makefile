@@ -3,8 +3,8 @@ FILE_VERSION   := $(shell cat $(VERSION_TXT))
 VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager
-EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/cert-manager
+MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager modules/ecr-credentials-sync
+EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/cert-manager examples/ecr-credentials-sync
 COMMON_TARGETS := fmt lint init validate clean
 TEST_TARGETS   := test
 

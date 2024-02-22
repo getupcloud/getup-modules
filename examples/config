@@ -14,3 +14,6 @@ export IGNORE_loki_cluster_oidc_issuer_url=true
 
 export MAP_cert_manager_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
 export IGNORE_cert_manager_cluster_oidc_issuer_url=true
+
+export MAP_ecr_credentials_sync_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
+export IGNORE_ecr_credentials_sync_cluster_oidc_issuer_url=true
