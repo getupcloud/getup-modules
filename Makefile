@@ -2,6 +2,7 @@ VERSION_TXT    := version.txt
 FILE_VERSION   := $(shell cat $(VERSION_TXT))
 VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
+TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
 MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager modules/ecr-credentials-sync
 EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/cert-manager examples/ecr-credentials-sync
@@ -59,3 +60,24 @@ build-release: examples
 	git tag $(RELEASE)
 	git push
 	git push --tags
+
+template:
+	select source in $(TEMPLATES); do
+		break
+	done
+	while true; do
+		read -e -p "Name of new module: " NAME
+		if [ -d modules/$$NAME ]; then
+			echo Already exists: modules/$$NAME
+		else
+			read -e -p "Display Name of new module: " DISPLAY_NAME
+			export NAME DISPLAY_NAME name=$${NAME,,} name_=$${NAME//-/_}
+			mkdir -p modules/$$NAME
+			for i in templates/$$source/*; do
+				envsubst < $$i >> modules/$$NAME/$${i##*/}
+			done
+			envsubst < templates/Makefile.example >> modules/$$NAME/Makefile
+			ls -la modules/$$NAME/
+			break
+		fi
+	done
