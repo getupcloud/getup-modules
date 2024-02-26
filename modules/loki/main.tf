@@ -3,7 +3,8 @@ locals {
 }
 
 module "loki_s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "4.1.0"
 
   bucket_prefix = local.name_prefix
   force_destroy = true
