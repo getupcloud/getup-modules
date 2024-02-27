@@ -17,3 +17,10 @@ export IGNORE_cert_manager_cluster_oidc_issuer_url=true
 
 export MAP_ecr_credentials_sync_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
 export IGNORE_ecr_credentials_sync_cluster_oidc_issuer_url=true
+
+export MAP_aws_eso_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
+export MAP_aws_eso_aws_region=var.aws_region
+export IGNORE_aws_eso_cluster_oidc_issuer_url=true
+export IGNORE_aws_eso_aws_region=true
+#export IGNORE_aws_eso_namespace=true
+#export IGNORE_aws_eso_service_account=true

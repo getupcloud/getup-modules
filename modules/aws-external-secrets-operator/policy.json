@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:CreateSecret",
+        "secretsmanager:PutSecretValue",
+        "secretsmanager:TagResource"
+      ],
+      "Resource": ${ jsonencode([ for name in all_secrets_managers : "arn:aws:secretsmanager:${aws_region}:${aws_account_id}:secret:${name}" ]) }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:DeleteSecret"
+      ],
+      "Resource": ${ jsonencode([ for name in all_secrets_managers : "arn:aws:secretsmanager:${aws_region}:${aws_account_id}:secret:${name}" ]) },
+      "Condition": {
+        "StringEquals": {
+          "secretsmanager:ResourceTag/managed-by": "external-secrets"
+        }
+      }
+    }
+  ]
+}
