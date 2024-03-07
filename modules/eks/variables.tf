@@ -130,6 +130,18 @@ variable "vpc_cni_enable_prefix_delegation" {
   default     = true
 }
 
+variable "kube_proxy" {
+  description = "Kube-proxy addon configurations."
+  type = object({
+    mode : optional(string, "iptables"),
+    resources : optional(any, {}),
+    ipvs : optional(object({
+      scheduler : optional(string, "rr")
+    }), {})
+  })
+  default = {}
+}
+
 #### Fargate ####
 #################
 

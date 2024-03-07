@@ -41,7 +41,8 @@ module "eks" {
       resolve_conflicts        = "OVERWRITE"
     }
     kube-proxy = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts    = "OVERWRITE"
+      configuration_values = jsonencode(var.kube_proxy)
     }
     vpc-cni = {
       before_compute    = true
