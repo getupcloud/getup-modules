@@ -3,7 +3,7 @@ locals {
   policy_vars = {
     aws_region : var.aws_eso_aws_region != "" ? var.aws_eso_aws_region : data.aws_region.current.name
     aws_account_id : var.aws_eso_aws_account_id != "" ? var.aws_eso_aws_account_id : data.aws_caller_identity.current.account_id
-    all_secrets_managers : toset(compact(concat(var.aws_eso_secrets_managers, var.aws_eso_create_secrets_managers)))
+    all_secrets : toset(compact(concat(var.aws_eso_secrets, var.aws_eso_create_secrets)))
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_iam_policy" "policy" {
 
   lifecycle {
     precondition {
-      condition     = length(local.policy_vars.all_secrets_managers) >= 0
+      condition     = length(local.policy_vars.all_secrets) >= 0
       error_message = "The selected AMI must be for the x86_64 architecture."
     }
   }
@@ -47,7 +47,7 @@ module "secrets_manager" {
   source  = "terraform-aws-modules/secrets-manager/aws"
   version = "~> 1.1.1"
 
-  for_each = toset(var.aws_eso_create_secrets_managers)
+  for_each = toset(var.aws_eso_create_secrets)
 
   # Secret
   name                    = each.key
