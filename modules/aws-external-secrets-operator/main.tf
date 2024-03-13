@@ -15,13 +15,6 @@ resource "aws_iam_policy" "policy" {
   description = "AWS External Secrets Operator policy for IRSA"
   policy      = templatefile("${path.module}/policy.json", local.policy_vars)
 
-  lifecycle {
-    precondition {
-      condition     = length(local.policy_vars.all_secrets) >= 0
-      error_message = "The selected AMI must be for the x86_64 architecture."
-    }
-  }
-
   tags = merge(var.aws_eso_tags, {
     "managed-by" : "terraform"
   })
