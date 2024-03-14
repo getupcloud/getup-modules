@@ -5,9 +5,9 @@ locals {
     aws_account_id : var.aws_eso_aws_account_id != "" ? var.aws_eso_aws_account_id : data.aws_caller_identity.current.account_id
     secrets : compact(concat(var.aws_eso_secrets, var.aws_eso_create_secrets))
     secrets_arns : concat(
-        [for s in var.aws_eso_secrets : s if startswith(s, "arn:")],
-        flatten([for s in data.aws_secretsmanager_secrets.secrets: s.arns]),
-        [for s in module.secrets : s.secret_arn]
+      [for s in var.aws_eso_secrets : s if startswith(s, "arn:")],
+      flatten([for s in data.aws_secretsmanager_secrets.secrets : s.arns]),
+      [for s in module.secrets : s.secret_arn]
     )
   }
 }
@@ -16,7 +16,7 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "aws_secretsmanager_secrets" "secrets" {
-  for_each = toset([ for s in var.aws_eso_secrets : s if !startswith(s, "arn:") ])
+  for_each = toset([for s in var.aws_eso_secrets : s if !startswith(s, "arn:")])
 
   filter {
     name   = "name"
@@ -60,11 +60,11 @@ module "secrets" {
   name                    = each.key
   description             = "Secrets Manager for EKS (${var.aws_eso_cluster_oidc_issuer_url})"
   recovery_window_in_days = 7
-  secret_string           = jsonencode({"EXAMPLE": "example-data"})
+  secret_string           = jsonencode({ "EXAMPLE" : "example-data" })
 
   # Policy
   ignore_secret_changes = true
-  block_public_policy = true
+  block_public_policy   = true
 
   tags = merge(var.aws_eso_tags, {
     "managed-by" : "terraform"
