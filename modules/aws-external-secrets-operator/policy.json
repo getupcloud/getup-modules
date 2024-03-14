@@ -9,7 +9,7 @@
         "secretsmanager:DescribeSecret",
         "secretsmanager:ListSecretVersionIds"
       ],
-      "Resource": ${ jsonencode([ for name in all_secrets : "arn:aws:secretsmanager:${aws_region}:${aws_account_id}:secret:${name}" ]) }
+      "Resource": ${ jsonencode([ for arn in secrets_arns : arn ]) }
     }
   ]
 }
