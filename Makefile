@@ -76,7 +76,7 @@ template:
 			for i in templates/$$source/*; do
 				envsubst < $$i >> modules/$$NAME/$${i##*/}
 			done
-			envsubst < templates/Makefile.example >> modules/$$NAME/Makefile
+			ln -s ../Makefile.common modules/$$NAME/Makefile
 			ls -la modules/$$NAME/
 			break
 		fi
