@@ -4,8 +4,8 @@ VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager modules/ecr-credentials-sync modules/aws-external-secrets-operator
-EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/cert-manager examples/ecr-credentials-sync examples/aws-external-secrets-operator
+MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager modules/ecr-credentials-sync modules/aws-external-secrets-operator modules/opencost
+EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/cert-manager examples/ecr-credentials-sync examples/aws-external-secrets-operator examples/opencost
 COMMON_TARGETS := fmt lint init validate clean
 TEST_TARGETS   := test
 

@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:HeadBucket",
+        "s3:HeadObject",
+        "s3:List*",
+        "s3:Get*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${opencost_bucket_name}"
+      ],
+      "Effect": "Allow",
+      "Sid": "SpotDataAccess"
+    }
+  ]
+}

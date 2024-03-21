@@ -5,8 +5,8 @@
 #
 
 export MAP_flux_aws_region=var.aws_region
-export MAP_flux_cluster_name=module.eks.cluster_name
 export IGNORE_flux_aws_region=true
+export MAP_flux_cluster_name=module.eks.cluster_name
 export IGNORE_flux_cluster_name=true
 
 export MAP_loki_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
@@ -24,3 +24,8 @@ export MAP_aws_eso_aws_region=var.aws_region
 export IGNORE_aws_eso_aws_region=true
 #export IGNORE_aws_eso_namespace=true
 #export IGNORE_aws_eso_service_account=true
+
+export MAP_opencost_cluster_name=module.eks.cluster_name
+export IGNORE_opencost_cluster_name=true
+export MAP_opencost_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
+export IGNORE_opencost_cluster_oidc_issuer_url=true
