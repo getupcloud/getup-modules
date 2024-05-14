@@ -37,6 +37,9 @@ examples:
 		if [ -e $$dir/versions.tf  ]; then
 			cp -f $$dir/versions.tf examples/$$name/versions-$$name.tf
 		fi
+		if [ -e $$dir/outputs.tf  ]; then
+			cat $$dir/outputs.tf | ./bin/outputs $$name > examples/$$name/outputs-$$name.tf
+		fi
 		ln -fs ../Makefile.example examples/$$name/Makefile
 	done
 	$(MAKE) fmt

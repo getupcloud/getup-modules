@@ -30,13 +30,13 @@ variable "aws_eso_aws_account_id" {
 }
 
 variable "aws_eso_create_secrets" {
-  description = "(Optional) List of secrets to create."
+  description = "(Optional) List of secret names to create."
   type        = list(string)
   default     = []
 }
 
 variable "aws_eso_secrets" {
-  description = "(Optional) List of existing secrets."
+  description = "(Optional) List of existing secrets. Can be either a arn or a secret name."
   type        = list(string)
   default     = []
 }

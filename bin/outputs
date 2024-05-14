@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import hcl2
+
+if len(sys.argv) < 2:
+    print(f"Usage: cat outputs.tf | {sys.argv[0]} module-name", file=sys.stderr)
+    sys.exit(1)
+
+module_name = sys.argv[1]
+hcl = hcl2.api.load(sys.stdin)
+
+print(f'''
+# File auto-generated from {sys.argv[0]}
+'''.strip())
+
+for output in hcl.get('output', []):
+    for name, spec in output.items():
+        print()
+        print(f'output "{name}" {{')
+        if 'description' in spec:
+            print(f'  description = "{spec["description"]}"')
+            print(f'  value       = module.{module_name}.{name}')
+        print('}')
