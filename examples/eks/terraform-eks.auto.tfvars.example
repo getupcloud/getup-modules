@@ -7,8 +7,8 @@
 
 # kubernetes_version - Kubernetes controlplane version.
 # Type: ${string}
-# Default: "1.28"
-#kubernetes_version = "1.28"
+# Default: "1.29"
+#kubernetes_version = "1.29"
 
 # aws_region - AWS Region.
 # Type: ${string}
