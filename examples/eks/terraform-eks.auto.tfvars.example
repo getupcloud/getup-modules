@@ -368,11 +368,6 @@
 # Default: []
 #aws_auth_accounts = []
 
-# aws_auth_node_iam_role_arns_non_windows - List of non-Windows based node IAM role ARNs to add to the aws-auth configmap
-# Type: ${list(string)}
-# Default: []
-#aws_auth_node_iam_role_arns_non_windows = []
-
 # keda_namespace - Namespace where to install Keda.
 # Type: ${string}
 # Default: "keda"
