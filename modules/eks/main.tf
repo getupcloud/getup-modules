@@ -253,7 +253,7 @@ module "karpenter" {
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
   version = "~> 20.10.0"
 
-  cluster_name                    = module.eks.cluster_name
+  cluster_name = module.eks.cluster_name
   #irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
   #irsa_namespace_service_accounts = ["${var.karpenter_namespace}:karpenter"]
   enable_pod_identity             = true
