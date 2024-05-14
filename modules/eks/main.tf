@@ -39,16 +39,16 @@ module "eks" {
 
   cluster_addons = {
     aws-ebs-csi-driver = {
-      service_account_role_arn = module.ebs_csi_driver_irsa.iam_role_arn
-      resolve_conflicts        = "OVERWRITE"
+      service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
+      resolve_conflicts_on_update = "OVERWRITE"
     }
     kube-proxy = {
-      resolve_conflicts    = "OVERWRITE"
-      configuration_values = jsonencode(var.kube_proxy)
+      resolve_conflicts_on_update = "OVERWRITE"
+      configuration_values        = jsonencode(var.kube_proxy)
     }
     vpc-cni = {
-      before_compute    = true
-      resolve_conflicts = "OVERWRITE"
+      before_compute              = true
+      resolve_conflicts_on_update = "OVERWRITE"
       configuration_values = var.vpc_cni_enable_prefix_delegation ? jsonencode({
         env = {
           # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
@@ -58,7 +58,7 @@ module "eks" {
       }) : null
     }
     coredns = {
-      resolve_conflicts = "OVERWRITE"
+      resolve_conflicts_on_update = "OVERWRITE"
       configuration_values = local.fargate.kube_system ? jsonencode({
         computeType = "Fargate"
         # Ensure that we fully utilize the minimum amount of resources that are supplied by
@@ -98,42 +98,6 @@ module "eks" {
   cluster_security_group_additional_rules = local.cluster_security_group_additional_rules
 
   cluster_encryption_config = var.cluster_encryption_config
-
-  manage_aws_auth_configmap = true
-  # TODO: merge from vars
-  aws_auth_roles = concat(
-    [
-      {
-        rolearn  = module.karpenter.role_arn
-        username = "system:node:{{EC2PrivateDNSName}}"
-        groups = [
-          "system:bootstrappers",
-          "system:nodes",
-        ]
-      }
-    ],
-    [
-      for arn in var.aws_auth_role_arns : {
-        rolearn  = arn
-        username = split("/", arn)[1]
-        groups   = var.aws_auth_role_groups
-      }
-    ],
-    var.aws_auth_roles
-  )
-
-  aws_auth_users = concat(
-    [
-      for arn in local.aws_auth_user_arns : {
-        userarn  = arn
-        username = strcontains(arn, "/") ? split("/", arn)[1] : split(":", arn)[5]
-        groups   = var.aws_auth_user_groups
-      }
-    ],
-    var.aws_auth_users
-  )
-
-  aws_auth_accounts = var.aws_auth_accounts
 
   aws_auth_node_iam_role_arns_non_windows = var.aws_auth_node_iam_role_arns_non_windows
 
@@ -176,6 +140,47 @@ module "eks" {
     # (i.e. - at most, only one security group should have this tag in your account)
     "karpenter.sh/discovery" = local.cluster_name
   })
+}
+
+module "aws_auth" {
+  source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
+  version = "~> 20.10.0"
+
+  manage_aws_auth_configmap = true
+
+  aws_auth_roles = concat(
+    [
+      {
+        rolearn  = module.karpenter.role_arn
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups = [
+          "system:bootstrappers",
+          "system:nodes",
+        ]
+      }
+    ],
+    [
+      for arn in var.aws_auth_role_arns : {
+        rolearn  = arn
+        username = split("/", arn)[1]
+        groups   = var.aws_auth_role_groups
+      }
+    ],
+    var.aws_auth_roles
+  )
+
+  aws_auth_users = concat(
+    [
+      for arn in local.aws_auth_user_arns : {
+        userarn  = arn
+        username = strcontains(arn, "/") ? split("/", arn)[1] : split(":", arn)[5]
+        groups   = var.aws_auth_user_groups
+      }
+    ],
+    var.aws_auth_users
+  )
+
+  aws_auth_accounts = var.aws_auth_accounts
 }
 
 # https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
