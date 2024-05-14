@@ -148,16 +148,6 @@ module "aws_auth" {
 
   aws_auth_roles = concat(
     [
-      {
-        rolearn  = module.karpenter.role_arn
-        username = "system:node:{{EC2PrivateDNSName}}"
-        groups = [
-          "system:bootstrappers",
-          "system:nodes",
-        ]
-      }
-    ],
-    [
       for arn in var.aws_auth_role_arns : {
         rolearn  = arn
         username = split("/", arn)[1]
@@ -301,9 +291,6 @@ resource "helm_release" "karpenter" {
       controller.resources.requests.memory: "256Mi"
       controller.resources.limits.cpu: "250m"
       controller.resources.limits.memory: "256Mi"
-    #serviceAccount:
-    #  annotations:
-    #    eks.amazonaws.com/role-arn: ${module.karpenter.irsa_arn}
     EOT
   ]
 
