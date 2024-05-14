@@ -315,7 +315,7 @@ resource "kubectl_manifest" "karpenter_node_class" {
       name: default
     spec:
       amiFamily: ${var.karpenter_node_class_ami_family}
-      role: ${module.karpenter.role_name}
+      role: ${module.karpenter.node_iam_role_name}
       subnetSelectorTerms:
         - tags:
             karpenter.sh/discovery: ${module.eks.cluster_name}
