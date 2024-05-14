@@ -22,4 +22,6 @@ for output in hcl.get('output', []):
         if 'description' in spec:
             print(f'  description = "{spec["description"]}"')
             print(f'  value       = module.{module_name}.{name}')
+        if 'sensitive' in spec:
+            print(f'  sensitive   = {spec["sensitive"]}')
         print('}')
