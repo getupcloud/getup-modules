@@ -249,6 +249,8 @@ module "karpenter" {
   cluster_name                    = module.eks.cluster_name
   enable_pod_identity             = true
   create_pod_identity_association = true
+  namespace                       = var.karpenter_namespace
+  service_account                 = "karpenter"
 
   # Used to attach additional IAM policies to the Karpenter node IAM role
   node_iam_role_additional_policies = {
@@ -263,7 +265,7 @@ resource "helm_release" "karpenter" {
   repository          = "oci://public.ecr.aws/karpenter"
   chart               = "karpenter"
   version             = var.karpenter_version
-  namespace           = var.karpenter_namespace
+  namespace           = module.karpenter.namespace
   create_namespace    = true
   repository_username = data.aws_ecrpublic_authorization_token.token.user_name
   repository_password = data.aws_ecrpublic_authorization_token.token.password
@@ -271,17 +273,9 @@ resource "helm_release" "karpenter" {
   values = [
     <<-EOT
     replicas: ${var.karpenter_replicas}
-    #affinity:
-    #  nodeAffinity:
-    #    requiredDuringSchedulingIgnoredDuringExecution:
-    #      nodeSelectorTerms:
-    #      - matchExpressions:
-    #        - key: karpenter.sh/nodepool
-    #          operator: DoesNotExist
-    #        - key: eks.amazonaws.com/compute-type
-    #          operator: In
-    #          values:
-    #          - fargate
+    serviceAccount:
+      create: true
+      name: ${module.karpenter.service_account}
     settings:
       clusterName: ${module.eks.cluster_name}
       clusterEndpoint: ${module.eks.cluster_endpoint}
