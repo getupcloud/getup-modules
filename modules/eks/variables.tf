@@ -219,7 +219,7 @@ variable "karpenter_namespace" {
 variable "karpenter_version" {
   description = "Karpenter chart version."
   type        = string
-  default     = "v0.33.1"
+  default     = "v0.36.1"
 }
 
 variable "karpenter_replicas" {

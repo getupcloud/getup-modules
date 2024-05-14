@@ -21,7 +21,7 @@ data "aws_vpc" "eks" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.21.0"
+  version = "~> 20.10.0"
 
   cluster_name                         = local.cluster_name
   cluster_version                      = local.cluster_version
@@ -31,6 +31,8 @@ module "eks" {
   iam_role_arn                         = var.iam_role_arn
   iam_role_name                        = var.eks_iam_role_name
   iam_role_use_name_prefix             = var.iam_role_use_name_prefix
+
+  enable_cluster_creator_admin_permissions = true
 
   cluster_enabled_log_types   = []
   create_cloudwatch_log_group = false
@@ -81,6 +83,7 @@ module "eks" {
         }
       }) : null
     }
+    eks-pod-identity-agent = {}
   }
 
   vpc_id                   = local.vpc_id
@@ -248,11 +251,13 @@ resource "kubernetes_storage_class_v1" "gp3" {
 
 module "karpenter" {
   source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "~> 19.21.0"
+  version = "~> 20.10.0"
 
   cluster_name                    = module.eks.cluster_name
-  irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
-  irsa_namespace_service_accounts = ["${var.karpenter_namespace}:karpenter"]
+  #irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
+  #irsa_namespace_service_accounts = ["${var.karpenter_namespace}:karpenter"]
+  enable_pod_identity             = true
+  create_pod_identity_association = true
 
   # In v0.32.0/v1beta1, Karpenter now creates the IAM instance profile
   # so we disable the Terraform creation and add the necessary permissions for Karpenter IRSA
@@ -299,9 +304,9 @@ resource "helm_release" "karpenter" {
       controller.resources.requests.memory: "256Mi"
       controller.resources.limits.cpu: "250m"
       controller.resources.limits.memory: "256Mi"
-    serviceAccount:
-      annotations:
-        eks.amazonaws.com/role-arn: ${module.karpenter.irsa_arn}
+    #serviceAccount:
+    #  annotations:
+    #    eks.amazonaws.com/role-arn: ${module.karpenter.irsa_arn}
     EOT
   ]
 
