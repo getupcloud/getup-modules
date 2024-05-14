@@ -99,8 +99,6 @@ module "eks" {
 
   cluster_encryption_config = var.cluster_encryption_config
 
-  aws_auth_node_iam_role_arns_non_windows = var.aws_auth_node_iam_role_arns_non_windows
-
   kms_key_administrators = local.kms_key_administrators
 
   fargate_profiles = {
@@ -259,17 +257,11 @@ module "karpenter" {
   version = "~> 20.10.0"
 
   cluster_name = module.eks.cluster_name
-  #irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
-  #irsa_namespace_service_accounts = ["${var.karpenter_namespace}:karpenter"]
   enable_pod_identity             = true
   create_pod_identity_association = true
 
-  # In v0.32.0/v1beta1, Karpenter now creates the IAM instance profile
-  # so we disable the Terraform creation and add the necessary permissions for Karpenter IRSA
-  enable_karpenter_instance_profile_creation = true
-
   # Used to attach additional IAM policies to the Karpenter node IAM role
-  iam_role_additional_policies = {
+  node_iam_role_additional_policies = {
     AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   }
 
