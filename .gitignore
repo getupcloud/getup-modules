@@ -1,7 +1,9 @@
-.terraform
-**/.terraform/
-**/.terraform.lock.hcl
-terraform.log
 *.sw?
-terraform.tfplan
-terraform-migrate.tfstate
+**/.terraform
+**/.terraform.lock.hcl
+*.tfstate
+*.tfplan
+*.tfstate.*.backup
+terraform.log
+.kubeconfig
+.kustomize_build.yaml
