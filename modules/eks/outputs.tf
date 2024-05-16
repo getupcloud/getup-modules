@@ -7,6 +7,11 @@ output "aws_account_id" {
   value       = data.aws_caller_identity.current.account_id
 }
 
+variable "aws_region" {
+  description = "AWS Region."
+  value       = var.aws_region
+}
+
 output "cluster_arn" {
   description = "The Amazon Resource Name (ARN) of the cluster"
   value       = module.eks.cluster_arn
