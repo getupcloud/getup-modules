@@ -20,21 +20,23 @@ data "aws_vpc" "eks" {
 # aws iam create-service-linked-role --aws-service-name spot.amazonaws.com || true
 # If the role has already been successfully created, you will see:
 # An error occurred (InvalidInput) when calling the CreateServiceLinkedRole operation: Service role name AWSServiceRoleForEC2Spot has been taken in this account, please try a different suffix.
-
-resource "aws_iam_service_linked_role" "spot" {
-  aws_service_name = "spot.amazonaws.com"
-
-  lifecycle {
-    replace_triggered_by = [null_resource.once]
-    ignore_changes       = [aws_service_name]
-  }
-}
-
-resource "null_resource" "once" {
-  triggers = {
-    once = true
-  }
-}
+#
+# This can't be shared among different clusters as it's a account-level resource
+#
+#resource "aws_iam_service_linked_role" "spot" {
+#  aws_service_name = "spot.amazonaws.com"
+#
+#  lifecycle {
+#    replace_triggered_by = [null_resource.once]
+#    ignore_changes       = [aws_service_name]
+#  }
+#}
+#
+#resource "null_resource" "once" {
+#  triggers = {
+#    once = true
+#  }
+#}
 
 ################################################################################
 # EKS Module
