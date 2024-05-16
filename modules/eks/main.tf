@@ -25,8 +25,14 @@ resource "aws_iam_service_linked_role" "spot" {
   aws_service_name = "spot.amazonaws.com"
 
   lifecycle {
-    replace_triggered_by = [data.aws_caller_identity.current.account_id]
+    replace_triggered_by = [null_resource.once]
     ignore_changes       = [aws_service_name]
+  }
+}
+
+resource "null_resource" "once" {
+  triggers = {
+    once = true
   }
 }
 
