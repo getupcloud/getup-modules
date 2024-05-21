@@ -62,6 +62,11 @@ output "cluster_vpc_id" {
   value       = local.vpc_id
 }
 
+output "cluster_vpc_private_route_table_ids" {
+  description = "Route table IDs from the cluster private subnets."
+  value       = try(module.vpc[0].private_route_table_ids, [])
+}
+
 ################################################################################
 # Security Group
 ################################################################################

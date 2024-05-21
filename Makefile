@@ -4,8 +4,8 @@ VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := modules/eks modules/flux modules/istio modules/argocd modules/loki modules/cert-manager modules/ecr-credentials-sync modules/aws-external-secrets-operator modules/opencost
-EXAMPLES       := examples/eks examples/flux examples/istio examples/argocd examples/loki examples/cert-manager examples/ecr-credentials-sync examples/aws-external-secrets-operator examples/opencost
+MODULES        := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
+EXAMPLES       := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
 COMMON_TARGETS := fmt lint init validate clean
 TEST_TARGETS   := test
 
@@ -14,18 +14,18 @@ TEST_TARGETS   := test
 .PHONY: examples $(COMMON_TARGETS) $(TFVARS)
 
 $(COMMON_TARGETS):
-	@for dir in $(MODULES) $(EXAMPLES); do
+	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(EXAMPLES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
 $(TEST_TARGETS):
-	@for dir in $(EXAMPLES); do
+	@for dir in $(addprefix examples/,$(EXAMPLES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
 examples:
 	@source examples/config
-	for dir in $(MODULES); do
+	for dir in $(addprefix modules/,$(MODULES)); do
 		name=$${dir##*/}
 		echo Generating files: examples/$$name
 		mkdir -p examples/$$name
@@ -65,7 +65,7 @@ build-release: examples
 	git push --tags
 
 template:
-	select source in $(TEMPLATES); do
+	@select source in $(TEMPLATES); do
 		break
 	done
 	while true; do

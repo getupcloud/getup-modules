@@ -29,3 +29,14 @@ export MAP_opencost_cluster_name=module.eks.cluster_name
 export IGNORE_opencost_cluster_name=true
 export MAP_opencost_cluster_oidc_issuer_url=module.eks.cluster_oidc_issuer_url
 export IGNORE_opencost_cluster_oidc_issuer_url=true
+
+export MAP_rds_aws_region=var.aws_region
+export IGNORE_rds_aws_region=true
+export MAP_rds_azs=var.azs
+export IGNORE_rds_azs=true
+export MAP_rds_eks_vpc_cidr=var.vpc_cidr
+export IGNORE_rds_eks_vpc_cidr=true
+export MAP_rds_vpc_peering_peer_vpc_id=module.eks.cluster_vpc_id
+export IGNORE_rds_vpc_peering_peer_vpc_id=true
+export MAP_rds_vpc_peering_peer_route_table_ids=module.eks.cluster_vpc_private_route_table_ids
+export IGNORE_rds_vpc_peering_peer_route_table_ids=true
