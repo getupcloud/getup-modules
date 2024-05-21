@@ -1,7 +1,7 @@
 # File auto-generated from ./bin/vars2tf
 
 module "rds" {
-  source = "github.com/getupcloud/terraform-modules//modules/rds?ref=v0.15.17"
+  source = "github.com/getupcloud/terraform-modules//modules/rds?ref=v0.16.0"
 
   rds_name                             = var.rds_name
   rds_engine                           = var.rds_engine
