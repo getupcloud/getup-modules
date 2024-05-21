@@ -6,8 +6,9 @@ TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
 MODULES        := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
 EXAMPLES       := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
-COMMON_TARGETS := fmt lint init validate clean
+COMMON_TARGETS := init validate clean
 TEST_TARGETS   := test
+TERRAFORM      ?= terraform
 
 .ONESHELL:
 
@@ -23,6 +24,17 @@ $(TEST_TARGETS):
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
+lint:
+	@echo Linting modules:
+	pushd modules && tflint --recursive
+	popd
+	echo
+	echo Linting examples:
+	pushd examples && tflint --recursive
+
+fmt:
+	$(TERRAFORM) fmt -recursive modules examples
+
 examples:
 	@source examples/config
 	for dir in $(addprefix modules/,$(MODULES)); do
@@ -34,14 +46,13 @@ examples:
 			cat $$dir/variables.tf | ./bin/filter-vars > examples/$$name/variables-$$name.tf || exit 1
 			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform-$$name.auto.tfvars.example || exit 1
 		fi
-		if [ -e $$dir/versions.tf  ]; then
-			cp -f $$dir/versions.tf examples/$$name/versions-$$name.tf
-		fi
 		if [ -e $$dir/outputs.tf  ]; then
 			cat $$dir/outputs.tf | ./bin/outputs $$name > examples/$$name/outputs-$$name.tf
 		fi
 		ln -fs ../Makefile.example examples/$$name/Makefile
+		
 	done
+	./bin/versions $(wildcard $(addsuffix /versions.tf,$(addprefix modules/,$(MODULES)))) > examples/versions.tf
 	$(MAKE) fmt
 
 release: fmt update-version

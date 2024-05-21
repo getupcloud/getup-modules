@@ -9,7 +9,7 @@ fmt:
 
 lint:
 	@if type tflint &>/dev/null; then
-		tflint
+		tflint --recursive
 	else
 		echo "Ignoring not found: tflint"
 	fi

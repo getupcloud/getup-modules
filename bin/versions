@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import hcl2
+
+if len(sys.argv) < 2:
+    print(f"Usage {sys.argv[0]} [versions.tf...] ", file=sys.stderr)
+    sys.exit(1)
+
+print(f'# File auto-generated from {sys.argv[0]}\n')
+
+seen=set()
+print('''terraform {
+  required_version = "~> 1.7.0"
+
+  backend "s3" {
+    bucket = "BUCKET_NAME"
+    key    = "CLUSTER_NAME/terraform.tfstate"
+    region = "CLUSTER_REGION"
+  }
+
+  required_providers {''', end='')
+
+tpl='''
+    {name} = {{
+      source  = "{source}"
+      version = "{version}"
+    }}'''
+
+for v in sys.argv[1:]:
+    with open(v, 'r') as f:
+        hcl = hcl2.api.load(f)
+        try:
+            for k, v in hcl['terraform'][0]['required_providers'][0].items():
+                if k not in seen:
+                    name, source, version = k, v['source'], v['version']
+                    print(tpl.format(name=name, source=source, version=version))
+                    seen.add(k)
+
+        except (IndexError, KeyError) as ex:
+            pass
+        #print(json.dumps(hcl))
+
+print('''  }
+}''')
