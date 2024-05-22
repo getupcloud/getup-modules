@@ -77,12 +77,13 @@ module "database" {
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [module.vpc.default_security_group_id]
 
-  maintenance_window           = "Mon:00:00-Mon:03:00"
-  backup_window                = "03:00-06:00"
-  backup_retention_period      = 1
-  skip_final_snapshot          = true
-  deletion_protection          = var.rds_deletion_protection
-  performance_insights_enabled = false
+  maintenance_window                    = "Mon:00:00-Mon:03:00"
+  backup_window                         = "03:00-06:00"
+  backup_retention_period               = 1
+  skip_final_snapshot                   = true
+  deletion_protection                   = var.rds_deletion_protection
+  performance_insights_enabled          = var.performance_insights_retention_period == 0 ? false : var.performance_insights_enabled
+  performance_insights_retention_period = var.performance_insights_retention_period
 
   parameters = [
     {
