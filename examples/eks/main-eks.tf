@@ -1,12 +1,13 @@
 # File auto-generated from ./bin/vars2tf
 
 module "eks" {
-  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.16.4"
+  source = "github.com/getupcloud/terraform-modules//modules/eks?ref=v0.16.5"
 
   cluster_name                           = var.cluster_name
   kubernetes_version                     = var.kubernetes_version
   aws_region                             = var.aws_region
   tags                                   = var.tags
+  overlay                                = var.overlay
   cluster_encryption_config              = var.cluster_encryption_config
   vpc_id                                 = var.vpc_id
   private_subnet_ids                     = var.private_subnet_ids
