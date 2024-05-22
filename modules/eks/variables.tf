@@ -37,6 +37,7 @@ variable "overlay" {
     msteams_channel_url : ""
     opencost_spot_datafeed_bucket_name : ""
     opencost_spot_datafeed_bucket_prefix : ""
+    opencost_storage_class_name : ""
     opsgenie_integration_api_key : ""
     pagerduty_service_key : ""
     slack_api_url : ""
