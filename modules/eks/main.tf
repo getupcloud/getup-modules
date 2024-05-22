@@ -5,12 +5,6 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "aws_ecrpublic_authorization_token" "token" {
-  # Temporary workaround due to AWS Public ECR only supporting us-east-1
-  # https://github.com/hashicorp/terraform-provider-aws/issues/28281
-  provider = aws.us-east-1
-}
-
 data "aws_vpc" "eks" {
   id = local.vpc_id
 }
@@ -290,8 +284,6 @@ resource "helm_release" "karpenter" {
   version             = var.karpenter_version
   namespace           = module.karpenter.namespace
   create_namespace    = true
-  repository_username = data.aws_ecrpublic_authorization_token.token.user_name
-  repository_password = data.aws_ecrpublic_authorization_token.token.password
 
   values = [
     <<-EOT
