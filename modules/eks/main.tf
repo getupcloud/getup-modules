@@ -278,12 +278,12 @@ module "karpenter" {
 }
 
 resource "helm_release" "karpenter" {
-  name                = "karpenter"
-  repository          = "oci://public.ecr.aws/karpenter"
-  chart               = "karpenter"
-  version             = var.karpenter_version
-  namespace           = module.karpenter.namespace
-  create_namespace    = true
+  name             = "karpenter"
+  repository       = "oci://public.ecr.aws/karpenter"
+  chart            = "karpenter"
+  version          = var.karpenter_version
+  namespace        = module.karpenter.namespace
+  create_namespace = true
 
   values = [
     <<-EOT
