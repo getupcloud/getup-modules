@@ -36,8 +36,7 @@ fmt:
 	$(TERRAFORM) fmt -recursive modules examples
 
 examples:
-	@source examples/config
-	for dir in $(addprefix modules/,$(MODULES)); do
+	@for dir in $(addprefix modules/,$(MODULES)); do
 		name=$${dir##*/}
 		echo Generating examples/$$name
 		mkdir -p examples/$$name
