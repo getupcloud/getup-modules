@@ -86,7 +86,7 @@ variable "control_plane_subnet_ids" {
 }
 
 variable "azs" {
-  description = "AZs to create subnets into."
+  description = "AZs to create subnets into. List all ZoneIDs with 'aws ec2 describe-availability-zones --region <region>'."
   type        = list(string)
   default     = ["use1-az1", "use1-az2"]
 }
