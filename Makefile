@@ -52,7 +52,7 @@ examples:
 		ln -fs ../Makefile.example examples/$$name/Makefile
 		
 	done
-	./bin/versions $(wildcard $(addsuffix /versions.tf,$(addprefix modules/,$(MODULES)))) > examples/versions.tf
+	./bin/make-versions $(wildcard $(addsuffix /versions.tf,$(addprefix modules/,$(MODULES)))) > examples/versions.tf
 	$(MAKE) fmt
 
 release: fmt update-version

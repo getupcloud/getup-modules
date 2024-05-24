@@ -1,0 +1,37 @@
+{
+    "map_var": {
+        "flux_aws_region": "var.aws_region",
+        "flux_cluster_name": "module.eks.cluster_name",
+        "loki_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "cert_manager_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "ecr_credentials_sync_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "aws_eso_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "aws_eso_aws_region": "var.aws_region",
+        "opencost_cluster_name": "module.eks.cluster_name",
+        "opencost_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "rds_aws_region": "var.aws_region",
+        "rds_azs": "var.vpc_zones",
+        "rds_eks_vpc_cidr": "var.vpc_cidr",
+        "rds_vpc_peering_peer_vpc_id": "module.eks.cluster_vpc_id",
+        "rds_vpc_peering_peer_route_table_ids": "module.eks.cluster_vpc_private_route_table_ids"
+    },
+    "no_use_var": [
+        "aws_account_id"
+    ],
+    "ignore_var" : [
+        "flux_aws_region",
+        "flux_cluster_name",
+        "loki_cluster_oidc_issuer_url",
+        "cert_manager_cluster_oidc_issuer_url",
+        "ecr_credentials_sync_cluster_oidc_issuer_url",
+        "aws_eso_cluster_oidc_issuer_url",
+        "aws_eso_aws_region",
+        "opencost_cluster_name",
+        "opencost_cluster_oidc_issuer_url",
+        "rds_aws_region",
+        "rds_azs",
+        "rds_eks_vpc_cidr",
+        "rds_vpc_peering_peer_vpc_id",
+        "rds_vpc_peering_peer_route_table_ids"
+    ]
+}
