@@ -39,7 +39,7 @@ examples:
 	@source examples/config
 	for dir in $(addprefix modules/,$(MODULES)); do
 		name=$${dir##*/}
-		echo Generating files: examples/$$name
+		echo Generating examples/$$name
 		mkdir -p examples/$$name
 		if [ -e $$dir/variables.tf ]; then
 			cat $$dir/variables.tf | ./bin/make-example-main $$name $(RELEASE) > examples/$$name/main-$$name.tf || exit 1

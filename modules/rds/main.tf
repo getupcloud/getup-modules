@@ -25,11 +25,10 @@ module "vpc" {
   cidr       = var.rds_vpc_cidr
   create_vpc = true
 
-  #  region           = var.rds_region
-  azs                                    = var.rds_azs # better if matches eks azs
-  database_subnets                       = [for k, v in var.rds_azs : cidrsubnet(var.rds_vpc_cidr, 4, k)]
+  azs                                    = var.rds_vpc_zones # better if matches eks azs
+  database_subnets                       = [for k, v in var.rds_vpc_zones : cidrsubnet(var.rds_vpc_cidr, 4, k)]
   create_database_subnet_route_table     = true
-  database_subnet_names                  = [for k, v in var.rds_azs : "rds-subnet-${k}"]
+  database_subnet_names                  = [for k, v in var.rds_vpc_zones : "rds-subnet-${k}"]
   create_database_subnet_group           = true
   create_database_internet_gateway_route = var.rds_public
 
@@ -73,7 +72,7 @@ module "database" {
   master_user_password_rotate_immediately           = false
   master_user_password_rotation_schedule_expression = "rate(15 days)"
 
-  multi_az               = length(var.rds_azs) > 1
+  multi_az               = length(var.rds_vpc_zones) > 1
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [module.vpc.default_security_group_id]
 

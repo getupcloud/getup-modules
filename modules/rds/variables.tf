@@ -62,12 +62,6 @@ variable "rds_instance_class" {
   default     = "db.t4g.large"
 }
 
-#variable "rds_aws_region" {
-#  description = "(Optional) AWS Region where is located Amazon Relational Database Service"
-#  type        = string
-#  default     = "us-east-1"
-#}
-
 variable "rds_public" {
   description = "Creates RDS on a public subnet for internet access"
   type        = bool
@@ -98,10 +92,10 @@ variable "rds_ingress_vpc_cidrs" {
   default     = []
 }
 
-variable "rds_azs" {
-  description = "AZs for the RDS VPC"
+variable "rds_vpc_zones" {
+  description = "AZ names to create the subnets. Use 'aws ec2 describe-availability-zones --region <region> | jq .AvailabilityZones[].ZoneName' to list all available subnets."
   type        = list(string)
-  default     = ["use1-az1", "use1-az2"]
+  default     = []
 }
 
 variable "rds_deletion_protection" {
