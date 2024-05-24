@@ -10,7 +10,7 @@ for i in ${ignores[*]}; do
         exprs="$exprs;"
     fi
 
-    exprs+="/^\\s*variable\\s\\+\"\\?$name\"\\?/,/^\\s*}\\s*\$/s/^/#/"
+    exprs+="/^\\s*variable\\s\\+\"\\?$name\"\\?/,/^}\\s*\$/s/^/#/"
 done
 echo "# File auto-generated from $0"
 echo

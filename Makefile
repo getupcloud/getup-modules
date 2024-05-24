@@ -42,9 +42,9 @@ examples:
 		echo Generating files: examples/$$name
 		mkdir -p examples/$$name
 		if [ -e $$dir/variables.tf ]; then
-			cat $$dir/variables.tf | ./bin/vars2tf $$name $(RELEASE) > examples/$$name/main-$$name.tf || exit 1
-			cat $$dir/variables.tf | ./bin/filter-vars > examples/$$name/variables-$$name.tf || exit 1
-			cat $$dir/variables.tf | ./bin/vars2tfvars > examples/$$name/terraform-$$name.auto.tfvars.example || exit 1
+			cat $$dir/variables.tf | ./bin/make-example-main $$name $(RELEASE) > examples/$$name/main-$$name.tf || exit 1
+			cat $$dir/variables.tf | ./bin/make-example-vars > examples/$$name/variables-$$name.tf || exit 1
+			cat $$dir/variables.tf | ./bin/make-example-tfvars > examples/$$name/terraform-$$name.auto.tfvars.example || exit 1
 		fi
 		if [ -e $$dir/outputs.tf  ]; then
 			cat $$dir/outputs.tf | ./bin/outputs $$name > examples/$$name/outputs-$$name.tf

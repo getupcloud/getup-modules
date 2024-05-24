@@ -15,7 +15,11 @@ variable "kubernetes_version" {
 variable "aws_region" {
   description = "AWS Region."
   type        = string
-  default     = "us-east-1"
+}
+
+variable "aws_account_id" {
+  description = "AWS Account ID to restrict resources. This is a safety measurement to avoid creating/destroying in the wrong account."
+  type        = string
 }
 
 variable "tags" {
@@ -85,18 +89,17 @@ variable "control_plane_subnet_ids" {
   default     = []
 }
 
-variable "azs" {
-  description = "AZs to create subnets into. List all ZoneIDs with 'aws ec2 describe-availability-zones --region <region>'."
-  type        = list(string)
-  default     = ["use1-az1", "use1-az2"]
-}
-
 ## Create a new VPC
 
 variable "vpc_name" {
   description = "VPC name to create new VPC. Defaults to cluster name."
   type        = string
   default     = ""
+}
+
+variable "vpc_zones" {
+  description = "AZ names to create the subnets. Use 'aws ec2 describe-availability-zones --region <region> | jq .AvailabilityZones[].ZoneName' to list all available subnets."
+  type        = list(string)
 }
 
 variable "vpc_cidr" {
