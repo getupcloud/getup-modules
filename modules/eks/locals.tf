@@ -26,7 +26,7 @@ locals {
   on_demand_limits_cpu    = var.karpenter_cluster_limits_cpu - local.spot_limits_cpu
 
   vpc_cidr = var.vpc_cidr
-  azs      = var.azs
+  azs      = var.vpc_zones
 
   tags = var.tags
 
