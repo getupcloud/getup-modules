@@ -136,8 +136,8 @@ module "eks" {
       ami_type       = var.fallback_node_group_ami_type
       platform       = var.fallback_node_group_platform
       instance_types = var.fallback_node_group_instance_types
-      min_size       = var.fallback_node_group_desired_size
-      max_size       = max(var.fallback_node_group_desired_size, 1)
+      min_size       = 0
+      max_size       = var.fallback_node_group_desired_size
       desired_size   = var.fallback_node_group_desired_size
       disk_size      = var.fallback_node_group_disk_size
       #      disk_type      = var.fallback_node_group_disk_type
