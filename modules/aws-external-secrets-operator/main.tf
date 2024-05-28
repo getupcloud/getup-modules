@@ -25,8 +25,6 @@ data "aws_secretsmanager_secrets" "secrets" {
 }
 
 resource "aws_iam_policy" "policy" {
-  for_each = length(local.policy_vars.secrets_arns) > 0 ? ["policy"] : []
-
   name_prefix = local.name_prefix
   description = "AWS External Secrets Operator policy for IRSA"
   policy      = templatefile("${path.module}/policy.json", local.policy_vars)

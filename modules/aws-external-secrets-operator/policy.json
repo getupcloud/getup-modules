@@ -9,7 +9,7 @@
         "secretsmanager:DescribeSecret",
         "secretsmanager:ListSecretVersionIds"
       ],
-      "Resource": ${ jsonencode([ for arn in secrets_arns : arn ]) }
+      "Resource": ${ jsonencode(length(secrets_arns) > 0 ? secrets_arns : ["*"]) }
     }
   ]
 }
