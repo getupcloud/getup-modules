@@ -15,10 +15,8 @@
         "rds_vpc_peering_peer_vpc_id": "module.eks.cluster_vpc_id",
         "rds_vpc_peering_peer_route_table_ids": "module.eks.cluster_vpc_private_route_table_ids"
     },
-    "no_use_var": [
-        "aws_account_id"
-    ],
-    "ignore_var" : [
+    "no_use_var": [],
+    "ignore_var": [
         "flux_aws_region",
         "flux_cluster_name",
         "loki_cluster_oidc_issuer_url",

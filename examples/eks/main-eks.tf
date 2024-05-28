@@ -6,6 +6,7 @@ module "eks" {
   cluster_name                           = var.cluster_name
   kubernetes_version                     = var.kubernetes_version
   aws_region                             = var.aws_region
+  aws_account_id                         = var.aws_account_id
   tags                                   = var.tags
   overlay                                = var.overlay
   cluster_encryption_config              = var.cluster_encryption_config
