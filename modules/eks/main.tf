@@ -274,7 +274,7 @@ module "karpenter" {
 
 resource "helm_release" "karpenter" {
   name             = "karpenter"
-  repository       = "oci://public.ecr.aws/karpenter"
+  repository       = "https://charts.getup.io/karpenter"
   chart            = "karpenter"
   version          = var.karpenter_version
   namespace        = module.karpenter.namespace
