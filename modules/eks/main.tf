@@ -181,6 +181,10 @@ module "aws_auth" {
   )
 
   aws_auth_accounts = var.aws_auth_accounts
+
+  depends_on = [
+    module.eks.cluster_name
+  ]
 }
 
 # https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
