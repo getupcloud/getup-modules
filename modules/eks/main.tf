@@ -283,6 +283,7 @@ resource "helm_release" "karpenter" {
   version          = var.karpenter_version
   namespace        = module.karpenter.namespace
   create_namespace = true
+  wait             = true
 
   values = [
     <<-EOT
@@ -467,6 +468,7 @@ resource "helm_release" "keda" {
   version          = var.keda_version
   namespace        = var.keda_namespace
   create_namespace = true
+  wait             = false
 
   values = [
     <<-EOT
@@ -589,6 +591,7 @@ resource "helm_release" "baloon" {
   repository = "https://charts.getup.io/getupcloud/"
   chart      = "baloon"
   version    = var.baloon_chart_version
+  wait       = false
 
   values = [
     <<-EOT
