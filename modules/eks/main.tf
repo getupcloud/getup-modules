@@ -162,7 +162,7 @@ module "aws_auth" {
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
   version = "~> 20.10.0"
 
-  manage_aws_auth_configmap = true
+  manage_aws_auth_configmap = false
 
   aws_auth_roles = concat(
     [
