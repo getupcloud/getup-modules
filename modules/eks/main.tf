@@ -4,28 +4,34 @@ data "aws_vpc" "eks" {
   id = local.vpc_id
 }
 
-# https://karpenter.sh/v0.34/getting-started/getting-started-with-karpenter/
-#
-# aws iam create-service-linked-role --aws-service-name spot.amazonaws.com || true
-# If the role has already been successfully created, you will see:
-# An error occurred (InvalidInput) when calling the CreateServiceLinkedRole operation: Service role name AWSServiceRoleForEC2Spot has been taken in this account, please try a different suffix.
-#
-# This can't be shared among different clusters as it's a account-level resource
-#
-#resource "aws_iam_service_linked_role" "spot" {
-#  aws_service_name = "spot.amazonaws.com"
-#
-#  lifecycle {
-#    replace_triggered_by = [null_resource.once]
-#    ignore_changes       = [aws_service_name]
-#  }
-#}
-#
-#resource "null_resource" "once" {
-#  triggers = {
-#    once = true
-#  }
-#}
+module "vpc" {
+  count   = var.vpc_id == "" ? 1 : 0
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
+
+  name = var.vpc_name != "" ? var.vpc_name : local.cluster_name
+  cidr = local.vpc_cidr
+
+  azs             = local.azs
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 6, k + 48)]
+  intra_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 6, k + 52)]
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
+  }
+
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+    # Tags subnets for Karpenter auto-discovery
+    "karpenter.sh/discovery" = local.cluster_name
+  }
+
+  tags = local.tags
+}
 
 ################################################################################
 # EKS Module
@@ -183,7 +189,7 @@ module "aws_auth" {
   aws_auth_accounts = var.aws_auth_accounts
 
   depends_on = [
-    module.eks.cluster_name
+    module.eks.cluster_endpoint
   ]
 }
 
@@ -223,7 +229,7 @@ resource "kubernetes_annotations" "gp2" {
   }
 
   depends_on = [
-    module.eks.cluster_name
+    module.eks.cluster_endpoint
   ]
 }
 
@@ -250,393 +256,7 @@ resource "kubernetes_storage_class_v1" "gp3" {
   }
 
   depends_on = [
-    module.eks.cluster_name
+    module.eks.cluster_endpoint
   ]
 }
 
-################################################################################
-# Karpenter
-################################################################################
-
-module "karpenter" {
-  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "~> 20.10.0"
-
-  cluster_name                    = module.eks.cluster_name
-  enable_pod_identity             = true
-  create_pod_identity_association = true
-  namespace                       = var.karpenter_namespace
-  service_account                 = "karpenter"
-
-  # Used to attach additional IAM policies to the Karpenter node IAM role
-  node_iam_role_additional_policies = {
-    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  }
-
-  tags = local.tags
-}
-
-resource "helm_release" "karpenter" {
-  name             = "karpenter"
-  repository       = "https://charts.getup.io/karpenter"
-  chart            = "karpenter"
-  version          = var.karpenter_version
-  namespace        = module.karpenter.namespace
-  create_namespace = true
-  wait             = true
-
-  values = [
-    <<-EOT
-    replicas: ${var.karpenter_replicas}
-    serviceAccount:
-      create: true
-      name: ${module.karpenter.service_account}
-    settings:
-      clusterName: ${module.eks.cluster_name}
-      clusterEndpoint: ${module.eks.cluster_endpoint}
-      interruptionQueueName: ${module.karpenter.queue_name}
-      settings.featureGates.drift: true
-      controller.resources.requests.cpu: "250m"
-      controller.resources.requests.memory: "256Mi"
-      controller.resources.limits.cpu: "250m"
-      controller.resources.limits.memory: "256Mi"
-    EOT
-  ]
-
-  depends_on = [
-    module.eks.fargate_profiles
-  ]
-
-  #lifecycle {
-  #  ignore_changes = [
-  #    repository_password
-  #  ]
-  #}
-}
-
-resource "kubectl_manifest" "karpenter_node_class" {
-  for_each = toset(var.karpenter_enabled ? ["default"] : [])
-
-  yaml_body = <<-YAML
-    apiVersion: karpenter.k8s.aws/v1beta1
-    kind: EC2NodeClass
-    metadata:
-      name: default
-    spec:
-      amiFamily: ${var.karpenter_node_class_ami_family}
-      role: ${module.karpenter.node_iam_role_name}
-      subnetSelectorTerms:
-        - tags:
-            karpenter.sh/discovery: ${module.eks.cluster_name}
-      securityGroupSelectorTerms:
-        - tags:
-            karpenter.sh/discovery: ${module.eks.cluster_name}
-      tags:
-        karpenter.sh/discovery: ${module.eks.cluster_name}
-  YAML
-
-  depends_on = [
-    helm_release.karpenter
-  ]
-}
-
-resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
-  for_each = toset(var.karpenter_enabled ? ["on-demand"] : [])
-
-  yaml_body = <<-YAML
-    apiVersion: karpenter.sh/v1beta1
-    kind: NodePool
-    metadata:
-      name: on-demand
-    spec:
-      template:
-        spec:
-          nodeClassRef:
-            name: default
-          requirements:
-            - key: karpenter.sh/capacity-type
-              operator: In
-              values: ["on-demand"]
-            - key: "kubernetes.io/arch"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_arch))}
-            - key: "karpenter.k8s.aws/instance-category"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_category))}
-            - key: "karpenter.k8s.aws/instance-cpu"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_cpu))}
-            - key: "karpenter.k8s.aws/instance-memory"
-              operator: In
-              values:
-              ${indent(10, yamlencode([for m in var.karpenter_node_pool_instance_memory_gb : tostring(m * 1024)]))}
-            - key: "karpenter.k8s.aws/instance-generation"
-              operator: Gt
-              values: ["2"]
-            - key: capacity-spread
-              operator: In
-              values:
-              ${indent(10, yamlencode([for i in range(local.on_demand_portion) : "ondemand-${i}"]))}
-      limits:
-        cpu: ${local.on_demand_limits_cpu}
-        memory: "${local.on_demand_limits_memory}Gi"
-      disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 30s
-  YAML
-
-  depends_on = [
-    kubectl_manifest.karpenter_node_class
-  ]
-}
-
-resource "kubectl_manifest" "karpenter_node_pool_spot" {
-  for_each = toset(var.karpenter_enabled ? ["spot"] : [])
-
-  yaml_body = <<-YAML
-    apiVersion: karpenter.sh/v1beta1
-    kind: NodePool
-    metadata:
-      name: spot
-    spec:
-      template:
-        spec:
-          nodeClassRef:
-            name: default
-          requirements:
-            - key: karpenter.sh/capacity-type
-              operator: In
-              values: ["spot"]
-            - key: "kubernetes.io/arch"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_arch))}
-            - key: "karpenter.k8s.aws/instance-category"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_category))}
-            - key: "karpenter.k8s.aws/instance-cpu"
-              operator: In
-              values:
-              ${indent(10, yamlencode(var.karpenter_node_pool_instance_cpu))}
-            - key: "karpenter.k8s.aws/instance-memory"
-              operator: In
-              values:
-              ${indent(10, yamlencode([for m in var.karpenter_node_pool_instance_memory_gb : tostring(m * 1024)]))}
-            - key: "karpenter.k8s.aws/instance-generation"
-              operator: Gt
-              values: ["2"]
-            - key: capacity-spread
-              operator: In
-              values:
-              ${indent(10, yamlencode([for i in range(local.spot_portion) : "spot-${i}"]))}
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: karpenter.sh/nodepool
-              operator: DoesNotExist
-    #        - key: eks.amazonaws.com/compute-type
-    #          operator: In
-    #          values:
-    #          - fargate
-      limits:
-        cpu: ${local.spot_limits_cpu}
-        memory: "${local.spot_limits_memory}Gi"
-      disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 30s
-  YAML
-
-  depends_on = [
-    kubectl_manifest.karpenter_node_class
-  ]
-}
-
-################################################################################
-# KEDA
-################################################################################
-
-resource "helm_release" "keda" {
-  name             = "keda"
-  repository       = "https://kedacore.github.io/charts"
-  chart            = "keda"
-  version          = var.keda_version
-  namespace        = var.keda_namespace
-  create_namespace = true
-  wait             = false
-
-  values = [
-    <<-EOT
-    clusterName: ${module.eks.cluster_name}
-
-    #priorityClassName: system-cluster-critical
-
-    #affinity:
-    #  nodeAffinity:
-    #    requiredDuringSchedulingIgnoredDuringExecution:
-    #      nodeSelectorTerms:
-    #      - matchExpressions:
-    #        - key: karpenter.sh/nodepool
-    #          operator: DoesNotExist
-    #        - key: eks.amazonaws.com/compute-type
-    #          operator: In
-    #          values:
-    #          - fargate
-
-    logging:
-      operator:
-        format: json
-      webhooks:
-        format:  json
-
-    operator:
-      replicaCount: ${var.keda_replicas}
-
-    resources:
-      metricServer:
-        limits:
-          cpu: 250m
-          memory: 1Gi
-        requests:
-          cpu: 25m
-          memory: 256Mi
-      operator:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 25m
-          memory: 256Mi
-      webhooks:
-        limits:
-          cpu: 50m
-          memory: 100Mi
-        requests:
-          cpu: 25m
-          memory: 10Mi
-
-    metricsServer:
-      replicaCount: ${var.keda_replicas}
-
-    webhooks:
-      replicaCount: ${var.keda_replicas}
-    EOT
-  ]
-
-  depends_on = [
-    module.eks.fargate_profiles
-  ]
-}
-
-resource "kubectl_manifest" "keda_cron" {
-  for_each  = { for i in var.keda_cron_schedule : i.name => i }
-  yaml_body = <<-YAML
-    apiVersion: keda.sh/v1alpha1
-    kind: ScaledObject
-    metadata:
-      name: ${each.value.name}
-      namespace: ${each.value.namespace}
-      annotations:
-        scaledobject.keda.sh/transfer-hpa-ownership: "true"     # Optional. Use to transfer an existing HPA ownership to this ScaledObject
-        # autoscaling.keda.sh/paused-replicas: "0"                # Optional. Use to pause autoscaling of objects
-        # autoscaling.keda.sh/paused: "true"                      # Optional. Use to pause autoscaling of objects explicitly
-    spec:
-      scaleTargetRef:
-        apiVersion:    ${each.value.apiVersion}
-        kind:          ${each.value.kind}                       # Optional. Default: Deployment
-        name:          ${each.value.name}                       # Mandatory. Must be in the same namespace as the ScaledObject
-        # envSourceContainerName: {container-name}                # Optional. Default: .spec.template.spec.containers[0]
-      pollingInterval:  15                                      # Optional. Default: 30 seconds
-      cooldownPeriod:   300                                     # Optional. Default: 300 seconds
-      #idleReplicaCount: 0                                       # Optional. Default: ignored, must be less than minReplicaCount
-      minReplicaCount:  ${each.value.minReplicaCount}           # Optional. Default: 0
-      maxReplicaCount:  ${each.value.maxReplicaCount}           # Optional. Default: 100
-      # fallback:                                                 # Optional. Section to specify fallback options
-      #   failureThreshold: 3                                     # Mandatory if fallback section is included
-      #   replicas: 2                                             # Mandatory if fallback section is included
-      advanced:                                                 # Optional. Section to specify advanced options
-        restoreToOriginalReplicaCount: false                    # Optional. Default: false
-        horizontalPodAutoscalerConfig:                          # Optional. Section to specify HPA related options
-          # name: {name-of-hpa-resource}                          # Optional. Default: keda-hpa-{scaled-object-name}
-          # behavior:                                             # Optional. Use to modify HPA's scaling behavior
-          #   scaleDown:
-          #     stabilizationWindowSeconds: 300
-          #     policies:
-          #     - type: Percent
-          #       value: 100
-          #       periodSeconds: 15
-      triggers:
-      ${indent(2, yamlencode([for metadata in each.value.schedules : { type : "cron", metadata : metadata }]))}
-  YAML
-
-  depends_on = [
-    helm_release.keda
-  ]
-}
-
-################################################################################
-# Baloon
-################################################################################
-
-resource "helm_release" "baloon" {
-  namespace        = var.baloon_namespace
-  create_namespace = true
-
-  name       = "baloon"
-  repository = "https://charts.getup.io/getupcloud/"
-  chart      = "baloon"
-  version    = var.baloon_chart_version
-  wait       = false
-
-  values = [
-    <<-EOT
-    replicas: ${var.baloon_replicas}
-
-    resources:
-      cpu: ${var.baloon_cpu}
-      memory: ${var.baloon_memory}
-    EOT
-  ]
-
-  depends_on = [
-    helm_release.karpenter
-  ]
-}
-
-################################################################################
-# Supporting Resources
-################################################################################
-
-module "vpc" {
-  count   = var.vpc_id == "" ? 1 : 0
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
-
-  name = var.vpc_name != "" ? var.vpc_name : local.cluster_name
-  cidr = local.vpc_cidr
-
-  azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 6, k + 48)]
-  intra_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 6, k + 52)]
-
-  enable_nat_gateway = true
-  single_nat_gateway = true
-
-  public_subnet_tags = {
-    "kubernetes.io/role/elb" = 1
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-elb" = 1
-    # Tags subnets for Karpenter auto-discovery
-    "karpenter.sh/discovery" = local.cluster_name
-  }
-
-  tags = local.tags
-}
