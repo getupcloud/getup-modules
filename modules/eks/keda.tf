@@ -75,7 +75,7 @@ resource "helm_release" "keda" {
 }
 
 resource "kubectl_manifest" "keda_cron" {
-  for_each  = { for i in var.keda_cron_schedule : i.name => i }
+  for_each = { for i in var.keda_cron_schedule : i.name => i }
 
   yaml_body = <<-YAML
     apiVersion: keda.sh/v1alpha1
