@@ -151,14 +151,18 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
               operator: In
               values:
               ${indent(10, yamlencode(var.karpenter_node_pool_instance_category))}
+            %{if length(var.karpenter_node_pool_instance_cpu) > 0}
             - key: "karpenter.k8s.aws/instance-cpu"
               operator: In
               values:
               ${indent(10, yamlencode(var.karpenter_node_pool_instance_cpu))}
+            %{endif}
+            %{if length(var.karpenter_node_pool_instance_memory_gb) > 0}
             - key: "karpenter.k8s.aws/instance-memory"
               operator: In
               values:
-              ${indent(10, yamlencode([for m in var.karpenter_node_pool_instance_memory_gb : tostring(m * 1024)]))}
+              ${indent(10, yamlencode([for m in var.karpenter_node_pool_instance_memory_gb : tostring(ceil(m * 1024))]))}
+            %{endif}
             - key: "karpenter.k8s.aws/instance-generation"
               operator: Gt
               values: ["2"]
@@ -204,14 +208,18 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
               operator: In
               values:
               ${indent(10, yamlencode(var.karpenter_node_pool_instance_category))}
+            %{if length(var.karpenter_node_pool_instance_cpu) > 0}
             - key: "karpenter.k8s.aws/instance-cpu"
               operator: In
               values:
               ${indent(10, yamlencode(var.karpenter_node_pool_instance_cpu))}
+            %{endif}
+            %{if length(var.karpenter_node_pool_instance_memory_gb) > 0}
             - key: "karpenter.k8s.aws/instance-memory"
               operator: In
               values:
               ${indent(10, yamlencode([for m in var.karpenter_node_pool_instance_memory_gb : tostring(m * 1024)]))}
+            %{endif}
             - key: "karpenter.k8s.aws/instance-generation"
               operator: Gt
               values: ["2"]
@@ -242,5 +250,3 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
     kubectl_manifest.karpenter_node_class
   ]
 }
-
-
