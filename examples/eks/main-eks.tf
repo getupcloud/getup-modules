@@ -48,6 +48,8 @@ module "eks" {
   iam_role_use_name_prefix               = var.iam_role_use_name_prefix
   iam_role_arn                           = var.iam_role_arn
   kms_key_administrators                 = var.kms_key_administrators
+  create_aws_auth_configmap              = var.create_aws_auth_configmap
+  manage_aws_auth_configmap              = var.manage_aws_auth_configmap
   aws_auth_user_arns                     = var.aws_auth_user_arns
   aws_auth_users                         = var.aws_auth_users
   aws_auth_user_groups                   = var.aws_auth_user_groups
