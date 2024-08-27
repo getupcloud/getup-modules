@@ -166,10 +166,12 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
             - key: "karpenter.k8s.aws/instance-generation"
               operator: Gt
               values: ["2"]
+            %{if local.on_demand_portion > 0}
             - key: capacity-spread
               operator: In
               values:
               ${indent(10, yamlencode([for i in range(local.on_demand_portion) : "ondemand-${i}"]))}
+            %{endif}
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
@@ -223,10 +225,12 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
             - key: "karpenter.k8s.aws/instance-generation"
               operator: Gt
               values: ["2"]
+            %{if local.spot_portion > 0}
             - key: capacity-spread
               operator: In
               values:
               ${indent(10, yamlencode([for i in range(local.spot_portion) : "spot-${i}"]))}
+            %{endif}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
