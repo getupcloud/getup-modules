@@ -13,7 +13,8 @@
         "rds_azs": "var.vpc_zones",
         "rds_eks_vpc_cidr": "var.vpc_cidr",
         "rds_vpc_peering_peer_vpc_id": "module.eks.cluster_vpc_id",
-        "rds_vpc_peering_peer_route_table_ids": "module.eks.cluster_vpc_private_route_table_ids"
+        "rds_vpc_peering_peer_route_table_ids": "module.eks.cluster_vpc_private_route_table_ids",
+        "tempo_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url"
     },
     "no_use_var": [],
     "ignore_var": [
@@ -30,6 +31,7 @@
         "rds_azs",
         "rds_eks_vpc_cidr",
         "rds_vpc_peering_peer_vpc_id",
-        "rds_vpc_peering_peer_route_table_ids"
+        "rds_vpc_peering_peer_route_table_ids",
+        "tempo_cluster_oidc_issuer_url"
     ]
 }
