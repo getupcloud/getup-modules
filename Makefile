@@ -4,25 +4,37 @@ VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
-EXAMPLES       := eks flux istio argocd loki cert-manager ecr-credentials-sync aws-external-secrets-operator opencost rds vpc_peering
-COMMON_TARGETS := init validate clean
-TEST_TARGETS   := test
+MODULES        := argocd \
+                  aws-external-secrets-operator \
+                  cert-manager \
+                  ecr-credentials-sync \
+                  eks \
+                  flux \
+                  istio \
+                  loki \
+                  opencost \
+                  rds \
+                  tempo \
+                  vpc_peering
+COMMON_TARGETS := init validate
 TERRAFORM      ?= terraform
 
 .ONESHELL:
 
-.PHONY: examples $(COMMON_TARGETS) $(TFVARS)
+.PHONY: examples tests $(COMMON_TARGETS) $(TFVARS)
 
 $(COMMON_TARGETS):
-	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(EXAMPLES)); do
+	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
-$(TEST_TARGETS):
-	@for dir in $(addprefix examples/,$(EXAMPLES)); do
+clean:
+	@for dir in tests $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
+
+tests:
+	$(MAKE) -C tests fmt init validate plan
 
 lint:
 	@echo Linting modules:
