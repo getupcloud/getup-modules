@@ -52,12 +52,12 @@ variable "istiod_set" {
       value : "1Gi"
     },
     {
-      name: "pilot.replicaCount",
-      value: "2"
+      name : "pilot.replicaCount",
+      value : "2"
     },
     {
-      name: "pilot.autoscaleMin",
-      value: "2"
+      name : "pilot.autoscaleMin",
+      value : "2"
     }
   ]
 }
@@ -86,12 +86,12 @@ variable "ingress_gateway_set" {
       value : "nlb",
     },
     {
-      name: "replicaCount",
-      value: "2"
+      name : "replicaCount",
+      value : "2"
     },
     {
-      name: "autoscaling.minReplicas",
-      value: "2"
+      name : "autoscaling.minReplicas",
+      value : "2"
     }
   ]
 }
