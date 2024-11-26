@@ -82,7 +82,7 @@ resource "helm_release" "karpenter" {
   ]
 
   depends_on = [
-    module.eks.fargate_profiles
+    module.eks.fargate_profiles,
     helm_release.karpenter-crd
   ]
 
