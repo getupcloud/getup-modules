@@ -44,6 +44,16 @@ module "karpenter" {
   tags = local.tags
 }
 
+resource "helm_release" "karpenter-crd" {
+  name             = "karpenter-crd"
+  repository       = "https://charts.getup.io/karpenter"
+  chart            = "karpenter-crd"
+  version          = var.karpenter_version
+  namespace        = module.karpenter.namespace
+  create_namespace = true
+  wait             = true
+}
+
 resource "helm_release" "karpenter" {
   name             = "karpenter"
   repository       = "https://charts.getup.io/karpenter"
@@ -73,6 +83,7 @@ resource "helm_release" "karpenter" {
 
   depends_on = [
     module.eks.fargate_profiles
+    helm_release.karpenter-crd
   ]
 
   #lifecycle {

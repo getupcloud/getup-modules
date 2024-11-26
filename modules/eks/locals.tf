@@ -40,5 +40,13 @@ locals {
       cidr_blocks = [data.aws_vpc.eks.cidr_block]
     }
   }
+
+  #warn_instances = [
+  #  for cat in var.karpenter_node_pool_instance_category : [
+  #    for id in ["c1," "cc1," "cc2," "cg1," "cg2," "cr1," "g1," "g2," "hi1," "hs1," "m1," "m2," "m3," "t1"] : [
+  #      id == cat ? warn() : id
+  #    ]
+  #  ]
+  #]
 }
 
