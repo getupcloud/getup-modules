@@ -56,6 +56,10 @@ module "eks" {
   create_cloudwatch_log_group = false
 
   cluster_addons = {
+    aws-efs-csi-driver = {
+      service_account_role_arn    = module.efs_csi_driver_irsa.iam_role_arn
+      resolve_conflicts_on_update = "OVERWRITE"
+    }
     aws-ebs-csi-driver = {
       service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
       resolve_conflicts_on_update = "OVERWRITE"
@@ -207,6 +211,25 @@ module "ebs_csi_driver_irsa" {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
+    }
+  }
+
+  tags = local.tags
+}
+
+# https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
+module "efs_csi_driver_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.20"
+
+  role_name_prefix = "${module.eks.cluster_name}-efs-csi-driver-"
+
+  attach_efs_csi_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:efs-csi-controller-sa"]
     }
   }
 
