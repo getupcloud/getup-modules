@@ -46,6 +46,12 @@ module "loki" {
   loki_cluster_oidc_issuer_url = "localhost"
 }
 
+module "velero" {
+  source = "../modules/velero"
+
+  velero_cluster_oidc_issuer_url = "localhost"
+}
+
 module "opencost" {
   source = "../modules/opencost"
 
