@@ -52,8 +52,9 @@ module "eks" {
 
   enable_cluster_creator_admin_permissions = true
 
-  cluster_enabled_log_types   = []
-  create_cloudwatch_log_group = false
+  cluster_enabled_log_types              = var.cluster_enabled_log_types
+  create_cloudwatch_log_group            = length(var.cluster_enabled_log_types) > 0
+  cloudwatch_log_group_retention_in_days = var.cluster_log_retention_days
 
   cluster_addons = {
     aws-efs-csi-driver = {
