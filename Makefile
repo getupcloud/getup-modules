@@ -15,6 +15,7 @@ MODULES        := argocd \
                   opencost \
                   rds \
                   tempo \
+                  velero \
                   vpc_peering
 COMMON_TARGETS := init validate
 TERRAFORM      ?= terraform
