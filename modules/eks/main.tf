@@ -253,8 +253,6 @@ resource "kubernetes_annotations" "gp2" {
     "storageclass.kubernetes.io/is-default-class" = "false"
   }
 
-  reclaim_policy = var.ebs_reclaim_policy
-
   depends_on = [
     module.eks.cluster_endpoint
   ]
