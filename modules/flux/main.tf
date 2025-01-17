@@ -30,25 +30,25 @@ resource "flux_bootstrap_git" "flux" {
   ]
 }
 
-resource "kubectl_manifest" "flux-apps" {
-  yaml_body = <<-EOF
-    apiVersion: kustomize.toolkit.fluxcd.io/v1
-    kind: Kustomization
-    metadata:
-      name: apps
-      namespace: flux-system
-    spec:
-      interval: 10m
-      path: ./apps
-      prune: true
-      sourceRef:
-        kind: GitRepository
-        name: flux-system
-      decryption:
-        provider: sops
-  EOF
-
-  depends_on = [
-    flux_bootstrap_git.flux
-  ]
-}
+#resource "kubectl_manifest" "flux-apps" {
+#  yaml_body = <<-EOF
+#    apiVersion: kustomize.toolkit.fluxcd.io/v1
+#    kind: Kustomization
+#    metadata:
+#      name: apps
+#      namespace: flux-system
+#    spec:
+#      interval: 10m
+#      path: ./apps
+#      prune: true
+#      sourceRef:
+#        kind: GitRepository
+#        name: flux-system
+#      decryption:
+#        provider: sops
+#  EOF
+#
+#  depends_on = [
+#    flux_bootstrap_git.flux
+#  ]
+#}
