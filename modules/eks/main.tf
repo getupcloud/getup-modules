@@ -253,6 +253,8 @@ resource "kubernetes_annotations" "gp2" {
     "storageclass.kubernetes.io/is-default-class" = "false"
   }
 
+  reclaim_policy = var.ebs_reclaim_policy
+
   depends_on = [
     module.eks.cluster_endpoint
   ]
@@ -271,7 +273,7 @@ resource "kubernetes_storage_class_v1" "gp3" {
 
   storage_provisioner    = "ebs.csi.aws.com"
   allow_volume_expansion = true
-  reclaim_policy         = "Retain"
+  reclaim_policy         = var.ebs_reclaim_policy
   volume_binding_mode    = "WaitForFirstConsumer"
 
   parameters = {
