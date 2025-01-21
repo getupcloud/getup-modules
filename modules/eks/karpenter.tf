@@ -120,14 +120,14 @@ resource "kubectl_manifest" "karpenter_node_class" {
           volumeType: gp3
       - deviceName: /dev/xvdb
         ebs:
-          volumeSize: 50Gi
+          volumeSize: 60Gi
           volumeType: gp3
       %{endif}
       %{if var.karpenter_node_class_ami_family == "AL2" || var.karpenter_node_class_ami_family == "AL2023"}
       blockDeviceMappings:
       - deviceName: /dev/xvda
         ebs:
-          volumeSize: 50Gi
+          volumeSize: 60Gi
           volumeType: gp3
       %{endif}
   YAML
