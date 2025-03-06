@@ -50,7 +50,8 @@ module "eks" {
   iam_role_name                        = var.eks_iam_role_name
   iam_role_use_name_prefix             = var.iam_role_use_name_prefix
 
-  enable_cluster_creator_admin_permissions = true
+  access_entries                           = var.access_entries
+  enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
 
   cluster_enabled_log_types              = var.cluster_enabled_log_types
   create_cloudwatch_log_group            = length(var.cluster_enabled_log_types) > 0
