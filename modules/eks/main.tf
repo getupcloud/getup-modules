@@ -59,8 +59,8 @@ module "eks" {
 
   cluster_addons = {
     aws-mountpoint-s3-csi-driver = {
-        service_account_role_arn    = module.mountpoint_s3_csi_driver_irsa.iam_role_arn
-        resolve_conflicts_on_update = "OVERWRITE"
+      service_account_role_arn    = module.mountpoint_s3_csi_driver_irsa.iam_role_arn
+      resolve_conflicts_on_update = "OVERWRITE"
     }
     aws-efs-csi-driver = {
       service_account_role_arn    = module.efs_csi_driver_irsa.iam_role_arn
