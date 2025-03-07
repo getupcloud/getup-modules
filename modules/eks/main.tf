@@ -250,7 +250,7 @@ module "mountpoint_s3_csi_driver_irsa" {
   role_name_prefix = "${module.eks.cluster_name}-mountpoint-s3-csi-driver-"
 
   attach_mountpoint_s3_csi_policy = true
-  mountpoint_s3_csi_path_arns     = ["/*"]
+  mountpoint_s3_csi_path_arns     = ["arn:aws:s3:::*/*"]
 
   oidc_providers = {
     main = {
