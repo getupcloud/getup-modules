@@ -58,6 +58,10 @@ module "eks" {
   cloudwatch_log_group_retention_in_days = var.cluster_log_retention_days
 
   cluster_addons = {
+    aws-mountpoint-s3-csi-driver = {
+      service_account_role_arn    = module.mountpoint_s3_csi_driver_irsa.iam_role_arn
+      resolve_conflicts_on_update = "OVERWRITE"
+    }
     aws-efs-csi-driver = {
       service_account_role_arn    = module.efs_csi_driver_irsa.iam_role_arn
       resolve_conflicts_on_update = "OVERWRITE"
@@ -203,7 +207,7 @@ module "aws_auth" {
 # https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
 module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  version = "~> 5.36"
 
   role_name_prefix = "${module.eks.cluster_name}-ebs-csi-driver-"
 
@@ -222,7 +226,7 @@ module "ebs_csi_driver_irsa" {
 # https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
 module "efs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.20"
+  version = "~> 5.36"
 
   role_name_prefix = "${module.eks.cluster_name}-efs-csi-driver-"
 
@@ -232,6 +236,26 @@ module "efs_csi_driver_irsa" {
     main = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:efs-csi-controller-sa"]
+    }
+  }
+
+  tags = local.tags
+}
+
+# https://github.com/aws-ia/terraform-aws-eks-blueprints/blob/main/patterns/stateful/main.tf
+module "mountpoint_s3_csi_driver_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.36"
+
+  role_name_prefix = "${module.eks.cluster_name}-mountpoint-s3-csi-driver-"
+
+  attach_mountpoint_s3_csi_policy = true
+  mountpoint_s3_csi_path_arns     = ["arn:aws:s3:::*/*"]
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:s3-csi-driver-sa"]
     }
   }
 
