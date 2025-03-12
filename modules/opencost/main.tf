@@ -41,15 +41,15 @@ module "opencost_s3_bucket" {
   count   = var.opencost_create_spot_datafeed_bucket ? 1 : 0
 
   bucket                   = var.opencost_spot_datafeed_bucket_name
+  force_destroy            = true
   control_object_ownership = true
   object_ownership         = "BucketOwnerPreferred"
-  force_destroy            = false
 
   lifecycle_rule = [{
     id      = "expiration-${var.opencost_spot_datafeed_retention_days}-days"
     enabled = true
     filter = {
-      prefix = var.opencost_spot_datafeed_prefix
+      prefix = var.opencost_spot_datafeed_bucket_prefix
     }
     expiration = {
       days = var.opencost_spot_datafeed_retention_days
@@ -66,7 +66,7 @@ resource "aws_spot_datafeed_subscription" "opencost" {
   count = var.opencost_create_spot_datafeed_bucket ? 1 : 0
 
   bucket = module.opencost_s3_bucket[0].s3_bucket_id
-  prefix = var.opencost_spot_datafeed_prefix
+  prefix = var.opencost_spot_datafeed_bucket_prefix
 
   depends_on = [
     module.opencost_s3_bucket,

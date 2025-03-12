@@ -67,6 +67,11 @@ output "cluster_vpc_private_route_table_ids" {
   value       = try(module.vpc[0].private_route_table_ids, [])
 }
 
+output "default_storage_class_name" {
+  description = "Default StorageClass name"
+  value       = kubernetes_storage_class_v1.gp3.metadata[0].name
+}
+
 ################################################################################
 # Security Group
 ################################################################################

@@ -34,7 +34,7 @@ clean:
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
-tests:
+test tests:
 	$(MAKE) -C tests fmt init validate plan
 
 lint:
