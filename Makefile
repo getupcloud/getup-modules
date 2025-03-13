@@ -48,6 +48,7 @@ lint:
 fmt:
 	$(TERRAFORM) fmt -recursive modules examples
 
+examples: MODULE_SOURCE_URL ?= git@github.com:getupcloud/getup-modules//modules/{module_name}?ref={tag}
 examples:
 	@for dir in $(addprefix modules/,$(MODULES)); do
 		name=$${dir##*/}
@@ -62,7 +63,6 @@ examples:
 			cat $$dir/outputs.tf | ./bin/outputs $$name > examples/$$name/outputs-$$name.tf
 		fi
 		ln -fs ../Makefile.example examples/$$name/Makefile
-		
 	done
 	./bin/make-versions $(wildcard $(addsuffix /versions.tf,$(addprefix modules/,$(MODULES)))) > examples/versions.tf
 	$(MAKE) fmt
