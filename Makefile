@@ -4,19 +4,20 @@ VERSION        ?= $(FILE_VERSION)
 RELEASE        := v$(VERSION)
 TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
-MODULES        := argocd \
-                  aws-external-secrets-operator \
-                  cert-manager \
-                  ecr-credentials-sync \
-                  eks \
-                  flux \
-                  istio \
-                  loki \
-                  opencost \
-                  rds \
-                  tempo \
-                  velero \
-                  vpc_peering
+FLAVORS        := eks
+MODULES        := eks/argocd \
+                  eks/aws-external-secrets-operator \
+                  eks/cert-manager \
+                  eks/ecr-credentials-sync \
+                  eks/eks \
+                  eks/flux \
+                  eks/istio \
+                  eks/loki \
+                  eks/opencost \
+                  eks/rds \
+                  eks/tempo \
+                  eks/velero \
+                  eks/vpc_peering
 COMMON_TARGETS := init validate
 TERRAFORM      ?= terraform
 
@@ -48,23 +49,25 @@ lint:
 fmt:
 	$(TERRAFORM) fmt -recursive modules examples
 
-examples: MODULE_SOURCE_URL ?= git@github.com:getupcloud/getup-modules//modules/{module_name}?ref={tag}
+examples: MODULE_SOURCE_URL ?= git@github.com:getupcloud/getup-modules//modules/{cluster_flavor}/{module_name}?ref={tag}
 examples:
-	@for dir in $(addprefix modules/,$(MODULES)); do
-		name=$${dir##*/}
-		echo Generating examples/$$name
-		mkdir -p examples/$$name
-		if [ -e $$dir/variables.tf ]; then
-			cat $$dir/variables.tf | ./bin/make-example-main $$name $(RELEASE) > examples/$$name/main-$$name.tf || exit 1
-			cat $$dir/variables.tf | ./bin/make-example-vars > examples/$$name/variables-$$name.tf || exit 1
-			cat $$dir/variables.tf | ./bin/make-example-tfvars > examples/$$name/terraform-$$name.auto.tfvars.example || exit 1
-		fi
-		if [ -e $$dir/outputs.tf  ]; then
-			cat $$dir/outputs.tf | ./bin/outputs $$name > examples/$$name/outputs-$$name.tf
-		fi
-		ln -fs ../Makefile.example examples/$$name/Makefile
+	for cluster_flavor in $(FLAVORS); do
+		for module_dir in $(addprefix modules/,$(MODULES)); do
+			module_name=$$(cut -f3 -d/ <<<$${module_dir})
+			example_module_dir=examples/$$cluster_flavor/$$module_name
+			echo Generating $$example_module_dir
+			mkdir -p $$example_module_dir
+			if [ -e $$module_dir/variables.tf ]; then
+				cat $$module_dir/variables.tf | ./bin/make-example-main $$cluster_flavor $$module_name $(RELEASE) > $$example_module_dir/main-$$module_name.tf || exit 1
+				cat $$module_dir/variables.tf | ./bin/make-example-vars > $$example_module_dir/variables-$$module_name.tf || exit 1
+				cat $$module_dir/variables.tf | ./bin/make-example-tfvars > $$example_module_dir/terraform-$$module_name.auto.tfvars.example || exit 1
+			fi
+			if [ -e $$module_dir/outputs.tf  ]; then
+				cat $$module_dir/outputs.tf | ./bin/outputs $$module_name > $$example_module_dir/outputs-$$module_name.tf
+			fi
+			ln -fs ../../Makefile.example $$example_module_dir/Makefile
+		done
 	done
-	./bin/make-versions $(wildcard $(addsuffix /versions.tf,$(addprefix modules/,$(MODULES)))) > examples/versions.tf
 	$(MAKE) fmt
 
 release: fmt update-version
