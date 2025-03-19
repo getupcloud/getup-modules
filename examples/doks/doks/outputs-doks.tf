@@ -15,9 +15,14 @@ output "region" {
   value       = module.doks.region
 }
 
-output "api_endpoint" {
+output "cluster_endpoint" {
   description = "The base URL of the API server on the Kubernetes master node."
-  value       = module.doks.api_endpoint
+  value       = module.doks.cluster_endpoint
+}
+
+output "kubeconfig" {
+  description = "A representation of the Kubernetes cluster's kubeconfig."
+  value       = module.doks.kubeconfig
 }
 
 output "node_pool" {
