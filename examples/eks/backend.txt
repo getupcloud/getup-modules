@@ -1,0 +1,5 @@
+backend "s3" {
+  bucket = "-- DEFINE BUCKET NAME HERE --"
+  key    = "-- DEFINE KEY PREFIX HERE --/terraform.tfstate"
+  region = "-- DEFINE BUCKET _REGION HERE --"
+}

@@ -5,21 +5,30 @@ import sys
 import hcl2
 
 if len(sys.argv) < 2:
-    print(f"Usage {sys.argv[0]} [versions.tf...] ", file=sys.stderr)
+    print(f"Usage {sys.argv[0]} cluster-flavor [versions.tf...] ", file=sys.stderr)
     sys.exit(1)
+
+try:
+    cluster_flavor, version_files = sys.argv[1], sys.argv[2:]
+except IndexError:
+    cluster_flavor = sys.argv[1]
+    version_files = []
 
 print(f'# File auto-generated from {sys.argv[0]}\n')
 
 seen=set()
 print('''terraform {
-  required_version = "~> 1.7.0"
+  required_version = "~> 1.7.0"''')
 
-  backend "s3" {
-    bucket = "-- DEFINE BUCKET NAME HERE --"
-    key    = "-- DEFINE KEY PREFIX HERE --/terraform.tfstate"
-    region = "-- DEFINE BUCKET _REGION HERE --"
-  }
+try:
+    with open(os.path.join('examples', cluster_flavor, 'backend.txt'), 'rt') as f:
+        print()
+        print(''.join([ f'  {line}' for line in f.readlines()]), end='')
+except FileNotFoundError as err:
+    print(err)
+    pass
 
+print('''
   required_providers {''', end='')
 
 tpl='''
@@ -28,7 +37,7 @@ tpl='''
       version = "{version}"
     }}'''
 
-for v in sys.argv[1:]:
+for v in version_files:
     with open(v, 'r') as f:
         hcl = hcl2.api.load(f)
         try:

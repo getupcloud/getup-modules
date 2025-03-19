@@ -2,6 +2,9 @@ TERRAFORM ?= terraform
 
 .ONESHELL:
 
+-include .env
+-include ../../../.env
+
 test: fmt lint init validate
 
 fmt:
