@@ -1,12 +1,10 @@
-data "aws_caller_identity" "current" {}
-
 resource "tls_private_key" "flux" {
   algorithm   = "ECDSA"
   ecdsa_curve = "P256"
 }
 
 resource "github_repository_deploy_key" "flux" {
-  title      = "DOKS Flux - ${var.flux_cluster_name} (Account ID: ${data.aws_caller_identity.current.account_id}, Region: ${var.flux_aws_region})"
+  title      = "DOKS Flux - ${var.flux_cluster_name} (Region: ${var.flux_region})"
   repository = var.flux_github_repository
   key        = tls_private_key.flux.public_key_openssh
   read_only  = false
