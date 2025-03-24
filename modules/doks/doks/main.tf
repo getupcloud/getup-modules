@@ -24,7 +24,7 @@ resource "digitalocean_kubernetes_cluster" "cluster" {
     min_nodes  = var.default_node_pool.min_nodes
     max_nodes  = var.default_node_pool.max_nodes
     labels     = try(var.default_node_pool.labels, {})
-    tags       = distinct(concat(var.tags, try(var.default_node_pool.tags, [])))
+    tags       = distinct(concat(local.tags, [for k, v in var.default_node_pool.tags : "${k}=${v}"]))
 
     dynamic "taint" {
       for_each = try(var.default_node_pool.taints, [])
@@ -48,7 +48,7 @@ resource "digitalocean_kubernetes_node_pool" "node_pool" {
   min_nodes  = try(each.value.min_nodes, 2)
   max_nodes  = try(each.value.max_nodes, 4)
   labels     = try(each.value.labels, {})
-  tags       = distinct(concat(var.tags, try(each.value.tags, [])))
+  tags       = distinct(concat(local.tags, [for k, v in each.value.tags : "${k}=${v}"]))
 
   dynamic "taint" {
     for_each = try(each.value.taints, [])
