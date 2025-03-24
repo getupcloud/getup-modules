@@ -4,7 +4,7 @@ module "flux" {
   source = "git@github.com:getupcloud/getup-modules//modules/doks/flux?ref=v1.1.2"
 
   flux_doks_region       = var.region
-  flux_cluster_name      = module.eks.cluster_name
+  flux_cluster_name      = module.doks.cluster_name
   flux_github_token      = var.flux_github_token
   flux_github_org        = var.flux_github_org
   flux_github_repository = var.flux_github_repository

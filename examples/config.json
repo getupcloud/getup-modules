@@ -1,8 +1,9 @@
 {
     "map_var": {
+        "flux_{cluster_flavor}_region": "var.{cluster_flavor}_region",
         "flux_aws_region": "var.aws_region",
         "flux_doks_region": "var.region",
-        "flux_cluster_name": "module.eks.cluster_name",
+        "flux_cluster_name": "module.{cluster_flavor}.cluster_name",
         "loki_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
         "cert_manager_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
         "ecr_credentials_sync_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
@@ -20,8 +21,8 @@
     },
     "no_use_var": [],
     "ignore_var": [
+        "flux_{cluster_flavor}_region",
         "flux_aws_region",
-        "flux_doks_region",
         "flux_cluster_name",
         "loki_cluster_oidc_issuer_url",
         "cert_manager_cluster_oidc_issuer_url",
