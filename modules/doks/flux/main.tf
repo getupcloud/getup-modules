@@ -4,7 +4,7 @@ resource "tls_private_key" "flux" {
 }
 
 resource "github_repository_deploy_key" "flux" {
-  title      = "DOKS Flux - ${var.flux_cluster_name} (Region: ${var.flux_region})"
+  title      = "DOKS Flux - ${var.flux_cluster_name} (Region: ${var.flux_doks_region})"
   repository = var.flux_github_repository
   key        = tls_private_key.flux.public_key_openssh
   read_only  = false
