@@ -66,6 +66,12 @@ resource "helm_release" "keda" {
 
     webhooks:
       replicaCount: ${var.keda_replicas}
+
+    tolerations:
+    ${yamlencode(local.tolerations.default)}
+
+    nodeSelector:
+      ${indent(2, yamlencode(local.node_selector.default))}
     EOT
   ]
 

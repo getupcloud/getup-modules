@@ -25,6 +25,7 @@ output "cluster_endpoint" {
 output "kubeconfig" {
   description = "A representation of the Kubernetes cluster's kubeconfig."
   value       = digitalocean_kubernetes_cluster.cluster.kube_config[0]
+  sensitive   = true
 }
 
 output "node_pool" {

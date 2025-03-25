@@ -106,6 +106,7 @@ variable "default_node_pool" {
 
     labels = {
       "role-role.getup.io/infra" : ""
+      "role" : "infra"
     }
 
     ## Format is list(taint): [{key:XXX, value: XXX, effect:XXX},...]
@@ -131,7 +132,8 @@ variable "node_pools" {
       tags       = []
 
       labels = {
-        "role-role.kubernetes.io/app" : ""
+        "role-role.getup.io/app" : ""
+        "role" : "app"
       }
 
       ## Format is list(taint): [{key:XXX, value: XXX, effect:XXX},...]
