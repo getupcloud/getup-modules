@@ -14,7 +14,7 @@ locals {
         key : try(taint.key, null),
         value : try(taint.value, null),
         effect : try(taint.effect, null),
-        operator : try(taint.value, null) == null ? "Equal" : "Exists"
+        operator : try(taint.value, null) == null ? "Exists" : "Equal"
       }]
       }, {
       for nodepool in var.node_pools : nodepool.name => [
@@ -22,7 +22,7 @@ locals {
           key : try(taint.key, null),
           value : try(taint.value, null),
           effect : try(taint.effect, null),
-          operator : try(taint.value, null) == null ? "Equal" : "Exists"
+          operator : try(taint.value, null) == null ? "Exists" : "Equal"
         }
       ]
     }
