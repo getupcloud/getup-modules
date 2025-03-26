@@ -22,15 +22,15 @@ terraform {
   #  HTTP Proxy server port: 0
   #
   # $ s3cmd mb s3://pontta-terraform-state                                                                    <<-- change for desired bucket name
-  
+
   backend "s3" {
     endpoints = {
       s3 = "https://-- DEFINE REGION HERE --.digitaloceanspaces.com"
     }
-  
+
     bucket            = "-- DEFINE BUCKET NAME HERE --"
     key               = "-- DEFINE KEY PREFIX HERE --/terraform.tfstate"
-  
+
     # Deactivate a few AWS-specific checks
     skip_credentials_validation = true
     skip_requesting_account_id  = true
