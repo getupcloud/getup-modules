@@ -19,7 +19,7 @@ print(f'# File auto-generated from {sys.argv[0]}\n')
 
 seen=set()
 print('''terraform {
-  required_version = "~> 1.7.0"''')
+  required_version = "~> 1.7"''')
 
 try:
     with open(os.path.join('examples', cluster_flavor, 'backend.txt'), 'rt') as f:

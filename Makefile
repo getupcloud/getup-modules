@@ -77,7 +77,7 @@ examples:
 		ln -fs ../../Makefile.example $$example_module_dir/Makefile
 	done
 	for cluster_flavor in $(FLAVORS); do
-		versions_tf=examples/$$cluster_flavor/versions.tf
+		versions_tf=examples/$$cluster_flavor/versions.tf.example
 		echo Generating $$versions_tf
 		find modules/$$cluster_flavor -name versions.tf | xargs bin/make-versions $$cluster_flavor > $$versions_tf
 	done
