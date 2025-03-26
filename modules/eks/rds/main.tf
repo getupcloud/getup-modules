@@ -99,7 +99,7 @@ module "database" {
 }
 
 module "vpc_peering" {
-  source = "git@github.com:getupcloud/terraform-modules//modules/vpc_peering?ref=v0.22.1"
+  source = "git@github.com:getupcloud/terraform-modules//modules/vpc_peering?ref=v1.2.1"
   count  = var.rds_vpc_peering_peer_vpc_id != null ? 1 : 0
 
   vpc_peering_owner_vpc_id          = module.vpc.vpc_id
