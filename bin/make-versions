@@ -4,9 +4,10 @@ import os
 import sys
 import hcl2
 
-if len(sys.argv) < 2:
+_help = '-h' in sys.argv or '--help' in sys.argv
+if len(sys.argv) < 2 or _help:
     print(f"Usage {sys.argv[0]} cluster-flavor [versions.tf...] ", file=sys.stderr)
-    sys.exit(1)
+    sys.exit(0 if _help else 1)
 
 try:
     cluster_flavor, version_files = sys.argv[1], sys.argv[2:]

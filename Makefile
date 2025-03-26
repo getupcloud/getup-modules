@@ -53,7 +53,13 @@ fmt:
 
 examples: MODULE_SOURCE_URL ?= git@github.com:getupcloud/getup-modules//modules/{cluster_flavor}/{module_name}?ref={tag}
 examples:
-	@for module in $(MODULES); do
+	@echo Generating examples/common
+	for i in examples/common/variables-*.tf; do
+		n=$${i%.tf}
+		n=$${n#*/variables-}
+		cat $$i | bin/make-example-tfvars > examples/common/terraform-$${n}.auto.tfvars.example
+	done
+	for module in $(MODULES); do
 		cluster_flavor=$${module%%/*}
 		module_name=$${module#*/}
 		source_module_dir=modules/$$module

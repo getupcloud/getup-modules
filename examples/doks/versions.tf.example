@@ -4,6 +4,25 @@ terraform {
   required_version = "~> 1.7.0"
 
   # Example from https://docs.digitalocean.com/products/spaces/reference/terraform-backend/
+  # $ pip3 install s3cmd --user
+  #
+  # $ s3cmd --configure
+  #
+  ### Use config below:
+  #
+  #  Access Key:
+  #  Secret Key:
+  #  Default Region: US
+  #  S3 Endpoint: nyc3.digitaloceanspaces.com                                                                 <<--- change for your region
+  #  DNS-style bucket+hostname:port template for accessing a bucket: %(bucket)s.nyc3.digitaloceanspaces.com   <<--- change for your region
+  #  Encryption password:                                                                                     <<--- may leave empty
+  #  Path to GPG program: /usr/bin/gpg                                                                        <<--- may leave empty
+  #  Use HTTPS protocol: True
+  #  HTTP Proxy server name:                                                                                  <<-- may leave empty
+  #  HTTP Proxy server port: 0
+  #
+  # $ s3cmd mb s3://pontta-terraform-state                                                                    <<-- change for desired bucket name
+
   backend "s3" {
     endpoints = {
       s3 = "https://-- DEFINE REGION HERE --.digitaloceanspaces.com"

@@ -8,9 +8,10 @@ import json
 var_start_re = re.compile('^\\s*variable\\s+"?([^\\s"]+)"?.*')
 var_end_re = re.compile('^\\s*}\\s*')
 
-if len(sys.argv) < 2:
+_help = '-h' in sys.argv or '--help' in sys.argv
+if len(sys.argv) < 2 or _help:
     print(f"Usage {sys.argv[0]} cluster-flavor [template-vars: name=value, ...]", file=sys.stderr)
-    sys.exit(1)
+    sys.exit(0 if _help else 1)
 
 cluster_flavor = sys.argv[1]
 tpl_data = { k: v for k, v in [ i.split('=') for i in sys.argv[2:] if '=' in i ] } # transforms argv["name=value"] into dict
