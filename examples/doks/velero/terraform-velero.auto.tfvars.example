@@ -7,8 +7,8 @@
 
 # velero_bucket_name - Bucket Name. Use as-is if provided, otherwise uses velero_bucket_name_prefix to create a random name.
 # Type: ${string}
-# Default: null
-#velero_bucket_name = null
+# Default: ""
+#velero_bucket_name = ""
 
 # velero_bucket_name_prefix - (Optional) Auto-generated bucket name prefix. Ignored if velero_bucket_name is provided.
 # Type: ${string}

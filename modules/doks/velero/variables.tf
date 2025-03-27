@@ -7,7 +7,7 @@ variable "velero_prefix_path" {
 variable "velero_bucket_name" {
   description = "Bucket Name. Use as-is if provided, otherwise uses velero_bucket_name_prefix to create a random name."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "velero_bucket_name_prefix" {

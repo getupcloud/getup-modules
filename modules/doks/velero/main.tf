@@ -1,5 +1,5 @@
 locals {
-  bucket_name = var.velero_bucket_name ? var.velero_bucket_name : "${var.velero_bucket_name_prefix}${random_uuid.bucket_name_suffix.result}"
+  bucket_name = (var.velero_bucket_name != "") ? var.velero_bucket_name : "${var.velero_bucket_name_prefix}${random_uuid.bucket_name_suffix.result}"
 }
 
 resource "random_uuid" "bucket_name_suffix" {}
@@ -7,6 +7,7 @@ resource "random_uuid" "bucket_name_suffix" {}
 resource "digitalocean_spaces_bucket" "velero" {
   name   = local.bucket_name
   region = var.velero_bucket_region
+  acl    = "private"
 
   versioning {
     enabled = true
