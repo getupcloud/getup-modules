@@ -1,23 +1,15 @@
-variable "velero_do_token" {
-  description = "DigitalOcean API Token"
+variable "velero_prefix_path" {
+  description = "Bucket prefix to create objets."
   type        = string
-  default     = ""
+  default     = "velero/"
 }
 
-variable "velero_tags" {
-  description = "Tags to apply to all resources."
-  type        = any
-  default     = {}
+variable "velero_bucket_name" {
+  description = "Bucket Name."
+  type        = string
 }
 
-variable "velero_retention_days" {
-  description = "Days to retain files in S3."
-  type        = number
-  default     = 15
-}
-
-variable "velero_retention_prefixes" {
-  description = "Prefixes to retain files in S3."
-  type        = list(string)
-  default     = ["/"]
+variable "velero_bucket_region" {
+  description = "Bucket Region."
+  type        = string
 }
