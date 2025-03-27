@@ -11,5 +11,5 @@ output "velero_access_key" {
 output "velero_secret_key" {
   description = "Velero Secret Key."
   value       = digitalocean_spaces_key.velero.secret_key
-  sensitive = true
+  sensitive   = true
 }
