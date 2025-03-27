@@ -19,7 +19,8 @@ MODULES        := eks/argocd \
                   eks/velero \
                   eks/vpc_peering \
                   doks/doks \
-                  doks/flux
+                  doks/flux \
+                  doks/velero
 COMMON_TARGETS := init validate
 TERRAFORM      ?= terraform
 

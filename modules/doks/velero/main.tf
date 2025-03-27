@@ -1,5 +1,11 @@
+locals {
+  bucket_name = var.velero_bucket_name ? var.velero_bucket_name : "${var.velero_bucket_name_prefix}${random_uuid.bucket_name_suffix.result}"
+}
+
+resource "random_uuid" "bucket_name_suffix" {}
+
 resource "digitalocean_spaces_bucket" "velero" {
-  name   = "velero-${var.velero_bucket_name}"
+  name   = local.bucket_name
   region = var.velero_bucket_region
 
   versioning {
@@ -18,10 +24,10 @@ resource "digitalocean_spaces_bucket" "velero" {
 }
 
 resource "digitalocean_spaces_key" "velero" {
-  name = "velero-${var.velero_bucket_name}"
+  name = local.bucket_name
 
   grant {
-    bucket     = var.velero_bucket_name
+    bucket     = local.bucket_name
     permission = "readwrite"
   }
 }

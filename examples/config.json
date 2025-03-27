@@ -17,7 +17,8 @@
         "rds_vpc_peering_peer_vpc_id": "module.eks.cluster_vpc_id",
         "rds_vpc_peering_peer_route_table_ids": "module.eks.cluster_vpc_private_route_table_ids",
         "tempo_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
-        "velero_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url"
+        "velero_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
+        "velero_bucket_region": "var.region"
     },
     "no_use_var": [],
     "ignore_var": [
