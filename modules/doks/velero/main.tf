@@ -18,8 +18,8 @@ resource "digitalocean_spaces_bucket" "velero" {
     prefix  = var.velero_prefix_path
 
     expiration {
-      days                         = "60"
-      expired_object_delete_marker = true
+      days = 60
+      #expired_object_delete_marker = true
     }
   }
 }
