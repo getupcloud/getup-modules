@@ -1,27 +1,27 @@
 module "argocd" {
-  source = "../modules/argocd"
+  source = "../../modules/eks/argocd"
 }
 
 module "aws-external-secrets-operator" {
-  source = "../modules/aws-external-secrets-operator"
+  source = "../../modules/eks/aws-external-secrets-operator"
 
   aws_eso_cluster_oidc_issuer_url = "localhost"
 }
 
 module "cert-manager" {
-  source = "../modules/cert-manager"
+  source = "../../modules/eks/cert-manager"
 
   cert_manager_cluster_oidc_issuer_url = "localhost"
 }
 
 module "ecr-credentials-sync" {
-  source = "../modules/ecr-credentials-sync"
+  source = "../../modules/eks/ecr-credentials-sync"
 
   ecr_credentials_sync_cluster_oidc_issuer_url = "localhost"
 }
 
 module "eks" {
-  source = "../modules/eks"
+  source = "../../modules/eks/eks"
 
   cluster_name   = "test"
   aws_account_id = "0000000000"
@@ -37,36 +37,36 @@ module "eks" {
 #}
 
 module "istio" {
-  source = "../modules/istio"
+  source = "../../modules/eks/istio"
 }
 
 module "loki" {
-  source = "../modules/loki"
+  source = "../../modules/eks/loki"
 
   loki_cluster_oidc_issuer_url = "localhost"
 }
 
 module "velero" {
-  source = "../modules/velero"
+  source = "../../modules/eks/velero"
 
   velero_cluster_oidc_issuer_url = "localhost"
 }
 
 module "opencost" {
-  source = "../modules/opencost"
+  source = "../../modules/eks/opencost"
 
   opencost_cluster_oidc_issuer_url   = "localhost"
   opencost_spot_datafeed_bucket_name = "test"
 }
 
 module "rds" {
-  source = "../modules/rds"
+  source = "../../modules/eks/rds"
 
   rds_name = "test"
 }
 
 module "tempo" {
-  source = "../modules/tempo"
+  source = "../../modules/eks/tempo"
 
   tempo_cluster_oidc_issuer_url = "localhost"
 }

@@ -40,8 +40,10 @@ clean:
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
-test tests:
-	$(MAKE) -C tests fmt init validate plan
+tests: test-eks test-doks
+
+test-%:
+	$(MAKE) -C tests/$* fmt init validate plan
 
 lint:
 	@echo Linting modules:
