@@ -25,10 +25,10 @@ resource "digitalocean_spaces_bucket" "tempo" {
 }
 
 resource "digitalocean_spaces_key" "tempo" {
-  name = local.bucket_name
+  name = digitalocean_spaces_bucket.tempo.name
 
   grant {
-    bucket     = local.bucket_name
+    bucket     = digitalocean_spaces_bucket.tempo.name
     permission = "readwrite"
   }
 }

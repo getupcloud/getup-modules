@@ -25,10 +25,10 @@ resource "digitalocean_spaces_bucket" "loki" {
 }
 
 resource "digitalocean_spaces_key" "loki" {
-  name = local.bucket_name
+  name = digitalocean_spaces_bucket.loki.name
 
   grant {
-    bucket     = local.bucket_name
+    bucket     = digitalocean_spaces_bucket.loki.name
     permission = "readwrite"
   }
 }

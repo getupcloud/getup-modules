@@ -25,10 +25,10 @@ resource "digitalocean_spaces_bucket" "velero" {
 }
 
 resource "digitalocean_spaces_key" "velero" {
-  name = local.bucket_name
+  name = digitalocean_spaces_bucket.velero.name
 
   grant {
-    bucket     = local.bucket_name
+    bucket     = digitalocean_spaces_bucket.velero.name
     permission = "readwrite"
   }
 }
