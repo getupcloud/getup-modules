@@ -18,7 +18,7 @@ variable "tempo_bucket_name_prefix" {
   default     = "tempo-"
 }
 
-variable "tempo_bucket_region" {
-  description = "Bucket Region."
-  type        = string
-}
+#variable "tempo_bucket_region" {
+#  description = "Bucket Region."
+#  type        = string
+#}

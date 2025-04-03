@@ -6,5 +6,5 @@ module "tempo" {
   tempo_prefix_path        = var.tempo_prefix_path
   tempo_bucket_name        = var.tempo_bucket_name
   tempo_bucket_name_prefix = var.tempo_bucket_name_prefix
-  tempo_bucket_region      = var.tempo_bucket_region
+  tempo_bucket_region      = var.region
 }

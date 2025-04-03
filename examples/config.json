@@ -19,7 +19,8 @@
         "tempo_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
         "velero_cluster_oidc_issuer_url": "module.eks.cluster_oidc_issuer_url",
         "velero_bucket_region": "var.region",
-        "loki_bucket_region": "var.region"
+        "loki_bucket_region": "var.region",
+        "tempo_bucket_region": "var.region"
     },
     "no_use_var": [],
     "ignore_var": [
@@ -41,6 +42,7 @@
         "tempo_cluster_oidc_issuer_url",
         "velero_cluster_oidc_issuer_url",
         "velero_bucket_region",
-        "loki_bucket_region"
+        "loki_bucket_region",
+        "tempo_bucket_region"
     ]
 }
