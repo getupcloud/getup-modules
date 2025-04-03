@@ -21,7 +21,8 @@ MODULES        := eks/argocd \
                   doks/doks \
                   doks/flux \
                   doks/velero \
-                  doks/loki
+                  doks/loki \
+                  doks/tempo
 COMMON_TARGETS := init validate
 TERRAFORM      ?= terraform
 
