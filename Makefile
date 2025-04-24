@@ -85,8 +85,18 @@ examples:
 		versions_tf=examples/$$cluster_flavor/versions.tf.example
 		echo Generating $$versions_tf
 		find modules/$$cluster_flavor -name versions.tf | xargs bin/make-versions $$cluster_flavor > $$versions_tf
+		echo Generating Makefile.conf
 	done
 	$(MAKE) fmt
+
+
+x:
+	for cluster_flavor in $(FLAVORS); do
+		echo ----- $$cluster_flavor
+		modules=$$(printf "MODULES := %s\n" $(MODULES) | awk -F/ -v cluster_flavor=$$cluster_flavor '$$1 ~ cluster_flavor {print $$2}')
+		echo $$modules
+		sed -e "s/^MODULES\s.*/MODULES := $$modules/" examples/$$cluster_flavor/Makefile.conf
+	done
 
 release: fmt update-version
 	$(MAKE) build-release
