@@ -6,10 +6,10 @@ TEMPLATES      := $(notdir $(wildcard templates/*))
 SEMVER_REGEX   := ^([0-9]+)\.([0-9]+)\.([0-9]+)(-([0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*))?(\+[0-9A-Za-z-]+)?$
 FLAVORS        := eks doks
 MODULES        := eks/argocd \
-                  eks/aws-external-secrets-operator \
                   eks/cert-manager \
                   eks/ecr-credentials-sync \
                   eks/eks \
+                  eks/external-secrets-operator \
                   eks/flux \
                   eks/istio \
                   eks/loki \
