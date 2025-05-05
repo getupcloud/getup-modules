@@ -88,6 +88,11 @@ module "eks" {
     coredns = {
       resolve_conflicts_on_update = "OVERWRITE"
       configuration_values = local.fargate.kube_system ? jsonencode({
+        autoScaling = {
+          enabled     = true
+          maxReplicas = 10
+          minReplicas = 2
+        }
         computeType = "Fargate"
         # Ensure that we fully utilize the minimum amount of resources that are supplied by
         # Fargate https://docs.aws.amazon.com/eks/latest/userguide/fargate-pod-configuration.html
