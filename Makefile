@@ -62,7 +62,7 @@ examples:
 	for i in examples/common/variables-*.tf; do
 		n=$${i%.tf}
 		n=$${n#*/variables-}
-		cat $$i | bin/make-example-tfvars > examples/common/terraform-$${n}.auto.tfvars.example
+		cat $$i | bin/make-example tfvars all common $(RELEASE) | terraform fmt - > examples/common/terraform-$${n}.auto.tfvars.example
 	done
 	for module in $(MODULES); do
 		cluster_flavor=$${module%%/*}
@@ -72,9 +72,9 @@ examples:
 		echo Generating $$example_module_dir
 		mkdir -p $$example_module_dir
 		if [ -e $$source_module_dir/variables.tf ]; then
-			cat $$source_module_dir/variables.tf | ./bin/make-example-main $$cluster_flavor $$module_name $(RELEASE) > $$example_module_dir/main-$$module_name.tf || exit 1
-			cat $$source_module_dir/variables.tf | ./bin/make-example-vars $$cluster_flavor module_name=$$module_name tag=$(RELEASE) > $$example_module_dir/variables-$$module_name.tf || exit 1
-			cat $$source_module_dir/variables.tf | ./bin/make-example-tfvars > $$example_module_dir/terraform-$$module_name.auto.tfvars.example || exit 1
+			cat $$source_module_dir/variables.tf | ./bin/make-example main $$cluster_flavor $$module_name $(RELEASE)   | terraform fmt - > $$example_module_dir/main-$$module_name.tf|| exit 1
+			cat $$source_module_dir/variables.tf | ./bin/make-example vars $$cluster_flavor $$module_name $(RELEASE)   | terraform fmt - > $$example_module_dir/variables-$$module_name.tf || exit 1
+			cat $$source_module_dir/variables.tf | ./bin/make-example tfvars $$cluster_flavor $$module_name $(RELEASE) | terraform fmt - > $$example_module_dir/terraform-$$module_name.auto.tfvars.example || exit 1
 		fi
 		if [ -e $$source_module_dir/outputs.tf ]; then
 			cat $$source_module_dir/outputs.tf | ./bin/outputs $$module_name > $$example_module_dir/outputs-$$module_name.tf
@@ -84,7 +84,7 @@ examples:
 	for cluster_flavor in $(FLAVORS); do
 		versions_tf=examples/$$cluster_flavor/versions.tf.example
 		echo Generating $$versions_tf
-		find modules/$$cluster_flavor -name versions.tf | xargs bin/make-versions $$cluster_flavor > $$versions_tf
+		find modules/$$cluster_flavor -name versions.tf | xargs bin/make-example versions $$cluster_flavor all $(RELEASE) | terraform fmt - > $$versions_tf || exit 1
 		echo Generating Makefile.conf
 	done
 	$(MAKE) fmt

@@ -1,0 +1,224 @@
+#!/usr/bin/env python
+
+import os
+import re
+import sys
+import hcl2
+import yaml
+import json
+
+_help = '-h' in sys.argv or '--help' in sys.argv
+if len(sys.argv) < 4 or _help:
+    print(f'Usage: {sys.argv[0]} kind cluster-flavor module-name module-version [template-vars...|versions-files...]', file=sys.stderr)
+    print('  kind             main, vars, tfvars, versions', file=sys.stderr)
+    print('  cluster-flavor   eks, doks, ... (see dir modules/ for all options)', file=sys.stderr)
+    print('  module-name      flux, loki, istio, argocd, ... (see modules/{cluster-flavor/ for all options)', file=sys.stderr)
+    print('  module-version   MAJOR.MINOR.PATCH (see version.txt for latest version)', file=sys.stderr)
+    print('  template-vars    Interpolation variables in format "name=value". Ex: replicas=2', file=sys.stderr)
+    sys.exit(0 if _help else 1)
+
+kind, cluster_flavor, module_name, tag = sys.argv[1:5]
+assert kind in ['main', 'vars', 'tfvars', 'versions'], f'Invalid kind: {kind}'
+
+tpl_data = { k: v for k, v in [ i.split('=') for i in sys.argv[5:] if '=' in i] }
+tpl_data.update({
+    'cluster_flavor': cluster_flavor,
+    'module_name': module_name,
+    'tag': tag,
+    'env': os.environ,
+})
+
+default_module_source_url = 'git@github.com:getupcloud/getup-modules//modules/{cluster_flavor}/{module_name}?ref={tag}'
+module_source_tpl = os.environ.get('MODULE_SOURCE_URL', tpl_data.get('module_source_url', default_module_source_url)).format(**tpl_data)
+tpl_data['module_source_tpl'] = module_source_tpl
+
+extra_args = [ i for i in sys.argv[5:] if '=' not in i ]
+tpl_data['extra_args'] = extra_args
+
+def load_config(cluster_flavor, module_name, tpl_data, config_file='examples/config.yaml'):
+    assert cluster_flavor, "Missing var: cluster_flavor"
+    assert module_name, "Missing var: module_name"
+
+    def load_module_config(config):
+        try:
+            map_var_root = config.get('module_mapping_vars', {})
+            map_var = map_var_root.get('_defaults', {})
+            map_var_module = map_var_root.get(cluster_flavor, {}).get(module_name, {})
+            map_var.update(map_var_module)
+        except AttributeError:
+            map_var = {}
+        return { eval(f'f"{k}"').format(**tpl_data): eval(f'f"{v}"').format(**tpl_data) for k, v in map_var.items() }
+
+    with open(config_file, 'r') as f:
+        try:
+            config = yaml.safe_load(f)
+            map_var = load_module_config(config)
+            ignore_var = [ eval(f'"{i}"').format(**tpl_data) for i in config.get('ignored_variables', []) ]
+            config = {
+                "module_mapping_vars": map_var,
+                "ignored_variables": ignore_var,
+            }
+            if '--print-config' in sys.argv:
+                print(yaml.dump(config, indent=2, default_flow_style=False))
+                sys.exit(0)
+            return config
+        except KeyError as ex:
+            print(f'Erro loading config file for examples: {config_file}: {ex}', file=sys.stderr)
+            sys.exit(1)
+
+config = load_config(cluster_flavor, module_name, tpl_data)
+
+
+#################################################
+def make_kind_main(input_file, config, tpl_data):
+    hcl = hcl2.api.load(input_file)
+
+    print(f'''
+    module "{tpl_data['module_name']}" {{
+      source = "{tpl_data['module_source_tpl']}"
+    '''.strip())
+    print()
+
+    for i, variable in enumerate(hcl.get('variable')):
+        for name, content in variable.items():
+            if name in config['ignored_variables']:
+                print(f'-> Ignored tfvar: {name}', file=sys.stderr)
+                continue
+            value = config['module_mapping_vars'].get(name, f'var.{name}')
+            #print(f'-> Mapped var: {name} = {value}', file=sys.stderr)
+            print(f'  {name} = {value}')
+    print('}')
+
+
+#################################################
+def make_kind_vars(input_file, config, tpl_data):
+    var_start_re = re.compile('^\\s*variable\\s+"?([^\\s"]+)"?.*')
+    var_end_re = re.compile('^\\s*}\\s*')
+    ignore = ignored_by_mapping = ignored_by_list = False
+    first_match = False
+
+    for line in input_file.readlines():
+        start_match = var_start_re.match(line)
+        end_match = var_end_re.match(line) if not start_match else None
+
+        if start_match:
+            (name, ) = start_match.groups()
+            ignored_by_mapping, ignored_by_list = name in config["module_mapping_vars"], name in config["ignored_variables"]
+            ignore = ignored_by_mapping or ignored_by_list
+            first_match = True
+        elif end_match:
+            if ignore:
+                print('#', end='')
+            ignore = ignored_by_mapping = ignored_by_list = False
+
+        if ignored_by_list:
+            if first_match:
+                print('## Ignored by config.json:ignored_variables')
+            print('#', end='')
+        elif ignored_by_mapping:
+            if first_match:
+                print('## Ignored by config.json:module_mapping_vars')
+            print('#', end='')
+
+        print(line, end='')
+        first_match = False
+
+
+###################################################
+def make_kind_tfvars(input_file, config, tpl_data):
+    def sanitize_string(s):
+        return s.replace('\'', '"').replace('\n', '\n#')
+
+    hcl = hcl2.api.load(input_file)
+    for i, variable in enumerate(hcl.get('variable')):
+        for name, content in variable.items():
+            description = content.get('description')
+            data_type = content.get('type')
+            has_default, default = 'default' in content, content.get('default')
+
+            if default is None:
+                pass
+            elif data_type == '${string}':
+                default = default
+            elif data_type == '${bool}':
+                default = bool(default)
+
+            if i:
+                print()
+
+            if description is not None:
+                print(sanitize_string(f'# {name} - {description}'))
+
+            if data_type is not None:
+                print(sanitize_string(f'# Type: {data_type}'))
+
+
+            if has_default:
+                print(sanitize_string(f'# Default: {json.dumps(default, indent=2, sort_keys=True)}'))
+            else:
+                print(f'# Required')
+
+            if has_default:
+                print(sanitize_string(f'#{name} = {json.dumps(default, indent=2, sort_keys=True)}'))
+            else:
+                print(f'#{name} = <REQUIRED-VALUE>')
+
+
+###################################################
+def make_kind_versions(input_file, config, tpl_data):
+    seen=set()
+    backend_txt = os.path.join('examples', tpl_data['cluster_flavor'], 'backend.txt')
+    print('''terraform {
+  required_version = "~> 1.11"''')
+
+    try:
+        with open(backend_txt, 'rt') as f:
+            print()
+            print(f'  # Source: {backend_txt}')
+            print(''.join([ f'  {line}' if line.strip() else '\n' for line in f.readlines()]), end='')
+    except FileNotFoundError as err:
+        print(err)
+        pass
+
+    print('''\n  required_providers {''')
+
+    tpl='''    {name} = {{
+      source  = "{source}"
+      version = "{version}"
+    }}'''
+
+    for vars_file in tpl_data['extra_args']:
+        with open(vars_file, 'r') as f:
+            #print(f'    # Seen in {vars_file}')
+            hcl = hcl2.api.load(f)
+            try:
+                for k, v in hcl['terraform'][0]['required_providers'][0].items():
+                    if k not in seen:
+                        name, source, version = k, v['source'], v['version']
+                        print(tpl.format(name=name, source=source, version=version))
+                        print()
+                        seen.add(k)
+
+            except (IndexError, KeyError) as ex:
+                pass
+            #print(json.dumps(hcl))
+
+    print('  }\n}')
+
+
+#########################################
+if len(' '.join(sys.argv)) > 160:
+    print('# File auto-generated by command:')
+    print(f'#  {sys.argv[0]} \\')
+    print(f'#    {" \\\n#    ".join(sys.argv[1:])}\n')
+else:
+    print(f'# File auto-generated by command: {" ".join(sys.argv)}\n')
+
+if kind == 'main':
+    make_kind_main(sys.stdin, config, tpl_data)
+elif kind == 'vars':
+    make_kind_vars(sys.stdin, config, tpl_data)
+elif kind == 'tfvars':
+    make_kind_tfvars(sys.stdin, config, tpl_data)
+elif kind == 'versions':
+    make_kind_versions(sys.stdin, config, tpl_data)

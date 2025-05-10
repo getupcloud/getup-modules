@@ -1,0 +1,37 @@
+module_mapping_vars:
+  _defaults:
+      "{module_name.replace('-','_')}_cluster_oidc_issuer_url": module.{cluster_flavor}.{cluster_flavor}_cluster_oidc_issuer_url
+      "{module_name.replace('-','_')}_cluster_name": module.{cluster_flavor}.{cluster_flavor}_cluster_name
+      "{module_name.replace('-','_')}_region": module.{cluster_flavor}.{cluster_flavor}_region
+      "{module_name.replace('-','_')}_{cluster_flavor}_cluster_name": module.{cluster_flavor}.{cluster_flavor}_cluster_name
+      "{module_name.replace('-','_')}_{cluster_flavor}_region": module.{cluster_flavor}.{cluster_flavor}_region
+      "{module_name.replace('-','_')}_bucket_region": module.{cluster_flavor}.{cluster_flavor}_region
+  eks:
+    argocd: {}
+    cert-manager: {}
+    ecr-credentials-sync: {}
+    eks: {}
+    external-secrets-operator:
+      aws_eso_aws_region: module.eks.eks_aws_region
+      aws_eso_cluster_oidc_issuer_url: module.eks.eks_cluster_oidc_issuer_url
+    flux:
+      flux_aws_region: module.eks.eks_aws_region
+    istio: {}
+    loki: {}
+    opencost: {}
+    rds:
+      rds_eks_vpc_cidr: var.vpc_cidr
+      rds_vpc_peering_peer_vpc_id: module.eks.eks_cluster_vpc_id
+      rds_vpc_peering_peer_route_table_ids: module.eks.eks_cluster_vpc_private_route_table_ids
+    tempo: {}
+    velero: {}
+    vpc_peering: {}
+  doks:
+    dock: {}
+    flux: {}
+    loki: {}
+    tempo: {}
+    velero: {}
+
+## list(string)
+ignored_variables: []
