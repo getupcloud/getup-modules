@@ -3,7 +3,7 @@
 #    versions \
 #    eks \
 #    all \
-#    v1.3.4 \
+#    v1.4.0 \
 #    modules/eks/cert-manager/versions.tf \
 #    modules/eks/ecr-credentials-sync/versions.tf \
 #    modules/eks/flux/versions.tf \
