@@ -28,7 +28,7 @@ TERRAFORM      ?= terraform
 
 .ONESHELL:
 
-.PHONY: examples tests $(COMMON_TARGETS) $(TFVARS)
+.PHONY: examples $(COMMON_TARGETS) $(TFVARS)
 
 $(COMMON_TARGETS):
 	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
@@ -36,14 +36,14 @@ $(COMMON_TARGETS):
 	done
 
 clean:
-	@for dir in tests $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
+	@for dir in tests/ $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
-tests: test-eks test-doks
+test: test-eks test-doks
 
 test-%:
-	$(MAKE) -C tests/$* fmt init validate plan
+	$(MAKE) -C tests/$* fmt init validate plan MODULES=$(MODULES)
 
 lint:
 	@echo Linting modules:

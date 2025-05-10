@@ -1,5 +1,5 @@
 locals {
-  name_prefix = "aws-external-secrets-operator-"
+  name_prefix = "external-secrets-operator-"
   policy_vars = {
     aws_region : var.aws_eso_aws_region != "" ? var.aws_eso_aws_region : data.aws_region.current.name
     aws_account_id : var.aws_eso_aws_account_id != "" ? var.aws_eso_aws_account_id : data.aws_caller_identity.current.account_id

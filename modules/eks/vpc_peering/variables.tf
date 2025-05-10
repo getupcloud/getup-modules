@@ -8,7 +8,7 @@ variable "vpc_peering_owner_route_table_ids" {
 
   validation {
     condition     = length(var.vpc_peering_owner_route_table_ids) > 0
-    error_message = "INVALID LENGTH order: ${length(var.vpc_peering_owner_route_table_ids)}."
+    error_message = "Invalid length: ${length(var.vpc_peering_owner_route_table_ids)}."
   }
 }
 
@@ -22,7 +22,7 @@ variable "vpc_peering_peer_route_table_ids" {
 
   validation {
     condition     = length(var.vpc_peering_peer_route_table_ids) > 0
-    error_message = "INVALID LENGTH peer: ${length(var.vpc_peering_peer_route_table_ids)}."
+    error_message = "Invalid length: ${length(var.vpc_peering_peer_route_table_ids)}."
   }
 }
 
