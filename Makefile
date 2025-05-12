@@ -81,22 +81,19 @@ examples:
 		fi
 		ln -fs ../../Makefile.example $$example_module_dir/Makefile
 	done
+	\
 	for cluster_flavor in $(FLAVORS); do
 		versions_tf=examples/$$cluster_flavor/versions.tf.example
 		echo Generating $$versions_tf
 		find modules/$$cluster_flavor -name versions.tf | xargs bin/make-example versions $$cluster_flavor all $(RELEASE) | terraform fmt - > $$versions_tf || exit 1
-		echo Generating Makefile.conf
+		modules_yaml=examples/$$cluster_flavor/modules.yaml
+		\
+		echo Generating $$modules_yaml
+		modules_yaml=examples/$$cluster_flavor/modules.yaml
+		echo 'modules:' > $$modules_yaml
+		printf "%s\n" $(MODULES) | grep ^$$cluster_flavor/ | cut -f2 -d/ | sort | sed -e 's/^/- /' >> $$modules_yaml
 	done
 	$(MAKE) fmt
-
-
-x:
-	for cluster_flavor in $(FLAVORS); do
-		echo ----- $$cluster_flavor
-		modules=$$(printf "MODULES := %s\n" $(MODULES) | awk -F/ -v cluster_flavor=$$cluster_flavor '$$1 ~ cluster_flavor {print $$2}')
-		echo $$modules
-		sed -e "s/^MODULES\s.*/MODULES := $$modules/" examples/$$cluster_flavor/Makefile.conf
-	done
 
 release: fmt update-version
 	$(MAKE) build-release
