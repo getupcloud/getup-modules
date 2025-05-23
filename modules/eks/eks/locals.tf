@@ -5,7 +5,7 @@ locals {
 
   arn_is_iam_user          = !strcontains(data.aws_caller_identity.current.arn, ":assumed-role/")
   vpc_id                   = var.vpc_id != "" ? var.vpc_id : module.vpc[0].vpc_id
-  subnet_ids               = var.vpc_id != "" ? concat(var.private_subnet_ids, var.public_subnet_ids) : module.vpc[0].private_subnets
+  subnet_ids               = var.vpc_id != "" ? var.private_subnet_ids : module.vpc[0].private_subnets
   control_plane_subnet_ids = var.vpc_id != "" ? var.control_plane_subnet_ids : module.vpc[0].intra_subnets
   aws_auth_user_arns       = concat(local.arn_is_iam_user ? [data.aws_caller_identity.current.arn] : [], var.aws_auth_user_arns)
   kms_key_administrators   = concat(local.arn_is_iam_user ? [data.aws_caller_identity.current.arn] : [], var.kms_key_administrators)

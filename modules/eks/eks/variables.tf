@@ -99,6 +99,7 @@ variable "vpc_name" {
 variable "vpc_zones" {
   description = "AZ names to create the subnets. Use 'aws ec2 describe-availability-zones --region <region> | jq .AvailabilityZones[].ZoneName' to list all available subnets."
   type        = list(string)
+  default     = []
 }
 
 variable "vpc_cidr" {
