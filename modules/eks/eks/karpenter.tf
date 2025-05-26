@@ -143,6 +143,70 @@ resource "kubectl_manifest" "karpenter_node_class" {
   ]
 }
 
+resource "kubectl_manifest" "karpenter_node_pool_infra" {
+  for_each = toset(var.karpenter_enabled ? ["infra"] : [])
+
+  yaml_body = <<-YAML
+    apiVersion: karpenter.sh/v1
+    kind: NodePool
+    metadata:
+      name: infra
+    spec:
+      template:
+        spec:
+          nodeClassRef:
+            group: karpenter.k8s.aws
+            kind: EC2NodeClass
+            name: default
+          taints:
+          - key: dedicated
+            value: infra
+            effect: "NoSchedule"
+          requirements:
+            - key: role
+              operator: In
+              values:
+              - infra
+            - key: karpenter.sh/capacity-type
+              operator: In
+              values:
+              - on-demand
+            - key: "kubernetes.io/arch"
+              operator: In
+              values:
+              - arm64
+            - key: "karpenter.k8s.aws/instance-category"
+              operator: In
+              values:
+              - c
+              - m
+              - r
+              - t
+            - key: "karpenter.k8s.aws/instance-cpu"
+              operator: In
+              values:
+              - 8
+              - 16
+              - 32
+            - key: "karpenter.k8s.aws/instance-memory"
+              operator: In
+              values:
+              - 16
+              - 32
+              - 64
+      limits:
+        cpu: ${local.on_demand_limits_cpu}
+        memory: "${local.on_demand_limits_memory}Gi"
+      disruption:
+        consolidationPolicy: WhenEmpty
+        consolidateAfter: 30s
+  YAML
+
+  depends_on = [
+    kubectl_manifest.karpenter_node_class
+  ]
+}
+
 resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
   for_each = toset(var.karpenter_enabled ? ["on-demand"] : [])
 
