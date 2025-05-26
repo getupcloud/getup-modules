@@ -185,15 +185,15 @@ resource "kubectl_manifest" "karpenter_node_pool_infra" {
             - key: "karpenter.k8s.aws/instance-cpu"
               operator: In
               values:
-              - 8
-              - 16
-              - 32
+              - "8"
+              - "16"
+              - "32"
             - key: "karpenter.k8s.aws/instance-memory"
               operator: In
               values:
-              - 16
-              - 32
-              - 64
+              - "${ceil(16 * 1024)}"
+              - "${ceil(32 * 1024)}"
+              - "${ceil(64 * 1024)}"
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
