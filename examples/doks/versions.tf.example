@@ -3,7 +3,7 @@
 #    versions \
 #    doks \
 #    all \
-#    v1.4.3 \
+#    v2.0.0 \
 #    modules/doks/doks/versions.tf \
 #    modules/doks/vpc_peering/versions.tf \
 #    modules/doks/flux/versions.tf \
