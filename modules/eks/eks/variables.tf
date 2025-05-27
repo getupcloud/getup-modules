@@ -90,7 +90,7 @@ variable "control_plane_subnet_ids" {
 
 variable "cluster_service_ipv4_cidr" {
   description = "The CIDR block to assign Kubernetes service IP addresses from. If you don't specify a block, Kubernetes assigns addresses from either the 10.100.0.0/16 or 172.20.0.0/16 CIDR blocks"
-  type        = list(string)
+  type        = string
   default     = "10.100.0.0/16"
 }
 
