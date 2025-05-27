@@ -86,9 +86,10 @@ module "eks" {
     eks-pod-identity-agent = {}
   }
 
-  vpc_id                   = local.vpc_id
-  subnet_ids               = local.subnet_ids
-  control_plane_subnet_ids = local.control_plane_subnet_ids
+  vpc_id                    = local.vpc_id
+  subnet_ids                = local.subnet_ids
+  control_plane_subnet_ids  = local.control_plane_subnet_ids
+  cluster_service_ipv4_cidr = var.cluster_service_ipv4_cidr
 
   create_cluster_security_group = var.create_cluster_security_group
   cluster_security_group_id     = var.cluster_security_group_id
