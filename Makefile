@@ -120,18 +120,19 @@ template:
 		break
 	done
 	while true; do
+		PS3='Cluster flavor: '; select FLAVOR in $(FLAVORS); do break; done
 		read -e -p "Name of new module: " NAME
-		if [ -d modules/$$NAME ]; then
+		if [ -d modules/$$FLAVOR/$$NAME ]; then
 			echo Already exists: modules/$$NAME
 		else
 			read -e -p "Display Name of new module: " DISPLAY_NAME
 			export NAME DISPLAY_NAME name=$${NAME,,} name_=$${NAME//-/_}
-			mkdir -p modules/$$NAME
+			mkdir -p modules/$$FLAVOR/$$NAME
 			for i in templates/$$source/*; do
-				envsubst < $$i >> modules/$$NAME/$${i##*/}
+				envsubst < $$i >> modules/$$FLAVOR/$$NAME/$${i##*/}
 			done
-			ln -s ../Makefile.common modules/$$NAME/Makefile
-			ls -la modules/$$NAME/
+			ln -s ../../Makefile.common modules/$$FLAVOR/$$NAME/Makefile
+			ls -la modules/$$FLAVOR/$$NAME/
 			break
 		fi
 	done
