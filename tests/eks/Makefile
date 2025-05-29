@@ -1,5 +1,12 @@
 TERRAFORM            ?= tflocal
 TERRAFORM_APPLY_ARGS ?=
+TERRAFORM_TFLOCAL_TARGETS := -target=aws_vpc.fake -target=aws_route_table.fake \
+                             -target=module.eks.module.eks.data.aws_caller_identity.current \
+                             -target=module.eks.module.eks.data.aws_iam_session_context.current \
+                             -target=module.eks.module.eks.data.aws_partition.current
+
+.ONESHELL:
+.EXPORT_ALL_VARIABLES:
 
 test: fmt init validate plan
 
@@ -21,9 +28,10 @@ validate:
 	$(TERRAFORM) validate $(TERRAFORM_ARGS) $(TERRAFORM_VALIDATE_ARGS)
 
 plan:
-	$(TERRAFORM) apply $(TERRAFORM_ARGS) $(TERRAFORM_APPLY_ARGS) -target=aws_vpc.fake -target=aws_route_table.fake
+	set -x
+	#$(TERRAFORM) apply $(TERRAFORM_ARGS) $(TERRAFORM_APPLY_ARGS) $(TERRAFORM_TFLOCAL_TARGETS)
 	$(TERRAFORM) plan $(TERRAFORM_ARGS) $(TERRAFORM_PLAN_ARGS)
-	$(TERRAFORM) destroy $(TERRAFORM_ARGS) $(TERRAFORM_PLAN_ARGS) -target=aws_vpc.fake -target=aws_route_table.fake
+	#$(TERRAFORM) destroy $(TERRAFORM_ARGS) $(TERRAFORM_PLAN_ARGS) $(TERRAFORM_TFLOCAL_TARGETS)
 
 clean:
 	rm -rf .terraform .terraform.lock.hcl terraform.log

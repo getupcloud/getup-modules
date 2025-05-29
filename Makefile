@@ -9,6 +9,7 @@ MODULES        := eks/argocd \
                   eks/cert-manager \
                   eks/ecr-credentials-sync \
                   eks/eks \
+                  eks/external-dns \
                   eks/external-secrets-operator \
                   eks/flux \
                   eks/istio \
@@ -36,7 +37,7 @@ $(COMMON_TARGETS):
 	done
 
 clean:
-	@for dir in tests/ $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
+	@for dir in tests/* $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
 		$(MAKE) -C $$dir $@ || exit 1
 	done
 
@@ -80,6 +81,7 @@ examples:
 			cat $$source_module_dir/outputs.tf | ./bin/outputs $$module_name > $$example_module_dir/outputs-$$module_name.tf
 		fi
 		ln -fs ../../Makefile.example $$example_module_dir/Makefile
+		ln -fs ../Makefile.conf $$example_module_dir/Makefile.conf
 	done
 	\
 	for cluster_flavor in $(FLAVORS); do

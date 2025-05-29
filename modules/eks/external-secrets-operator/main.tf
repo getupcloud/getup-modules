@@ -36,7 +36,7 @@ resource "aws_iam_policy" "policy" {
 
 module "aws_eso_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "~> 5.34.0"
+  version = "~> 5.34"
 
   create_role                   = true
   role_name_prefix              = local.name_prefix
@@ -51,7 +51,7 @@ module "aws_eso_irsa" {
 
 module "secrets" {
   source  = "terraform-aws-modules/secrets-manager/aws"
-  version = "~> 1.1.1"
+  version = "~> 1.1"
 
   for_each = toset(var.aws_eso_create_secrets)
 

@@ -22,7 +22,7 @@ resource "aws_iam_policy" "policy" {
 
 module "opencost_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "~> 5.34.0"
+  version = "~> 5.34"
 
   create_role                   = true
   role_name_prefix              = local.name_prefix
@@ -37,7 +37,7 @@ module "opencost_irsa" {
 
 module "opencost_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.0"
+  version = "~> 4.1"
   count   = var.opencost_create_spot_datafeed_bucket ? 1 : 0
 
   bucket                   = var.opencost_spot_datafeed_bucket_name

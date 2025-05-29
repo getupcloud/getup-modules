@@ -4,7 +4,7 @@ locals {
 
 module "tempo_s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "4.1.0"
+  version = "~> 4.1"
 
   bucket_prefix = local.name_prefix
   force_destroy = true
@@ -43,7 +43,7 @@ resource "aws_iam_policy" "tempo_s3" {
 
 module "tempo_s3_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "~> 5.34.0"
+  version = "~> 5.34"
 
   create_role                   = true
   role_name_prefix              = local.name_prefix

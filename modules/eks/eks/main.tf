@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.36.0"
+  version = "~> 20.36"
 
   cluster_name                         = local.cluster_name
   cluster_version                      = local.cluster_version
@@ -143,7 +143,7 @@ module "eks" {
 
 module "aws_auth" {
   source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
-  version = "~> 20.10.0"
+  version = "~> 20.10"
 
   create_aws_auth_configmap = var.create_aws_auth_configmap
   manage_aws_auth_configmap = var.manage_aws_auth_configmap

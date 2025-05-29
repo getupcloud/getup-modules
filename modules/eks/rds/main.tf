@@ -19,7 +19,7 @@ data "aws_caller_identity" "current" {}
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.8.1"
+  version = "~> 5.8"
 
   name       = coalesce(var.rds_vpc_name, "rds-${var.rds_name}")
   cidr       = var.rds_vpc_cidr
@@ -49,7 +49,7 @@ module "vpc" {
 
 module "database" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "6.6.0"
+  version = "~> 6.6"
 
   identifier = var.rds_name
 

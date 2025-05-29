@@ -53,7 +53,7 @@ resource "aws_iam_policy" "cert_manager" {
 
 module "cert_manager_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "~> 5.34.0"
+  version = "~> 5.34"
 
   create_role                   = true
   role_name_prefix              = local.name_prefix

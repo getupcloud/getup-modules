@@ -1,22 +1,3 @@
-### Common resources
-resource "aws_vpc" "fake" {
-  count      = 2
-  cidr_block = "10.${count.index}.0.0/28"
-
-  tags = {
-    Name = "fake${count.index}"
-  }
-}
-
-resource "aws_route_table" "fake" {
-  count  = 2
-  vpc_id = aws_vpc.fake[count.index].id
-
-  tags = {
-    Name = "fake-${count.index}"
-  }
-}
-
 ### Modules
 
 module "argocd" {
@@ -28,6 +9,20 @@ module "external-secrets-operator" {
 
   aws_eso_cluster_oidc_issuer_url = "localhost"
 }
+
+module "external-dns-zoned" {
+  source = "../../modules/eks/external-dns"
+
+  external_dns_cluster_oidc_issuer_url = "localhost"
+  external_dns_hosted_zone_ids         = ["Z12345678901234567890", "Z01234567890123456789"]
+}
+
+module "external-dns-all" {
+  source = "../../modules/eks/external-dns"
+
+  external_dns_cluster_oidc_issuer_url = "localhost"
+}
+
 
 module "cert-manager" {
   source = "../../modules/eks/cert-manager"
@@ -94,12 +89,30 @@ module "tempo" {
   tempo_cluster_oidc_issuer_url = "localhost"
 }
 
-
-module "vpc_peering" {
-  source = "../../modules/eks/vpc_peering"
-
-  vpc_peering_owner_vpc_id          = aws_vpc.fake[0].id
-  vpc_peering_peer_vpc_id           = aws_vpc.fake[1].id
-  vpc_peering_owner_route_table_ids = [aws_route_table.fake[0].id]
-  vpc_peering_peer_route_table_ids  = [aws_route_table.fake[0].id]
-}
+#### 
+#resource "aws_vpc" "fake" {
+#  count      = 2
+#  cidr_block = "10.${count.index}.0.0/28"
+#
+#  tags = {
+#    Name = "fake${count.index}"
+#  }
+#}
+#
+#resource "aws_route_table" "fake" {
+#  count  = 2
+#  vpc_id = aws_vpc.fake[count.index].id
+#
+#  tags = {
+#    Name = "fake-${count.index}"
+#  }
+#}
+#
+#module "vpc_peering" {
+#  source = "../../modules/eks/vpc_peering"
+#
+#  vpc_peering_owner_vpc_id          = aws_vpc.fake[0].id
+#  vpc_peering_peer_vpc_id           = aws_vpc.fake[1].id
+#  vpc_peering_owner_route_table_ids = [aws_route_table.fake[0].id]
+#  vpc_peering_peer_route_table_ids  = [aws_route_table.fake[0].id]
+#}

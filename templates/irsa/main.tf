@@ -2,7 +2,7 @@ locals {
   name_prefix = "${NAME}-"
   policy_vars = {
     ${name_}_aws_region: var.${name_}_aws_region != "" ? var.${name_}_aws_region : data.aws_region.current.name
-    ${name_}_aws_account_id: var.${name_}_aws_account_id != "" ? var${name_}_.aws_account_id : data.aws_caller_identity.current.account_id
+    ${name_}_aws_account_id: var.${name_}_aws_account_id != "" ? var.${name_}_aws_account_id : data.aws_caller_identity.current.account_id
     ## Add variables to replace inside the policy.json file
   }
 }
