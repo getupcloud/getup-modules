@@ -3,6 +3,7 @@
 ################################################################################
 
 resource "helm_release" "baloon" {
+  provider = helm.internal_doks_charts
   namespace        = var.baloon_namespace
   create_namespace = true
 
