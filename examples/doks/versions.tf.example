@@ -3,7 +3,7 @@
 #    versions \
 #    doks \
 #    all \
-#    v2.0.8 \
+#    v2.0.9 \
 #    modules/doks/doks/versions.tf \
 #    modules/doks/vpc_peering/versions.tf \
 #    modules/doks/flux/versions.tf \
@@ -12,7 +12,7 @@
 #    modules/doks/tempo/versions.tf
 
 terraform {
-  required_version = "~> 1.11"
+  required_version = "~> 1.12"
 
   # Source: examples/doks/backend.txt
   # Example from https://docs.digitalocean.com/products/spaces/reference/terraform-backend/
