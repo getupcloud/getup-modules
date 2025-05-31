@@ -3,6 +3,7 @@
 ################################################################################
 
 resource "helm_release" "keda" {
+  provider = helm.internal_doks_charts
   name             = "keda"
   repository       = "https://kedacore.github.io/charts"
   chart            = "keda"
