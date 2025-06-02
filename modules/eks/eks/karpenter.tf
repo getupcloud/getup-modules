@@ -198,8 +198,8 @@ resource "kubectl_manifest" "karpenter_node_pool_infra" {
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
       disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 30s
+        consolidationPolicy: WhenEmptyOrUnderutilized
+        consolidateAfter: 1h
   YAML
 
   depends_on = [
@@ -259,8 +259,8 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
       disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 30s
+        consolidationPolicy: WhenEmptyOrUnderutilized
+        consolidateAfter: 1h
   YAML
 
   depends_on = [
