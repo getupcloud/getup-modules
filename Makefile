@@ -31,6 +31,19 @@ TERRAFORM      ?= terraform
 
 .PHONY: examples $(COMMON_TARGETS) $(TFVARS)
 
+all help:
+	@echo Available targets
+	echo
+	echo "  examples        Build each ./examples/[FLAVOR] from ./modules/[FLAVOR]"
+	echo "  release         Build a new version release, commit and push to git repo"
+	echo "  fmt             Executes 'terraform fmt'"
+	echo "  lint            Executes 'tflint'"
+	echo "  test            Test all modules"
+	echo "  test-[FLAVOR]   Test modules ./test/[FLAVOR] only"
+	echo "  clean           Remove test files"
+	echo "  template        Creates new module based on ./templates/"
+	echo
+
 $(COMMON_TARGETS):
 	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
 		$(MAKE) -C $$dir $@ || exit 1
