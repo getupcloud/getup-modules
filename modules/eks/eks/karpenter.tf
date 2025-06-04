@@ -68,6 +68,8 @@ resource "helm_release" "karpenter" {
   values = [
     <<-EOT
     replicas: ${var.karpenter_replicas}
+    podAnnotations:
+      CapacityProvisioned: 0.5vCPU 1GB
     serviceAccount:
       create: true
       name: ${module.karpenter.service_account}
@@ -78,10 +80,10 @@ resource "helm_release" "karpenter" {
       clusterEndpoint: ${module.eks.cluster_endpoint}
       interruptionQueueName: ${module.karpenter.queue_name}
       settings.featureGates.drift: true
-      controller.resources.requests.cpu: "250m"
-      controller.resources.requests.memory: "256Mi"
-      controller.resources.limits.cpu: "250m"
-      controller.resources.limits.memory: "256Mi"
+      controller.resources.requests.cpu: "500m"
+      controller.resources.requests.memory: "1Gi"
+      controller.resources.limits.cpu: "500m"
+      controller.resources.limits.memory: "1Gi"
     EOT
   ]
 
