@@ -129,7 +129,8 @@ resource "kubectl_manifest" "karpenter_node_class" {
         - tags:
             karpenter.sh/discovery: ${module.eks.cluster_name}
       tags:
-        karpenter.sh/discovery: ${module.eks.cluster_name}
+        ${indent(4, yamlencode(merge(var.tags, { "karpenter.sh/discovery" : module.eks.cluster_name })))}
+
       %{if var.karpenter_node_class_ami_family == "Bottlerocket"}
       blockDeviceMappings:
       - deviceName: /dev/xvda

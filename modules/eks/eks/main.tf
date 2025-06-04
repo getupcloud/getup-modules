@@ -283,3 +283,25 @@ resource "kubernetes_storage_class_v1" "gp3" {
   ]
 }
 
+# Tag instances created by all ASGs of the cluster
+resource "aws_autoscaling_group_tag" "asg_tags" {
+  for_each = {
+    for asg_key in setproduct(
+      toset(module.eks.eks_managed_node_groups_autoscaling_group_names),
+      toset(keys(var.tags))
+      ) : "${asg_key[0]}/${asg_key[1]}" => {
+      asg_name : asg_key[0],
+      tag_name : asg_key[1],
+      tag_value : lookup(var.tags, asg_key[1])
+    }
+  }
+
+  autoscaling_group_name = each.value.asg_name
+
+  tag {
+    key                 = each.value.tag_name
+    value               = each.value.tag_value
+    propagate_at_launch = true
+  }
+}
+
