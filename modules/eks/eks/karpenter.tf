@@ -56,6 +56,7 @@ resource "helm_release" "karpenter-crd" {
   wait             = true
 }
 
+# TODO: parametrize resources
 resource "helm_release" "karpenter" {
   name             = "karpenter"
   repository       = "https://charts.getup.io/karpenter"
@@ -67,23 +68,32 @@ resource "helm_release" "karpenter" {
 
   values = [
     <<-EOT
-    replicas: ${var.karpenter_replicas}
-    podAnnotations:
-      CapacityProvisioned: 0.5vCPU 1GB
     serviceAccount:
       create: true
       name: ${module.karpenter.service_account}
       annotations:
-       eks.amazonaws.com/role-arn: ${module.karpenter.iam_role_arn}
+        eks.amazonaws.com/role-arn: ${module.karpenter.iam_role_arn}
+
+    replicas: ${var.karpenter_replicas}
+
+    controller:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 768Mi
+        limits:
+          cpu: 500m
+          memory: 768Mi
+
+    logLevel: debug
+
     settings:
+      batchMaxDuration: 10s
+      batchIdleDuration: 2s
       clusterName: ${module.eks.cluster_name}
       clusterEndpoint: ${module.eks.cluster_endpoint}
-      interruptionQueueName: ${module.karpenter.queue_name}
-      settings.featureGates.drift: true
-      controller.resources.requests.cpu: "500m"
-      controller.resources.requests.memory: "1Gi"
-      controller.resources.limits.cpu: "500m"
-      controller.resources.limits.memory: "1Gi"
+      eksControlPlane: true
+      interruptionQueue: ${module.karpenter.queue_name}
     EOT
   ]
 
