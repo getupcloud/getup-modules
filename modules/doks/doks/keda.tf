@@ -68,7 +68,7 @@ resource "helm_release" "keda" {
       replicaCount: ${var.keda_replicas}
 
     tolerations:
-    ${yamlencode(local.tolerations.default)}
+      ${indent(1, yamlencode(local.tolerations.default))}
 
     nodeSelector:
       ${indent(2, yamlencode(local.node_selector.default))}
