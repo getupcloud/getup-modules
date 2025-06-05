@@ -1,7 +1,7 @@
 locals {
   argocd_values_default = !(startswith("/", var.argocd_values) || startswith("./", var.argocd_values))
   argocd_values = (var.argocd_values == "") ? [] : [
-    local.argocd_values_default ? "${path.module}/${var.argocd_values}" : var.argocd_values
+    local.argocd_values_default ? "${path.root}/${var.argocd_values}" : var.argocd_values
   ]
 }
 
