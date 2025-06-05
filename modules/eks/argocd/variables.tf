@@ -20,7 +20,7 @@ variable "argocd_namespace" {
 }
 
 variable "argocd_values" {
-  description = "Path to argocd values file. Start it with / for absolute path or ./ to relative to root module. Set it to empty string to ignore."
+  description = "Path to argocd values file. The file is relative to root module path. Set it to empty string to ignore."
   type        = string
   default     = ""
 }
