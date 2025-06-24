@@ -17,6 +17,7 @@ check-tools:
 	@type localstack || { echo -e "$$(tput setaf 9)Please install localstack (https://github.com/localstack/localstack)$$(tput sgr0)"; exit 1; }
 	@type tflocal || { echo -e "$$(tput setaf 9)Please install tflocal (https://docs.localstack.cloud/user-guide/integrations/terraform/)$$(tput sgr0)"; exit 1; }
 	@type awslocal || { echo -e "$$(tput setaf 9)Please install awslocal (https://github.com/localstack/awscli-local) or use $$(tput bold)aws --endpoint-url=http://localhost:4566$$(tput sgr0)"; exit 1; }
+	@python3 -c 'import localstack' || { echo -e "$$(tput setaf 9)Please install localstack python package: pip3 install localstack --user$$(tput sgr0)"; exit 1; }
 
 start-localstack: check-tools
 	localstack start -d
