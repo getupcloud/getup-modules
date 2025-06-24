@@ -10,9 +10,6 @@ TERRAFORM_TFLOCAL_TARGETS := -target=aws_vpc.fake -target=aws_route_table.fake \
 
 test: fmt init validate plan
 
-fmt:
-	$(TERRAFORM) fmt
-
 check-tools:
 	@type localstack || { echo -e "$$(tput setaf 9)Please install localstack (https://github.com/localstack/localstack)$$(tput sgr0)"; exit 1; }
 	@type tflocal || { echo -e "$$(tput setaf 9)Please install tflocal (https://docs.localstack.cloud/user-guide/integrations/terraform/)$$(tput sgr0)"; exit 1; }
@@ -20,7 +17,15 @@ check-tools:
 	@python3 -c 'import localstack' || { echo -e "$$(tput setaf 9)Please install localstack python package: pip3 install localstack --user$$(tput sgr0)"; exit 1; }
 
 start-localstack: check-tools
-	localstack start -d
+	running="$$(localstack status docker -f json | jq -r '.running//"false"')"
+	if [ "$$running" == true ]; then
+		echo "Localstack is already running"
+	else
+		localstack start -d
+	fi
+
+fmt:
+	$(TERRAFORM) fmt
 
 init: start-localstack
 	$(TERRAFORM) init $(TERRAFORM_ARGS) $(TERRAFORM_INIT_ARGS)
