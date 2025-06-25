@@ -361,27 +361,27 @@ variable "karpenter_node_pool_taints" {
   description = "Overall EC2 Instance taints for OnDemand, Spot and Infra Karpenter node pools."
   type = object({
     infra : list(object({
-      key: optional(string, "dedicated")
-      value: optional(string, "infra")
-      effect: optional(string, "NoSchedule")
+      key : optional(string, "dedicated")
+      value : optional(string, "infra")
+      effect : optional(string, "NoSchedule")
     })),
-    on-demand: list(object({
-      key: optional(string, "dedicated")
-      value: optional(string, "on-demand")
-      effect: optional(string, "NoSchedule")
+    on-demand : list(object({
+      key : optional(string, "dedicated")
+      value : optional(string, "on-demand")
+      effect : optional(string, "NoSchedule")
     })),
-    spot: list(object({
-      key: optional(string, "dedicated")
-      value: optional(string, "spot")
-      effect: optional(string, "NoSchedule")
+    spot : list(object({
+      key : optional(string, "dedicated")
+      value : optional(string, "spot")
+      effect : optional(string, "NoSchedule")
     }))
   })
   default = {
     infra : [
       {
         key : "dedicated"
-        value: "infra"
-        effect: "NoSchedule"
+        value : "infra"
+        effect : "NoSchedule"
       }
     ],
     on-demand : [],

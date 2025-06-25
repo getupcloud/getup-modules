@@ -204,7 +204,7 @@ resource "kubectl_manifest" "karpenter_node_pool_infra" {
               - "${ceil(32 * 1024)}"
               - "${ceil(64 * 1024)}"
           taints:
-            ${indent (8, yamlencode(var.karpenter_node_pool_taints.infra))}
+            ${indent(8, yamlencode(var.karpenter_node_pool_taints.infra))}
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
@@ -267,7 +267,7 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
               ${indent(10, yamlencode([for i in range(local.on_demand_portion) : "ondemand-${i}"]))}
             %{endif}
           taints:
-            ${indent (8, yamlencode(var.karpenter_node_pool_taints.on-demand))}
+            ${indent(8, yamlencode(var.karpenter_node_pool_taints.on-demand))}
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
@@ -330,7 +330,7 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
               ${indent(10, yamlencode([for i in range(local.spot_portion) : "spot-${i}"]))}
             %{endif}
           taints:
-            ${indent (8, yamlencode(var.karpenter_node_pool_taints.spot))}
+            ${indent(8, yamlencode(var.karpenter_node_pool_taints.spot))}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
