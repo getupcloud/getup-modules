@@ -1,0 +1,14 @@
+.env
+.kubeconfig
+.kustomize_build.yaml
+.output.json
+.overlay.output.json
+.overlay.tfvars.json
+*.sw?
+**/.terraform
+terraform.log
+*.tfplan
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+.upstream
