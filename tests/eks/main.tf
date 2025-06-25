@@ -43,6 +43,28 @@ module "eks" {
   aws_account_id = "000000000000"
   aws_region     = "us-east-1"
   vpc_zones      = ["us-east-1a", "us-east-1b"]
+  karpenter_node_pool_taints = {
+    infra : [],
+    on-demand : [
+      {
+        key : "dedicated"
+        value : "on-demand1"
+        effect : "NoSchedule"
+      },
+      {
+        key : "dedicated"
+        value : "on-demand2"
+        effect : "NoSchedule"
+      }
+    ],
+    spot : [
+      {
+        key : "dedicated"
+        value : "spot"
+        effect : "NoSchedule"
+      }
+    ]
+  }
 }
 
 module "flux" {
