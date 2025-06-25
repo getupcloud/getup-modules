@@ -57,7 +57,7 @@ clean:
 test: test-eks test-doks
 
 test-%:
-	$(MAKE) -C tests/$* fmt init validate plan MODULES=$(MODULES)
+	$(MAKE) -C tests/$* test MODULES="$(MODULES)"
 
 lint:
 	@echo Linting modules:
