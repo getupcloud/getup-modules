@@ -138,9 +138,7 @@ def make_kind_tfvars(input_file, config, tpl_data):
 
             if default is None:
                 pass
-            elif data_type == '${string}':
-                default = default
-            elif data_type == '${bool}':
+            elif data_type == 'bool':
                 default = bool(default)
 
             if i:
