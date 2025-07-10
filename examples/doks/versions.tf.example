@@ -3,13 +3,13 @@
 #    versions \
 #    doks \
 #    all \
-#    v2.1.4 \
+#    v2.1.5 \
 #    modules/doks/doks/versions.tf \
 #    modules/doks/vpc_peering/versions.tf \
-#    modules/doks/flux/versions.tf \
+#    modules/doks/tempo/versions.tf \
 #    modules/doks/velero/versions.tf \
-#    modules/doks/loki/versions.tf \
-#    modules/doks/tempo/versions.tf
+#    modules/doks/flux/versions.tf \
+#    modules/doks/loki/versions.tf
 
 terraform {
   required_version = "~> 1.12"
