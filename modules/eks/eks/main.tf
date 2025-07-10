@@ -182,7 +182,7 @@ module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.36"
 
-  role_name_prefix = "${module.eks.cluster_name}-ebs-csi-driver-"
+  role_name_prefix = substr("${module.eks.cluster_name}-ebs-csi-driver-", 0, 38)
 
   attach_ebs_csi_policy = true
 
@@ -201,7 +201,7 @@ module "efs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.36"
 
-  role_name_prefix = "${module.eks.cluster_name}-efs-csi-driver-"
+  role_name_prefix = substr("${module.eks.cluster_name}-efs-csi-driver-", 0, 38)
 
   attach_efs_csi_policy = true
 
@@ -220,7 +220,7 @@ module "mountpoint_s3_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.36"
 
-  role_name_prefix = "${module.eks.cluster_name}-mountpoint-s3-csi-driver-"
+  role_name_prefix = substr("${module.eks.cluster_name}-mountpoint-s3-csi-driver-", 0, 38)
 
   attach_mountpoint_s3_csi_policy = true
   mountpoint_s3_csi_path_arns     = ["arn:aws:s3:::*/*"]
