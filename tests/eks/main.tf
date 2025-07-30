@@ -39,10 +39,26 @@ module "ecr-credentials-sync" {
 module "eks" {
   source = "../../modules/eks/eks"
 
-  cluster_name   = "test"
-  aws_account_id = "000000000000"
-  aws_region     = "us-east-1"
-  vpc_zones      = ["us-east-1a", "us-east-1b"]
+  cluster_name                           = "test"
+  aws_account_id                         = "000000000000"
+  aws_region                             = "us-east-1"
+  vpc_zones                              = ["us-east-1a", "us-east-1b"]
+  private_subnet_ids                     = ["subnet-11111111", "subnet-22222222", "subnet-33333333"]
+  fargate_private_subnet_ids             = ["subnet-11111111", "subnet-22222222"]
+  fallback_node_group_private_subnet_ids = ["subnet-11111111", "subnet-22222222"]
+  karpenter_node_pool_disruption = {
+    infra : [],
+    on-demand : [
+      {
+        consolidationPolicy : "WhenEmpty"
+        consolidateAfter : "2h"
+        budgets : {
+          nodes : "20%"
+        }
+      }
+    ],
+    spot : []
+  }
   karpenter_node_pool_taints = {
     infra : [],
     on-demand : [

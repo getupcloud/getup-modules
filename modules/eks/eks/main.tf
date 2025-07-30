@@ -104,9 +104,9 @@ module "eks" {
 
   fargate_profiles = {
     default = {
-      name        = "default"
-      subnet_ids  = length(var.fargate_private_subnet_ids) == 0 ? local.subnet_ids : var.fargate_private_subnet_ids
-      selectors   = var.fargate_profiles
+      name       = "default"
+      subnet_ids = length(var.fargate_private_subnet_ids) == 0 ? local.subnet_ids : var.fargate_private_subnet_ids
+      selectors  = var.fargate_profiles
     }
   }
 
@@ -131,7 +131,7 @@ module "eks" {
       desired_size   = var.fallback_node_group_desired_size
       disk_size      = var.fallback_node_group_disk_size
       #      disk_type      = var.fallback_node_group_disk_type
-      subnet_ids     = length(var.fallback_node_group_private_subnet_ids) == 0 ? local.subnet_ids : var.fallback_node_group_private_subnet_ids
+      subnet_ids = length(var.fallback_node_group_private_subnet_ids) == 0 ? local.subnet_ids : var.fallback_node_group_private_subnet_ids
     }
   }
 
