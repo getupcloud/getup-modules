@@ -209,8 +209,7 @@ resource "kubectl_manifest" "karpenter_node_pool_infra" {
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
       disruption:
-        consolidationPolicy: WhenEmptyOrUnderutilized
-        consolidateAfter: 1h
+        ${indent(4, yamlencode(var.karpenter_node_pool_disruption.infra))}
   YAML
 
   depends_on = [
@@ -272,8 +271,7 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
       disruption:
-        consolidationPolicy: WhenEmptyOrUnderutilized
-        consolidateAfter: 1h
+        ${indent(4, yamlencode(var.karpenter_node_pool_disruption.on-demand))}
   YAML
 
   depends_on = [
@@ -331,6 +329,11 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
             %{endif}
           taints:
             ${indent(8, yamlencode(var.karpenter_node_pool_taints.spot))}
+      limits:
+        cpu: ${local.spot_limits_cpu}
+        memory: "${local.spot_limits_memory}Gi"
+      disruption:
+        ${indent(4, yamlencode(var.karpenter_node_pool_disruption.spot))}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
@@ -342,12 +345,6 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
     #          operator: In
     #          values:
     #          - fargate
-      limits:
-        cpu: ${local.spot_limits_cpu}
-        memory: "${local.spot_limits_memory}Gi"
-      disruption:
-        consolidationPolicy: WhenEmpty
-        consolidateAfter: 30s
   YAML
 
   depends_on = [
