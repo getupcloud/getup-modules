@@ -406,7 +406,7 @@ variable "karpenter_node_pool_disruption" {
   default = {
     spot : {
       budgets : [
-        { nodes : "10%"}
+        { nodes : "10%" }
       ],
       consolidateAfter : "30s",
       consolidationPolicy : "WhenEmpty"
