@@ -372,57 +372,38 @@ variable "karpenter_cluster_limits_cpu" {
 variable "karpenter_node_pool_disruption" {
   description = "Overall EC2 Instance disruption logic for OnDemand, Spot and Infra Karpenter node pools."
   type = object({
-    infra : list(object({
+    infra : optional(object({
       consolidationPolicy : optional(string, "WhenEmptyOrUnderutilized")
-      consolidateAfter : optional(string, "1h")
-      budgets : optional(object({
-        nodes : optional(string, "10%")
-      }))
+      consolidateAfter : string
+      budgets : optional(list(object({
+        nodes : string,
+        duration : optional(string),
+        reasons : optional(list(string)),
+        schedule : optional(string)
+      })))
     })),
-    on-demand : list(object({
+    on-demand : optional(object({
       consolidationPolicy : optional(string, "WhenEmptyOrUnderutilized")
-      consolidateAfter : optional(string, "1h")
-      budgets : optional(object({
-        nodes : optional(string, "10%")
-      }))
+      consolidateAfter : string
+      budgets : optional(list(object({
+        nodes : string,
+        duration : optional(string),
+        reasons : optional(list(string)),
+        schedule : optional(string)
+      })))
     })),
-    spot : list(object({
+    spot : optional(object({
       consolidationPolicy : optional(string, "WhenEmptyOrUnderutilized")
-      consolidateAfter : optional(string, "30s")
-      budgets : optional(object({
-        nodes : optional(string, "10%")
-      }))
+      consolidateAfter : string
+      budgets : optional(list(object({
+        nodes : string,
+        duration : optional(string),
+        reasons : optional(list(string)),
+        schedule : optional(string)
+      })))
     }))
   })
-  default = {
-    infra : [
-      {
-        consolidationPolicy : "WhenEmptyOrUnderutilized"
-        consolidateAfter : "1h"
-        budgets : {
-          nodes : "10%"
-        }
-      }
-    ],
-    on-demand : [
-      {
-        consolidationPolicy : "WhenEmptyOrUnderutilized"
-        consolidateAfter : "1h"
-        budgets : {
-          nodes : "10%"
-        }
-      }
-    ],
-    spot : [
-      {
-        consolidationPolicy : "WhenEmptyOrUnderutilized"
-        consolidateAfter : "30min"
-        budgets : {
-          nodes : "10%"
-        }
-      }
-    ]
-  }
+  default = {}
 }
 
 variable "karpenter_node_pool_taints" {
