@@ -403,7 +403,15 @@ variable "karpenter_node_pool_disruption" {
       })))
     }))
   })
-  default = {}
+  default = {
+    spot : {
+      budgets : [
+        { nodes : "10%"}
+      ],
+      consolidateAfter : "30s",
+      consolidationPolicy : "WhenEmpty"
+    }
+  }
 }
 
 variable "karpenter_node_pool_taints" {
