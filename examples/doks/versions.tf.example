@@ -5,11 +5,11 @@
 #    all \
 #    v2.1.8 \
 #    modules/doks/doks/versions.tf \
-#    modules/doks/vpc_peering/versions.tf \
+#    modules/doks/flux/versions.tf \
+#    modules/doks/loki/versions.tf \
 #    modules/doks/tempo/versions.tf \
 #    modules/doks/velero/versions.tf \
-#    modules/doks/flux/versions.tf \
-#    modules/doks/loki/versions.tf
+#    modules/doks/vpc_peering/versions.tf
 
 terraform {
   required_version = "~> 1.12"
@@ -53,24 +53,14 @@ terraform {
   }
 
   required_providers {
-    digitalocean = {
-      source  = "digitalocean/digitalocean"
-      version = "~> 2.11"
-    }
-
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.10"
-    }
-
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.7"
-    }
-
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.34"
+    }
+
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.11"
     }
 
     flux = {
@@ -83,9 +73,19 @@ terraform {
       version = "~> 5.18"
     }
 
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.7"
+    }
+
     kubectl = {
       source  = "alekc/kubectl"
       version = "~> 2.0"
+    }
+
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.10"
     }
 
   }
