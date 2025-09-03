@@ -26,22 +26,27 @@ module "eks" {
 
   cluster_addons = {
     aws-mountpoint-s3-csi-driver = {
+      most_recent                 = true
       service_account_role_arn    = module.mountpoint_s3_csi_driver_irsa.iam_role_arn
       resolve_conflicts_on_update = "OVERWRITE"
     }
     aws-efs-csi-driver = {
+      most_recent                 = true
       service_account_role_arn    = module.efs_csi_driver_irsa.iam_role_arn
       resolve_conflicts_on_update = "OVERWRITE"
     }
     aws-ebs-csi-driver = {
+      most_recent                 = true
       service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
       resolve_conflicts_on_update = "OVERWRITE"
     }
     kube-proxy = {
+      most_recent                 = true
       resolve_conflicts_on_update = "OVERWRITE"
       configuration_values        = jsonencode(var.kube_proxy)
     }
     vpc-cni = {
+      most_recent                 = true
       before_compute              = true
       resolve_conflicts_on_update = "OVERWRITE"
       configuration_values = var.vpc_cni_enable_prefix_delegation ? jsonencode({
@@ -53,6 +58,7 @@ module "eks" {
       }) : null
     }
     coredns = {
+      most_recent                 = true
       resolve_conflicts_on_update = "OVERWRITE"
       configuration_values = local.fargate.kube_system ? jsonencode({
         autoScaling = {
@@ -83,7 +89,9 @@ module "eks" {
         }
       }) : null
     }
-    eks-pod-identity-agent = {}
+    eks-pod-identity-agent = {
+      most_recent = true
+    }
   }
 
   vpc_id                    = local.vpc_id
