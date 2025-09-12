@@ -9,7 +9,7 @@ terraform {
 
     github = {
       source  = "integrations/github"
-      version = "~> 5.18"
+      version = "~> 6.6"
     }
 
     kubectl = {
