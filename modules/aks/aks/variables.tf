@@ -3,11 +3,6 @@ variable "location" {
   description = "Location of cluster, if not defined it will be read from the resource-group"
 }
 
-variable "subscription_id" {
-  type        = string
-  description = "The Azure subscription ID to use"
-}
-
 variable "resource_group_name" {
   type        = string
   description = "The existing resource group name to use"
