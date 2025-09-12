@@ -208,7 +208,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "this" {
   temporary_name_for_rotation   = each.value.temporary_name_for_rotation
   ultra_ssd_enabled             = each.value.ultra_ssd_enabled
   vm_size                       = each.value.vm_size
-  vnet_subnet_id                = try(each.value.vnet_subnet.id, null)
+  vnet_subnet_id                = try(each.value.vnet_subnet.id, data.azurerm_subnet.this[0].id)
   workload_runtime              = each.value.workload_runtime
   zones                         = each.value.zones
 
