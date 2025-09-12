@@ -42,3 +42,26 @@ output "azurerm_log_analytics_workspace_id" {
   value       = module.aks.azurerm_log_analytics_workspace_id
   description = "The Log Analytics Workspace ID."
 }
+
+output "admin_client_certificate" {
+  value       = module.aks.admin_client_certificate
+  description = "The client certificate for the admin endpoint."
+  sensitive = true
+}
+
+output "admin_client_key" {
+  value       = module.aks.admin_client_key
+  description = "The client key for the admin endpoint."
+  sensitive = true
+}
+
+output "admin_cluster_ca_certificate" {
+  value       = module.aks.admin_cluster_ca_certificate
+  description = "The cluster CA certificate for the admin endpoint."
+  sensitive = true
+}
+
+output "admin_host" {
+  value       = module.aks.admin_host
+  description = "The host name of the admin endpoint."
+}
