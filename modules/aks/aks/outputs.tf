@@ -13,11 +13,6 @@ output "aks_id" {
   description = "The Kubernetes Managed Cluster ID."
 }
 
-output "kube_config_raw" {
-  value       = module.cluster.kube_config_raw
-  description = "Raw Kubernetes config to be used by kubectl and other compatible tools."
-}
-
 output "kube_admin_config_raw" {
   value       = module.cluster.kube_admin_config_raw
   description = "Raw Kubernetes config for the admin account to be used by kubectl and other compatible tools. This is only available when Role Based Access Control with Azure Active Directory is enabled and local accounts enabled."
