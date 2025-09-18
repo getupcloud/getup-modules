@@ -208,8 +208,10 @@ resource "kubectl_manifest" "karpenter_node_pool_infra" {
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
+      %{if var.karpenter_node_pool_disruption.infra != null}
       disruption:
         ${indent(4, yamlencode(var.karpenter_node_pool_disruption.infra))}
+      %{endif}
   YAML
 
   depends_on = [
@@ -270,8 +272,10 @@ resource "kubectl_manifest" "karpenter_node_pool_on_demand" {
       limits:
         cpu: ${local.on_demand_limits_cpu}
         memory: "${local.on_demand_limits_memory}Gi"
+      %{if var.karpenter_node_pool_disruption.on-demand != null}
       disruption:
         ${indent(4, yamlencode(var.karpenter_node_pool_disruption.on-demand))}
+      %{endif}
   YAML
 
   depends_on = [
@@ -332,8 +336,10 @@ resource "kubectl_manifest" "karpenter_node_pool_spot" {
       limits:
         cpu: ${local.spot_limits_cpu}
         memory: "${local.spot_limits_memory}Gi"
+      %{if var.karpenter_node_pool_disruption.spot != null}
       disruption:
         ${indent(4, yamlencode(var.karpenter_node_pool_disruption.spot))}
+      %{endif}
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
