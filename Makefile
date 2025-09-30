@@ -24,7 +24,7 @@ MODULES        := eks/argocd \
                   doks/velero \
                   doks/loki \
                   doks/tempo
-COMMON_TARGETS := init validate
+COMMON_TARGETS := tf-init tf-validate
 TERRAFORM      ?= terraform
 
 .ONESHELL:
@@ -43,6 +43,10 @@ all help:
 	echo "  clean           Remove test files"
 	echo "  template        Creates new module based on ./templates/"
 	echo
+
+init validate:
+	@echo "This repo is not supposed to be executed. If you are trying to run tests, use 'tf-$@' instead"
+	exit 1
 
 $(COMMON_TARGETS):
 	@for dir in $(addprefix modules/,$(MODULES)) $(addprefix examples/,$(MODULES)); do
