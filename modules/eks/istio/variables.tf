@@ -57,7 +57,7 @@ variable "istiod_set" {
     },
     {
       name : "pilot.autoscaleMin",
-      value : "2"
+      value : "1"
     }
   ]
 }
