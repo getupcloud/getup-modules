@@ -1,3 +1,4 @@
+SHELL          := /bin/bash
 VERSION_TXT    := version.txt
 FILE_VERSION   := $(shell cat $(VERSION_TXT))
 VERSION        ?= $(FILE_VERSION)
@@ -28,7 +29,6 @@ COMMON_TARGETS := tf-init tf-validate
 TERRAFORM      ?= terraform
 
 .ONESHELL:
-
 .PHONY: examples $(COMMON_TARGETS) $(TFVARS)
 
 all help:
