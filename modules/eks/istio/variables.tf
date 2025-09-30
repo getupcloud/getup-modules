@@ -86,6 +86,10 @@ variable "ingress_gateway_set" {
       value : "nlb",
     },
     {
+      name  : "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-scheme",
+      value : "internet-facing",
+    },
+    {
       name : "replicaCount",
       value : "2"
     },
