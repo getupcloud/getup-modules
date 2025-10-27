@@ -120,7 +120,7 @@ resource "kubectl_manifest" "karpenter_node_class" {
     spec:
       amiFamily: ${var.karpenter_node_class_ami_family}
       amiSelectorTerms:
-      - alias: ${lower(var.karpenter_node_class_ami_family)}@1.39.1
+      - alias: ${lower(var.karpenter_node_class_ami_family)}@latest
       role: ${module.karpenter.node_iam_role_name}
       subnetSelectorTerms:
         - tags:
