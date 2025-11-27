@@ -65,3 +65,8 @@ output "admin_host" {
   value       = module.aks.admin_host
   description = "The host name of the admin endpoint."
 }
+
+output "oidc_issuer_url" {
+  description = "The OIDC issuer URL that is associated with the cluster."
+  value       = module.aks.oidc_issuer_url
+}
