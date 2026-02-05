@@ -38,6 +38,7 @@ variable "opencost_spot_datafeed_bucket_name" {
   # https://www.opencost.io/docs/configuration/aws#aws-spot-instance-data-feed
   description = "Bucket name for Spot Instance Data Feed. Must there be only one bucket configured to receive spot usage data."
   type        = string
+  default     = "opencost"
 }
 
 variable "opencost_spot_datafeed_bucket_prefix" {
