@@ -32,8 +32,8 @@
 
 # opencost_spot_datafeed_bucket_name - Bucket name for Spot Instance Data Feed. Must there be only one bucket configured to receive spot usage data.
 # Type: string
-# Required
-#opencost_spot_datafeed_bucket_name = <REQUIRED-VALUE>
+# Default: "opencost"
+#opencost_spot_datafeed_bucket_name = "opencost"
 
 # opencost_spot_datafeed_bucket_prefix - (Optional) Prefix to retain Spot Instance Data Feed files in S3.
 # Type: string
