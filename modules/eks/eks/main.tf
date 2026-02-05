@@ -53,8 +53,8 @@ module "eks" {
         env = {
           # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
           AWS_VPC_K8S_CNI_CUSTOM_NETWORK_CFG = var.vpc_cni_custom_network_cfg ? "true" : "false"
-          ENABLE_PREFIX_DELEGATION = var.vpc_cni_enable_prefix_delegation ? "true" : "false"
-          WARM_PREFIX_TARGET       = "1"
+          ENABLE_PREFIX_DELEGATION           = var.vpc_cni_enable_prefix_delegation ? "true" : "false"
+          WARM_PREFIX_TARGET                 = "1"
         }
       }) : null
     }
