@@ -3,7 +3,7 @@
 #    versions \
 #    doks \
 #    all \
-#    v2.2.5 \
+#    v2.2.6 \
 #    modules/doks/doks/versions.tf \
 #    modules/doks/flux/versions.tf \
 #    modules/doks/loki/versions.tf \
