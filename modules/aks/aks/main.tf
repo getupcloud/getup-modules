@@ -2,7 +2,7 @@ data "azurerm_subnet" "this" {
   count                = var.vnet_subnet == "" ? 0 : 1
   name                 = var.vnet_subnet
   virtual_network_name = var.vnet_name
-  resource_group_name  = var.resource_group_name
+  resource_group_name  = var.vnet_resource_group_name != "" ? var.vnet_resource_group_name : var.resource_group_name
 }
 
 module "aks" {
