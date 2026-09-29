@@ -164,6 +164,7 @@ module "aks" {
   tags                                                            = var.tags
   temporary_name_for_rotation                                     = var.temporary_name_for_rotation
   ultra_ssd_enabled                                               = var.ultra_ssd_enabled
+  upgrade_override                                                = var.upgrade_override
   vnet_subnet                                                     = var.vnet_subnet != "" ? data.azurerm_subnet.this[0] : null
   web_app_routing                                                 = var.web_app_routing
   workload_autoscaler_profile                                     = var.workload_autoscaler_profile

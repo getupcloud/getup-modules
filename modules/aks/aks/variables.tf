@@ -1518,6 +1518,23 @@ variable "ultra_ssd_enabled" {
   description = "(Optional) Used to specify whether the UltraSSD is enabled in the Default Node Pool. Defaults to false."
 }
 
+variable "upgrade_override" {
+  type = object({
+    force_upgrade_enabled = bool
+    effective_until       = optional(string)
+  })
+  default     = null
+  description = <<-EOT
+    `force_upgrade_enabled` - (Required) Whether to force upgrade the cluster. Possible values are `true` or `false`.
+    `effective_until` - (Optional) Specifies the duration, in RFC 3339 format (e.g., `2025-10-01T13:00:00Z`), the upgrade_override values are effective. This field must be set for the `upgrade_override` values to take effect. The date-time must be within the next 30 days.
+
+    Azure retorna `upgradeSettings.overrideSettings` sempre preenchido a partir de certas versões da API do AKS
+    (mesmo quando o cluster nunca usou force-upgrade). Se esse variable ficar `null`, o Terraform tenta remover
+    o bloco do resource e o provider recusa com `upgrade_override cannot be unset`. Defina explicitamente
+    `{ force_upgrade_enabled = false }` para refletir o estado real do cluster e evitar esse erro.
+  EOT
+}
+
 variable "vnet_subnet" {
   type        = string
   default     = null
